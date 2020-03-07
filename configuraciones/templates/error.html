@@ -1,0 +1,48 @@
+{% load  static %}
+<html>
+    <head>
+        <title>GESTION DE ERRORES</title>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+    </head>
+
+    <body>
+        
+        <div id="contenedor">
+            <H1>GESTION DE ERRORES</H1>
+            <label class="lberror">COLUMNAS : {{ columnas }}</label>
+
+
+            <p class="perror">VACIOS : </p>
+            {% for i in vacios %}
+              <label class="lberror">FILA: {{i.0}} &nbsp;&nbsp; COLUMNA: {{i.1}} </label>
+              <br>
+            {% endfor %}
+
+            <p class="perror">DUPLICADOS : </p>
+            {% for i in duplicados %}
+              <label class="lberror">{{ i }}</label>
+              <br>
+            {% endfor %}
+
+            <p class="perror">GFH Y DISPOSITIVO : </p>
+            {% for i in gfh %}
+               <label class="lberror">FILA: {{i.0}} &nbsp;&nbsp; ERROR: {{i.1}}</label>
+               <br>
+            {% endfor %}
+
+            <p class="perror">EXCEPCION : </p>
+              <label class="lberror">{{ except }}</label>
+              <br>
+            
+
+            
+
+        </div>
+
+
+
+
+    </body>
+
+</html>

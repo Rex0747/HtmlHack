@@ -1,0 +1,6 @@
+{
+    "djangointellisense.debugMessages": true,
+    "djangointellisense.projectRoot": "\\\\DENEBOLA\\python\\django\\HtmlHack",
+    "djangointellisense.settingsModule": "HtmlHack.settings",
+    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe"
+}

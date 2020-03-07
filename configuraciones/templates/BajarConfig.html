@@ -1,0 +1,68 @@
+{% load  static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BAJAR CONFIGURACION</title>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    </head>
+    <body>
+    {% block content %}
+        <div id="flota">
+          <!-- <p id="portada">BAJANDO CONFIGURACION DEL SERVIDOR</p> --> 
+            <form id="formulario"  method="post" enctype="multipart/form-data" >
+                            {% csrf_token %} 
+                <!-- <p id="fila">Configuracion a bajar:</p> -->
+                <table id="tmenu">
+                    <tr>
+                        <td><p>GFH: &nbsp &nbsp &nbsp <input type="text" name="gfh" id="gfh"></p></td>
+                        <td><p>DISPOSITIVO:<input type="text" name="disp" id="disp"></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CODIGO:<input type="text" name="code" id="code"></p></td>  
+                        <td><p>UBICACION &nbsp:<input type="text" name="ubic" id="ubic"></p></td>                      
+                    </tr>
+                    <tr>
+                        <td><p><input type="checkbox" name="bajarfila" id="bajarfila">BAJAR FILA</p></td>
+                        <td><button type="submit" id="boton">BAJAR CONFIGURACION</button>
+                        <a href="http://192.168.1.34:8082/uploadfile">Subir Configuracion</a></td>
+                    </tr>
+                    <tr>
+                        <td> <p id="nombre">{{nombre}}</p></td>
+                        <td><p id="lineas">{{lineas}}</p></td>
+                    </tr>
+                </table>
+                
+            </form>
+        </div>
+        <table id="config">
+            <tr>
+                <th>Modulo</th>
+                <th>Estanteria</th>
+                <th>Ubicacion</th>
+                <th>Division</th>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Pacto</th>
+                <th>Minimo</th>
+                <th>DC</th>
+                <th>Gfh</th>
+                <th>Disp</th> 
+                <th>Hosp</th>  
+            </tr>
+                    {% for i in configuraciones %}
+            <tr>
+                             
+                                {% for j in i %} 
+                                     <td>{{ j }}</td>
+                                {% endfor %}
+                                
+                               
+            </tr>
+                    {% endfor %}
+        </table>
+            
+    {% endblock %}
+    </body>
+
+
+</html>

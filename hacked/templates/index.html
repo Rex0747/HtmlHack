@@ -1,0 +1,67 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ title }}</title>
+		<link rel="STYLESHEET" type="text/css" href={% static 'css/estilos.css' %}>
+	</head>
+
+	<body background={% static 'img/hack1.jpg' %}>
+			<h1 id="h1A" class="nomove">{{ ticont }}</h1>
+		<div id="cont1">
+			<div id="contenido">
+				<h2 id="h2c">GENERAL</h2>
+				 <div id="ccont1" >
+				 	<br>
+						<p id="vtitulo"	>{{ titulocont|safe }}</p><br>
+							{{ context|safe }}
+				 
+				 </div>
+			</div>
+			<div id="lateral" class="nomove">
+				<h2 id="h2b">SECCION</h2>
+				<div id="lcont1" >
+					<img id="fblat" src={% static 'img/hack3.jpg' %}>
+						 <br><hr>
+				{% include 'lateral1.html' %}
+				 		<!-- {% block lateral %}
+							<h2>Lateral</h2>
+					    {% endblock %} -->
+				</div>
+			</div>
+		</div>
+	<footer id="pie">
+		
+			<img id="imgp1" src={% static 'img/pie1.jpg' %}>
+			<div id="firm">
+				<p id="fcorreo">E-MAIL: pedro.luis.jimenez.rico@gmail.com &nbsp &nbsp &nbsp TFN: 647.401.509</p>
+				<nav id="nav">
+					<ul id="menu">
+							<li><a href="/index">INICIO</a>
+								<ul>
+									<li><a href="/envfichero">Link_1</a></li>
+									<li><a href="/video">Link_2</a></li>
+									<li><a href="/vermeta">META.items</a></li>
+									<li><a href="/uploadfile">Link_4</a></li>
+								</ul>
+								</li>
+							<li><a href="http://192.168.1.34:9980/video/">MANUALES</a></li>
+							<li><a href="/video">VIDEOS</a></li>
+							<li><a href="http://192.168.1.34:9980/video/">PDFs</a></li>
+							<li><a href="http://192.168.1.34:9980/video/">A CERCA.</a></li>
+					</ul>
+				</nav>
+			</div>
+		    <img id="imgp2" src={% static 'img/pie2.jpg' %}>
+		    
+		
+	
+	</footer>
+	
+		
+	</body>
+		
+
+
+</html>

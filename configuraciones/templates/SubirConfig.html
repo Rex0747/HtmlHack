@@ -1,0 +1,41 @@
+{% load  static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SUBIR CONFIGURACION</title>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+    </head>
+    <body>
+        <p id="portada">SUBIR CONFIGURACION</p>
+    {% block content %}
+        <div id="formupload">
+            
+            <form id="formu" enctype="multipart/form-data" method="POST" >
+                {% csrf_token %}
+                <p id="fila">CARGAR FICHERO A SUBIR:
+                <table>
+                    <tr>
+                        <td><input type="file" name="upload" id="upload" onchange="enableBoton()"></td>
+                    </tr>
+                    <tr>
+                        <td><button type="submit" id="boton2">SUBIR FILA</button> </td>
+                    </tr>
+                    <tr>
+                        <td><a href="http://192.168.1.34:8082/downloadfile">Bajar Configuracion</a></td>
+                    </tr>
+                </table> 
+                {% if uploaded_file %}
+                 <p id="enlace">Configuracion actualizada: {{ uploaded_file }}</p>
+                 <p id="nfilas">Numero de filas agregadas: {{ nfilas }}</p>
+                 <p id="bfilas">Numero de filas borradas: {{ borradas }}</p><br>
+            {% endif %}
+            </form>
+
+            
+    {% endblock %}
+        </div>
+    </body>
+
+
+</html>
