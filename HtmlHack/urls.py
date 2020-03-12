@@ -32,6 +32,7 @@ urlpatterns = [
     path('articulos',v1.articulosAdd),
     path('addgfh',v1.gfhsAdd ),
     path('adddisp',v1.dispositivosAdd ),
+    path('addFotos',v1.AñadirFotosArticulos ),
     
   
 ]

@@ -9,6 +9,7 @@ class articulos(models.Model):
     cbarras=models.CharField(max_length=50, null=True)
     cbarras2=models.CharField(max_length=50 , null=True)
     hospital=models.ForeignKey( 'hospitales' ,on_delete=models.CASCADE )
+    foto=models.CharField( max_length=60 , null=True )#Contiene ruta a fichero de foto.
 
     def __str__(self):
         return '%s %s' %( self.codigo, self.nombre )

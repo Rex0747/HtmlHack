@@ -4,7 +4,7 @@ from django.http import HttpResponse , Http404
 from configuraciones.models import  articulos , configurations , gfhs , dispositivos
 from django.core.files.storage import FileSystemStorage
 from .forms import UploadFileForm
-from os import remove
+from os import remove , listdir
 from configuraciones.excell import Excell
 from configuraciones.excell import comprobarExcel
 from HtmlHack.settings import MEDIA_ROOT
@@ -346,6 +346,49 @@ def dispositivosAdd(request):
             #return HttpResponse( 'Hubo un fallo al subir lista de dispositivos. ' +str(e))
             print('COLISION AL INSERTAR gfh: ' + item[1]+ ' , ERROR: ' + str( e ) )
     return HttpResponse( 'Lista dispositivos correctamente' )
+
+
+def addFotoArticulo( rutaNombreFichero , codigo ):
+    #consulta = 'UPDATE configuraciones_articulos set foto = %s WHERE codigo = %s ',[ rutaNombreFichero , codigo ]
+    #print( consulta )
+    #cursor = connection.cursor()
+   # res = ''
+    try:
+        #cursor.execute( consulta )
+        #print ('Codigo ' + codigo +' añadido correctamente.')
+        #cursor = None
+        p = articulos.objects.filter(codigo=codigo).update(foto=rutaNombreFichero)
+        #print(str(p))
+        #p.save()
+        return '0'
+    except Exception as e:
+        #print('Fallo al insertar foto en el codigo ' + str(codigo))
+        res = 'Fallo al actualizar: ' + str( e ) + ' Codigo: '+codigo+' Ruta: '+rutaNombreFichero
+        #cursor = None
+    return str( res )
+
+
+def AñadirFotosArticulos( request ):
+    ruta = MEDIA_ROOT+'/articulos/'
+    filas =  listdir( ruta )
+    codigo = ''
+    res = '0'
+    for i in filas:
+        codigo = i.rstrip('.png')
+        if not codigo:
+            codigo = i.rstrip('.jpg')
+        #print('CODIGO: '+codigo + ' RUTA: '+ ruta + i )
+        res = addFotoArticulo( str(ruta + i) , str(codigo) )
+        print('res: '+res )
+        if res == '0':
+            #return HttpResponse( 'Ruta fotos añadida correctamente' )
+            print('Codigo '+codigo+'añadido correctamente')
+    return HttpResponse( res)
+    
+
+
+
+
     
 
 
