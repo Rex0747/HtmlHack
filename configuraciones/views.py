@@ -1,15 +1,21 @@
+#import os
 from django.http import HttpResponseRedirect
+from django.template import Template 
 from django.shortcuts import render
 from django.http import HttpResponse , Http404
-from configuraciones.models import  articulos , configurations , gfhs , dispositivos
+from configuraciones.models import  articulos , configurations , gfhs , dispositivos, hospitales
 from django.core.files.storage import FileSystemStorage
 from .forms import UploadFileForm
 from os import remove , listdir
 from configuraciones.excell import Excell
 from configuraciones.excell import comprobarExcel
 from HtmlHack.settings import MEDIA_ROOT
+from HtmlHack.settings import STATIC_ROOT
 from django.db import connection, transaction
-#from qrcode import code
+from django.db.models import Q
+#from configuraciones.qrcode import generate
+#from configuraciones.qrcode import make
+import qrcode
 
 #from somewhere import handle_uploaded_file
 # Create your views here.
@@ -151,6 +157,8 @@ def download_file(request):
     dispositivo = ''
     hospitalP = ''
     code = ''
+    cqr = ''
+    cqrlist = {}
     if  request.method == 'POST':
         if request.POST['gfh']:
             gfhNombre = request.POST['gfh']
@@ -158,7 +166,7 @@ def download_file(request):
             dispositivo = request.POST['disp']
         if request.POST['code']:
             code = request.POST['code']
-        ubic = request.POST['ubic']
+        #ubic = request.POST['ubic']
 
         #__________________________________SQL___________________________________________
         try:
@@ -174,8 +182,6 @@ def download_file(request):
                 cursor.execute('SELECT id FROM configuraciones_dispositivos WHERE nombre = %s', [ dispositivo ])
                 dispId = cursor.fetchone()[0]
                 print('IdDisp:'+str(dispId))
-                
-
 
             if gfhNombre:
                 cursor.execute('SELECT id FROM configuraciones_gfhs WHERE gfh = %s ', [ gfhNombre ])
@@ -237,6 +243,9 @@ def download_file(request):
             hospitalP = cursor.fetchone()[0]
 
             cursor = None
+            cqr = str(i.modulo)+'-'+str(i.estanteria)+'-'+str(i.ubicacion)+'-'+str(i.division)+' '+str(i.codigo)+' '+str(articulos)+\
+            ' '+str(i.pacto)+' '+str(i.minimo)+' '+str(i.dc)+' '+str(gfhNombre)+' '+str(dispositivo)+' '+str(hospitalP )
+            cqrlist.update({ i.codigo : cqr })
             #_________________________________________________________________________
             ret = []
             ret.append(i.modulo)
@@ -251,6 +260,7 @@ def download_file(request):
             ret.append( gfhNombre )
             ret.append( dispositivo )
             ret.append( hospitalP )
+            ret.append( cqr )
             retorno.append( ret )
 # ____________FASE LLENAR EXCEL____________________
             excel.insertar_rangofila( ret , ultimaFila , 1 )
@@ -280,7 +290,7 @@ def download_file(request):
             print('No existe fichero '+ str(e) )
 # ____________END FASE DOWNLOAD FILA____________________
     return render(request, 'BajarConfig.html', {'configuraciones': retorno,
-    'nombre': gfhNombre, 'lineas': nlineas  } )
+    'nombre': gfhNombre, 'lineas': nlineas , 'cqr': cqrlist })
 
 
 def articulosAdd(request):
@@ -357,7 +367,7 @@ def addFotoArticulo( rutaNombreFichero , codigo ):
         #cursor.execute( consulta )
         #print ('Codigo ' + codigo +' añadido correctamente.')
         #cursor = None
-        p = articulos.objects.filter(codigo=codigo).update(foto=rutaNombreFichero)
+        p = articulos.objects.filter(codigo=codigo, hospital_id=2 ).update(foto=rutaNombreFichero)
         #print(str(p))
         #p.save()
         return '0'
@@ -378,20 +388,78 @@ def AñadirFotosArticulos( request ):
         if not codigo:
             codigo = i.rstrip('.jpg')
         #print('CODIGO: '+codigo + ' RUTA: '+ ruta + i )
-        res = addFotoArticulo( str(ruta + i) , str(codigo) )
+        res = addFotoArticulo( str('articulos/' + i) , str(codigo) )
         print('res: '+res )
         if res == '0':
             #return HttpResponse( 'Ruta fotos añadida correctamente' )
-            print('Codigo '+codigo+'añadido correctamente')
+            print('Codigo '+codigo+' añadido correctamente')
     return HttpResponse( res)
     
+def verArticulo( request ):
+    #img = '010181.png' 
+    #image_data = open( MEDIA_ROOT + "/articulos/" + img , "rb").read()
+    #return HttpResponse(image_data, content_type="image/png")
+    img = None
+    if request.method == 'POST' and request.POST['verimg']:
+        codigo = request.POST['verimg']
+        img = articulos.objects.filter(codigo= codigo)[0]
+        print( str(img))
+    return render( request , 'galeria.html',{'img': img })
 
+def verGaleria( request ):
+    img = ''
+    if request.method == 'POST' and request.POST['hospital']:
+        hospi = request.POST['hospital']
+        try:
+            id_hospi = hospitales.objects.get( codigo=hospi )
+        except Exception as e:
+            img = 'Hospital desconocido.'
+            return render( request , 'galeria.html',{'error': img })
+        img = articulos.objects.filter(hospital_id=id_hospi)
+        #img = articulos.objects.filter(~Q(foto = ''))
+        print('Numero de registros: ' + str(len(img)))
+        #print(str('HOSPITAL: '+ hospi))
+        return render( request , 'galeria.html',{'imagen': img })
+    else:
+        img = 'No se selecciono hospital.'
+        return render( request , 'galeria.html',{'error': img })
 
+def mostrarCodigoQR( request ):
+    img = ''
+    if request.method == 'POST' and request.POST['verimg']:
+        codigo = request.POST['verimg']
+        img = qrcode.make( codigo )
+        imagen = open('media/qrcode.png','wb')
+        img.save(imagen)
+        imagen.close()
+        imagen = open('media/qrcode.png','rb').read()
+        return HttpResponse( imagen, content_type="image/png")
 
-
+    return render( request , 'galeria.html',{'imagen': img })
     
+def mostrarCodigoGRpng( request ):
+    if request.method == 'POST' and request.POST['verimg']:
+        valor = request.POST['verimg']
+        img = qrcode.make( valor )
+        imagen = open('media/qrcode.png','wb')
+        img.save(imagen)
+        imagen.close()
+        return render( request , 'galeria.html',{'qrcode': 'media/qrcode.png' })
+    return render( request , 'galeria.html')
 
-
+def verCgr( request ):
+    #items = request.META.items()
+    items = request.GET['data']
+    fila = items.split(' ')
+    codigo = fila[1]
+    foto = articulos.objects.filter(codigo=codigo) #.values('foto')[0]
+   
+    print('RUTA: ' + str(foto))
+    img = qrcode.make( items )
+    imagen = open('media/qrcode.png','wb')
+    img.save( imagen )
+    imagen.close()
+    return render( request , 'cqr.html',{'cqr': items , 'qrcode': 'media/qrcode.png','img': foto ,} )
 
 
 

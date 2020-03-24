@@ -1,0 +1,9 @@
+
+table{  margin: auto;  width: 80%; color: #000; border: solid 1px #000;background-color: rgb( 4,A,4,0.6);  }
+table tr{ height: 40px;}
+table tr td{ margin-top: 10px; font-size: 30px;}
+table th td p{ text-align: center; text-decoration: none; }
+
+table tr td a{ text-decoration: none; color: #222; margin-left: 5%; text-decoration: none;font-size: 20px;margin-top: 10px;}
+
+table tr td a:hover{ color: #F44; transition-duration: 0.5s; }

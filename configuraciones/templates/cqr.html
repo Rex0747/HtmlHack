@@ -1,0 +1,20 @@
+{% load  static %}
+{% include 'menu.html' %}
+<html>
+    <head>
+        <title>QR CODE</title>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+         
+    </head>
+    <body>
+        <div id="conqr">
+            <h1 id="qrh">CODIGO QR UBICACION COMPLETA</h1>
+            <p id="tqr">{{cqr|safe}}</p>
+            <img id="imgcqr" src={{qrcode|safe}}  width="250">
+            {% for i in img %}
+            <img id="foto" src={{i.foto.url}}  width="250">
+            {% endfor%}
+        </div>
+    </body>
+
+</html>

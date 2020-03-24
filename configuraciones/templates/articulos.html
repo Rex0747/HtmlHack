@@ -1,4 +1,5 @@
 {% load  static %}
+{% include 'menu.html' %}
 <html>
     <head>
         <title>GESTION DE ARTICULOS</title>
@@ -11,7 +12,7 @@
             <form>
                  <p>CODIGO<input type="text" name="codigo" id="codigo"></p>
                  <p>NOMBRE<input type="text" name="nombre" id="nombre"></p>
-                 <p>CODE BARRAS2<input type="text" name="cbarras1" id="cbarras1"></p>
+                 <p>CODE BARRAS1<input type="text" name="cbarras1" id="cbarras1"></p>
                  <p>CODE BARRAS2<input type="text" name="cbarras2" id="cbarras2"></p>
                 <input type="radio" name="art" value="add" checked><label for="add">Añadir Articulo</label><br>
                 <input type="radio" name="art" value="remove"><label for="remove">Borrar Articulo</label><br>

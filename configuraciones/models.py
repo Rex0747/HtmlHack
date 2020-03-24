@@ -9,10 +9,10 @@ class articulos(models.Model):
     cbarras=models.CharField(max_length=50, null=True)
     cbarras2=models.CharField(max_length=50 , null=True)
     hospital=models.ForeignKey( 'hospitales' ,on_delete=models.CASCADE )
-    foto=models.CharField( max_length=60 , null=True )#Contiene ruta a fichero de foto.
+    foto=models.ImageField( upload_to = 'articulos/' )
 
     def __str__(self):
-        return '%s %s' %( self.codigo, self.nombre )
+        return '%s %s %s' %( self.codigo, self.nombre, self.foto )
 
     class Meta:
         #pass
@@ -20,12 +20,19 @@ class articulos(models.Model):
         #    models.UniqueConstraint( fields=['codigo', 'hospital'] )
         #]
         unique_together = ('codigo', 'hospital')
-
+    class Admin:
+        list_display = ('codigo', 'nombre', 'hospital_id')
+        list_filter = ('hospital_id',)
+        ordering = ('-codigo',)
+        search_fields = ('codigo',)
 
 class gfhs(models.Model):
     id=models.AutoField( primary_key=True )
     gfh=models.CharField(max_length=4 ) #unique=True
     nombre=models.CharField(max_length=25)
+    def __str__(self):
+        return '%s %s' %(self.gfh, self.nombre)
+
     class Meta:
         unique_together = ('gfh', 'nombre')
 
@@ -34,6 +41,8 @@ class dispositivos(models.Model):
     id=models.AutoField( primary_key=True )
     nombre=models.CharField(max_length=5, unique=True)
     gfh=models.ForeignKey('gfhs', on_delete=models.CASCADE)  #, null=True, blank=True)
+    def __str__(self):
+        return '%s %s' %(self.nombre, self.gfh)
     class Meta:
         unique_together = ( 'nombre', 'gfh' )
 

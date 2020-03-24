@@ -20,6 +20,9 @@ from django.conf import settings
 from hacked import views as v0
 from configuraciones import views as v1
 
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('vermeta/',v0.vermeta),
@@ -33,9 +36,14 @@ urlpatterns = [
     path('addgfh',v1.gfhsAdd ),
     path('adddisp',v1.dispositivosAdd ),
     path('addFotos',v1.AñadirFotosArticulos ),
+    path('verGaleria',v1.verGaleria ),
+    path('verqr',v1.mostrarCodigoQR),
+    path('verqr2',v1.mostrarCodigoGRpng),
+    path('cqr',v1.verCgr),
     
-  
 ]
 
 if settings.DEBUG:
     urlpatterns += static( settings.MEDIA_URL, document_root=settings.MEDIA_ROOT )
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

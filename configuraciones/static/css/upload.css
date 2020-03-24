@@ -32,6 +32,9 @@ body{ background-color: rgba(12, 190, 12, 0.9); margin: 0px; padding: 0px;}
 #gfh, #disp, #code, #ubic, #bajarfila{ width: 40%; margin-left: 5%;  font-size: 1.1em;}
 #bajarfila{ height: 1.2em;}
 
+
 #contenedor{ width: 40%; margin: auto;border: solid 2px; }
 .lberror{ padding: 1px 50px; background-color: rgb(23, 209, 63); margin: 40px 80px 40px 40px ;width: 90%;border: solid 2px;height: 36px;font-size: 1.3em ;}
 .perror{ padding: 20px 10px; background-color: rgb(119, 184, 241); margin: 20px 80px 40px 40px;width: 30%;font-size: 1.3em ; }
+#imgcqr{ margin: auto; border: solid 2px #F00; width: 400px;}
+#qrh{ width: 400px;text-align: center; font-size: 20px; background-color: magenta; }
