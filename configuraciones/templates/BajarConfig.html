@@ -49,17 +49,18 @@
                 <th>Gfh</th>
                 <th>Disp</th> 
                 <th>Hosp</th>
-                <th>Ubic</th>
+                <!-- <th>Ubic</th> -->
                 <th>VerQR</th>
             </tr>
             {% for i in configuraciones %}
             <tr>
                 {{data}}
                 {% for j in i %}
-                                     
-                    <td>{{j}}</td>
+                    {% if forloop.counter != 13 %}      
+                        <td>{{j}}</td>
+                    {% endif %}
                     {% if forloop.last  %} <!-- tambien tiene first ,counter -->
-                    <td><a id="blink" href="cqr?data={{j}}">CQR</a></td>
+                        <td><a id="blink" href="cqr?data={{j}}">CQR</a></td>
                     {% endif %}
                 {% endfor %}
                                 

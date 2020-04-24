@@ -228,7 +228,9 @@ def download_file(request):
         #gfh = 'GFH: ' + str( gfhNombre )
         nlineas = 'NUMERO DE LINEAS: ' + str( len(res))
         print('NUMERO DE LINEAS: ' + str( len(res)))
-        excel = Excell( gfhNombre )
+        print(str(res))
+        excel = Excell( 'data' )
+
         ultimaFila = 2
         for i in res:
             #______________________________MODO SQL___________________________________
@@ -238,6 +240,7 @@ def download_file(request):
             cursor.execute('SELECT nombre FROM configuraciones_dispositivos WHERE id = %s', [i.disp])
             dispositivo = cursor.fetchone()[0]
             cursor.execute('SELECT gfh FROM configuraciones_gfhs WHERE id = %s', [i.gfh])
+            print('ID_Config: '+ str(i.gfh))
             gfhNombre = cursor.fetchone()[0]
             cursor.execute('SELECT codigo FROM configuraciones_hospitales WHERE id = %s', [i.hosp_id])
             hospitalP = cursor.fetchone()[0]
@@ -274,8 +277,8 @@ def download_file(request):
 # ____________END FASE LLENAR EXCEL________________
 # ____________FASE DOWNLOAD FILA____________________        
         #print( excel.nombre )
-        fila = MEDIA_ROOT +'/' + gfhNombre +'.xlsx'
-        print('Fila: '+ fila)
+        fila = MEDIA_ROOT +'/' + 'data.xlsx'
+        print('FilaExcel: '+ fila)
         if 'bajarfila' in request.POST:
             import os
             with open( fila , 'rb') as fh:
