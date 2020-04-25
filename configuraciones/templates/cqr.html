@@ -10,7 +10,7 @@
         <div id="conqr">
             <h1 id="qrh">CODIGO QR UBICACION COMPLETA</h1>
             <p id="tqr">{{cqr|safe}}</p>
-            <img id="imgcqr" src={{qrcode|safe}}  width="250">
+            <img id="imgcqr" src={% static 'qrcode.png'  %}  width="250">
             {% for i in img %}
             <img id="foto" src={{i.foto.url}}  width="250">
             {% endfor%}

@@ -99,10 +99,10 @@ def upload_file(request):
                         consulta = "INSERT INTO configuraciones_articulos(codigo,nombre,hospital_id,foto)VALUES\
                         ('"+str(i[4])+"','"+str(i[5])+"','"+str(i[11])+"','"+str('articulos/'+str(i[4])+'.png')+"')"
                         cursor.execute( consulta )
-                        consulta = 'SELECT idsel FROM configuraciones_articulos WHERE codigo = %s',[ i[4] ]
-                        cursor.execute( consulta )
-                        i[5] = cursor.fetchone()[0]
                         print('Articulo_Nuevo: ' + str( i[5] ))
+                        cursor.execute( 'SELECT idsel FROM configuraciones_articulos WHERE codigo = %s',[ i[4] ] )
+                        i[5] = cursor.fetchone()[0]
+                        
                     
                     cursor.execute('SELECT id FROM configuraciones_gfhs WHERE gfh = %s',[i[9] ])
                     i[9] = str(cursor.fetchone()[0])
@@ -432,10 +432,10 @@ def mostrarCodigoQR( request ):
     if request.method == 'POST' and request.POST['verimg']:
         codigo = request.POST['verimg']
         img = qrcode.make( codigo )
-        imagen = open('media/qrcode.png','wb')
+        imagen = open( STATIC_ROOT + 'qrcode.png','wb')
         img.save(imagen)
         imagen.close()
-        imagen = open('media/qrcode.png','rb').read()
+        imagen = open( STATIC_ROOT + 'qrcode.png' ,'rb').read()
         return HttpResponse( imagen, content_type="image/png")
 
     return render( request , 'galeria.html',{'imagen': img })
@@ -444,10 +444,10 @@ def mostrarCodigoGRpng( request ):
     if request.method == 'POST' and request.POST['verimg']:
         valor = request.POST['verimg']
         img = qrcode.make( valor )
-        imagen = open('media/qrcode.png','wb')
+        imagen = open( STATIC_ROOT + 'qrcode.png','wb')
         img.save(imagen)
         imagen.close()
-        return render( request , 'galeria.html',{'qrcode': 'media/qrcode.png' })
+        return render( request , 'galeria.html',{'qrcode': STATIC_ROOT + 'qrcode.png' })
     return render( request , 'galeria.html')
 
 def verCgr( request ):
@@ -459,10 +459,10 @@ def verCgr( request ):
    
     print('RUTA: ' + str(foto))
     img = qrcode.make( items )
-    imagen = open('media/qrcode.png','wb')
+    imagen = open( STATIC_ROOT + 'qrcode.png','wb')
     img.save( imagen )
     imagen.close()
-    return render( request , 'cqr.html',{'cqr': items , 'qrcode': 'media/qrcode.png','img': foto ,} )
+    return render( request , 'cqr.html',{'cqr': items , 'qrcode': STATIC_ROOT + 'qrcode.png' ,'img': foto ,} )
 
 
 
