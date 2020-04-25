@@ -96,13 +96,13 @@ def upload_file(request):
                     except:
                         #artnew = articulos(codigo=i[4] ,nombre=i[5] ,hospital=i[11])
                         #artnew.save()
-                        consulta = "INSERT INTO configuraciones_articulos(codigo,nombre,hospital_id)VALUES\
-                        ('"+str(i[4])+"','"+str(i[5])+"','"+str(i[11])+"')"
+                        consulta = "INSERT INTO configuraciones_articulos(codigo,nombre,hospital_id,foto)VALUES\
+                        ('"+str(i[4])+"','"+str(i[5])+"','"+str(i[11])+"','"+str('articulos/'+str(i[4])+'.png')+"')"
                         cursor.execute( consulta )
                         consulta = 'SELECT idsel FROM configuraciones_articulos WHERE codigo = %s',[ i[4] ]
                         cursor.execute( consulta )
                         i[5] = cursor.fetchone()[0]
-                        #print('Articulo_Nuevo: ' + str( i[5] ))
+                        print('Articulo_Nuevo: ' + str( i[5] ))
                     
                     cursor.execute('SELECT id FROM configuraciones_gfhs WHERE gfh = %s',[i[9] ])
                     i[9] = str(cursor.fetchone()[0])
