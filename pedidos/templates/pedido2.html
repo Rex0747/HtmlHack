@@ -1,0 +1,28 @@
+{% load  static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    <title>Pedido2</title>
+</head>
+    <body>
+        <table>
+            <tr>
+                <th>USUARIO</th>
+                <th>HOSPITAL</th>
+                <th>GFH</th>
+                <th>DISPOSITIVO</th>
+            </tr>
+            <tr>
+                <th>{{user}}</th>
+                <th>{{hospital}}</th>
+                <th>{{gfh}}</th>
+                <th>{{disp}}</th>
+            </tr>
+
+        </table>
+    
+    </body>
+</html>

@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from hacked import views as v0
 from configuraciones import views as v1
+from pedidos import views as v2
 
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -40,6 +41,7 @@ urlpatterns = [
     path('verqr',v1.mostrarCodigoQR),
     path('verqr2',v1.mostrarCodigoGRpng),
     path('cqr',v1.verCgr),
+    path('pedidos/', v2.pedido),
     
 ]
 

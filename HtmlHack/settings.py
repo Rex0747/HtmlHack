@@ -58,7 +58,8 @@ ROOT_URLCONF = 'HtmlHack.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(BASE_DIR, 'hacked/templates/'), os.path.join(BASE_DIR, 'hacked/static/'), ],
+        'DIRS': [ os.path.join(BASE_DIR, 'hacked/templates/'),
+         os.path.join(BASE_DIR, 'pedidos/templates/'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

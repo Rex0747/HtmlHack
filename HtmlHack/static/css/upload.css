@@ -15,14 +15,13 @@ body{ background-color: rgba(12, 190, 12, 0.9); margin: 0px; padding: 0px;}
 #boton2{ padding: 10px; margin-left: 30px;margin-top: 30px; margin-bottom: 30px;background-color: rgb(99, 235, 117);font-size:18px;width: 50%; }
 #nombre , #lineas{ margin: auto; font-size: 15px; margin: 10px; }
 
-#config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
-
-#config th{ border: 1px solid; background-color: rgb(15, 104, 82); color: cornsilk; font-size: 1.5em; height: 1.8em}
-#config tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
-#config td{ border: 1px solid; }
-#config tr:nth-child(odd){ background-color:#d3f690; }
-#config tr:nth-child(even){ background-color:#b6f6ad; }
-#config tr td{font-size: 1.2em; height: 1.5em;}
+.config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
+.config th{ border: 1px solid; background-color: rgb(15, 104, 82); color: cornsilk; font-size: 1.5em; height: 1.8em}
+.config tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
+.config td{ border: 1px solid; }
+.config tr:nth-child(odd){ background-color:#d3f690; }
+.config tr:nth-child(even){ background-color:#b6f6ad; }
+.config tr td{font-size: 1.2em; height: 1.5em;}
 
 #tmenu{ margin: auto; border: 2px solid #000; background-color: aliceblue;margin-top: 50px; width: 50%;;  }
 #tmenu tr{  background-color: rgb(22, 236, 58); }

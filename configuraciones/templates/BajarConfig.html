@@ -35,7 +35,7 @@
                 
             </form>
         </div>
-        <table id="config">
+        <table id="config" class="config">
             <tr>
                 <th>Modulo</th>
                 <th>Estanteria</th>
@@ -52,6 +52,7 @@
                 <!-- <th>Ubic</th> -->
                 <th>VerQR</th>
             </tr>
+             
             {% for i in configuraciones %}
             <tr>
                 {{data}}
@@ -63,10 +64,9 @@
                         <td><a id="blink" href="cqr?data={{j}}">CQR</a></td>
                     {% endif %}
                 {% endfor %}
-                                
-                                     
-                    </tr>
-                    {% endfor %}
+                                                        
+            </tr>
+             {% endfor %}
         </table>
             
     {% endblock %}
