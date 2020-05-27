@@ -1,14 +1,19 @@
 from django.shortcuts import render
-from configuraciones.models import articulos, configurations
-from pedidos.models import pedidos, usuarios
+import os, random
+from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos
+import datetime
+from pedidos.models import pedidos, pedidos_ident, usuarios
 from django.db import connection
+from configuraciones.excell import Excell
+from HtmlHack.settings import MEDIA_ROOT
+from HtmlHack.settings import STATIC_ROOT
 
 # Create your views here.
 global hospital, disp, user, gfh
 
 def pedido( request ):
     global gfh, hospital, disp, user
-    pedid='' ; pedido='' ; lista=[] ; codes={}
+    pedid='' ; pedido='' ; lista=[] ; codes={};
     if request.method == 'POST':
 
         clavesDescartar = ['csrfmiddlewaretoken', 'hospital', 'gfh', 'disp', 'pboton', 'tped', 'user']
@@ -46,7 +51,6 @@ def pedido( request ):
             disp_id = cursor.fetchone()[0]
             print('disp_id:'+str(disp_id))
             cursor.execute('SELECT id from pedidos_usuarios WHERE ident = %s', [ user ]) 
-            print(str(cursor))
             user_id = cursor.fetchone()[0]
             print('disp_id:'+str(user_id))
 
@@ -63,6 +67,68 @@ def pedido( request ):
 
         if request.method == 'POST':
             print(str(codes.keys()) + '\t' + str(codes.values()))
+        """ A partir de aqui queda pendiente:
+              crear hoja de excel con pedido, solo se usaran los campos codigo, nombre, cantidad
+              insertar pedido en bd.
+              mandar correo adjunto al correo de Emil automaticamente editado y con el excel adjuno.
+              el nombre del excel sera el gfh + _ + dispositivo + _ + fecha   ejemplo  H2NB_IZL013_12042020.xlsx
+              este fichero se descargara en una carpeta colgando de media/pedidos/
+        """
+        #BORRAR
+      
+        #___________________________
+
+        rnd= ''
+        l1 = 'A','B','C','D','E','F','X','Y','Z'
+        for i in range(3):
+            rnd += random.choice(l1)
+        nr = random.randrange(10000,99999)
+        rnd += str(nr)
+        rnd += random.choice(l1)
+        rnd += random.choice(l1)
+        # rnd Numero de pedido
+        
+        filexcel = 'pedidos/'+gfh+'_'+disp+'_'+str(int(datetime.datetime.now().timestamp()))
+        excel = Excell( filexcel )
+        head = ['codigo','nombre','cantidad']
+        excel.insertar_rangofila( head ,1 ,1 )
+       
+        indx = 2
+        for i, j in codes.items():
+            art=articulos.objects.filter( codigo=i )
+            print( i + '\t' + art[0].nombre + '\t' + str( j ) )
+            #dbped = pedidos( hospitales.objects.get( codigo= hospital ) ,gfhs.objects.get(gfh=gfh), dispositivos.objects.get(nombre=disp), articulos.objects.get(codigo=i), cantidad=j)
+            #dbped = pedidos( hospital=hospital ,gfh=gfh, disp=disp, codigo=i, cantidad=j)
+
+            dbped = pedidos()
+            dbped.npedido=rnd
+            dbped.hospital=hospitales.objects.get( codigo= hospital )
+            dbped.gfh=gfhs.objects.get(nombre=disp)
+            dbped.disp=dispositivos.objects.get(nombre=disp)
+            dbped.codigo=articulos.objects.get(codigo=i)
+            dbped.cantidad=j
+            dbped.save()
+
+            lt = ( i, art[0].nombre, j )
+            excel.insertar_rangofila( lt , indx, 1)
+            indx += 1
+        excel.salvarexcell2()
+      
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         return render( request, 'pedido2.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user }) 

@@ -13,6 +13,7 @@ class usuarios(models.Model):
         return '%s %s %s' %(self.nombre, self.ident, self.correo)
 
 class pedidos(models.Model):
+    npedido=models.CharField(max_length=12)
     hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
     gfh=models.ForeignKey( gfhs ,on_delete=models.CASCADE )
     disp=models.ForeignKey( dispositivos ,on_delete=models.CASCADE )
@@ -23,10 +24,12 @@ class pedidos(models.Model):
         return '%s %s %s %s %s' %(self.hospital, self.gfh, self.disp, self.codigo, self.cantidad )
 
 class pedidos_ident(models.Model):
-    npedido=models.IntegerField()
     pedido=models.ForeignKey( pedidos ,on_delete=models.CASCADE)
     user=models.ForeignKey( usuarios ,on_delete=models.CASCADE)
     fecha=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '%s %s %s %s' %(self.npedido, self.pedido, self.user, self.fecha)
 
 
 
