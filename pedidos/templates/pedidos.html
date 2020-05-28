@@ -1,0 +1,75 @@
+{% load  static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    <title>pedidos</title>
+</head>
+    <body>
+            <h1>PEDIDOS</h1>
+
+            <form id="fpedidos" name="fpedido" enctype="multipart/form-data" method="POST" >
+                {% csrf_token %}
+                <p id="pedidos">PEDIDOS</p>
+                <table>
+                    <tr>
+                        <td><label>Hospital</label></td>
+                        <td><input type="text" name="hospital" id="hospital"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Gfh</label></td>
+                        <td><input type="text" name="gfh" id="gfh"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Dispositivo</label></td>
+                        <td><input type="text" name="disp" id="disp"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Usuario</label></td>
+                        <td><input type="text" name="user" id="user"></td>
+                    </tr>
+                    <tr>
+                        <td><button type="submit" id="boton2">Enviar</button></td>
+                    </tr>
+                </table> 
+        <!--  </form>
+
+            <form id="tpedidos" name="tpedido" enctype="multipart/form-data" method="POST" >
+                {% csrf_token %}    -->
+            {% if hospital %}
+                <table id="config" class="config">
+                  <!-- <tr>
+                        <th>Codigo</th>
+                        <th>Cantidad</th>   
+                    </tr>--> 
+                    <tr>
+            
+                {% for i in datos %}
+                        <!--<td>{{i.modulo}}</td>
+                        <td>{{i.estanteria}}</td>
+                        <td>{{i.ubicacion}}</td>
+                        <td>{{i.division}}</td>-->
+                        <td>{{i.codigo}}</td>
+                        <td>{{i.nombre}}</td>
+                        <td>{{i.pacto}}</td>
+                        <!--<td>{{i.gfh}}</td>
+                        <td>{{i.disp}}</td>-->
+                        
+                        <td><input type="text" name={{i.codigo}}  value="0"></td>
+                        
+                
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td><button type="submit" name="pboton" id="pboton">SUBIR PEDIDO</button></td>
+                        <td><input type="text" name="tped"></td>
+                    </tr>
+                </table>
+            {% endif %}
+
+         </form>    
+
+    </body>
+</html>

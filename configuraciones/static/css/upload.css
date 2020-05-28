@@ -1,0 +1,40 @@
+body{ background-color: rgba(12, 190, 12, 0.9); margin: 0px; padding: 0px;}
+#portada{ background-color: rgb(9, 231, 113); text-align: center; font-size: 28px; color:darkblue; margin: auto; width: 50%; padding: 25px 0px;margin-top: 20px; border: solid 2px #000; }
+
+#flota{ position: fixed; margin: auto; width: 100%;opacity: 0; transition: 2.6s cubic-bezier(0.5, 0, 0,0.5)  ;  }
+#flota:hover{ opacity: 1;}
+#formulario{  width: 90%; margin: auto; }
+#formupload{ width: 70%; margin: auto; background-color: chartreuse; border: solid 2px #000;margin-top: 30px;  }
+#fila{ text-align: center; font-size: 25px; color:darkblue; padding-top: 15px; }
+#upload{  margin-left: 30px; padding: 20px; background-color: rgb(99, 235, 117); width: 100%;font-size: 18px;
+    border: 2px solid #000; display: inline-block; padding: 6px 12px; cursor: pointer; }
+#enlace, #nfilas, #bfilas{ font-size: 22px;  border: 2px solid #333; padding: 10px 5px 15px 5px; background-color: #CCC;
+    width: 100%; margin-bottom: 20px; }
+
+#boton{ padding: 20px; background-color: rgb(98, 177, 98); margin-left: 18%;font-size: 1.1em;color: #fff;}
+#boton2{ padding: 10px; margin-left: 30px;margin-top: 30px; margin-bottom: 30px;background-color: rgb(99, 235, 117);font-size:18px;width: 50%; }
+#nombre , #lineas{ margin: auto; font-size: 15px; margin: 10px; }
+
+#config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
+
+#config th{ border: 1px solid; background-color: rgb(15, 104, 82); color: cornsilk; font-size: 1.5em; height: 1.8em}
+#config tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
+#config td{ border: 1px solid; }
+#config tr:nth-child(odd){ background-color:#d3f690; }
+#config tr:nth-child(even){ background-color:#b6f6ad; }
+#config tr td{font-size: 1.2em; height: 1.5em;}
+
+#tmenu{ margin: auto; border: 2px solid #000; background-color: aliceblue;margin-top: 50px; width: 50%;;  }
+#tmenu tr{  background-color: rgb(22, 236, 58); }
+#tmenu tr td{ border: 1px solid;  }
+#tmenu tr td p{ font-size: 1.6em;margin-left:25px;}
+
+#gfh, #disp, #code, #ubic, #bajarfila{ width: 40%; margin-left: 5%;  font-size: 1.1em;}
+#bajarfila{ height: 1.2em;}
+
+
+#contenedor{ width: 40%; margin: auto;border: solid 2px; }
+.lberror{ padding: 1px 50px; background-color: rgb(23, 209, 63); margin: 40px 80px 40px 40px ;width: 90%;border: solid 2px;height: 36px;font-size: 1.3em ;}
+.perror{ padding: 20px 10px; background-color: rgb(119, 184, 241); margin: 20px 80px 40px 40px;width: 30%;font-size: 1.3em ; }
+#imgcqr{ margin: auto; border: solid 2px #F00; width: 400px;}
+#qrh{ width: 400px;text-align: center; font-size: 20px; background-color: magenta; }
