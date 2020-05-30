@@ -13,7 +13,7 @@ global hospital, disp, user, gfh
 
 def pedido( request ):
     global gfh, hospital, disp, user
-    pedid='' ; pedido='' ; lista=[] ; codes={};
+    pedid='' ; pedido='' ; lista=[] ; codes={}
     if request.method == 'POST':
 
         clavesDescartar = ['csrfmiddlewaretoken', 'hospital', 'gfh', 'disp', 'pboton', 'tped', 'user']
@@ -54,7 +54,7 @@ def pedido( request ):
             user_id = cursor.fetchone()[0]
             print('disp_id:'+str(user_id))
 
-            datos = configurations.objects.filter(gfh=gfh_id, disp=disp_id, hosp_id=2).order_by('modulo','estanteria','ubicacion').distinct()
+            datos = configurations.objects.filter(gfh=gfh_id, disp=disp_id, hosp_id=2).order_by('modulo','estanteria','ubicacion')
             #consulta = 'SELECT * FROM configuraciones_configurations WHERE gfh ='+str(gfh_id)+' and disp =' +str(disp_id)+ ' and hosp_id = 2'
             #cursor.execute( consulta)
             #datos = cursor.fetchone()[0]
@@ -95,6 +95,8 @@ def pedido( request ):
         dbped_ident=pedidos_ident()
         indx = 2
         for i, j in codes.items():
+            i = i[ : i.find('*')]
+            print('CODIGO: ' + i )
             art=articulos.objects.filter( codigo=i )
             print( i + '\t' + art[0].nombre + '\t' + str( j ) )
             #dbped = pedidos( hospitales.objects.get( codigo= hospital ) ,gfhs.objects.get(gfh=gfh), dispositivos.objects.get(nombre=disp), articulos.objects.get(codigo=i), cantidad=j)
@@ -128,11 +130,12 @@ def pedido( request ):
                 'subject' : 'Pedido H6NA',
                 'mensaje' : 'Buenos dias adjunto fichero a pedir',
                 } """
-
+        """
         envcorreogmail( remcorreo='pedro.luis.jimenez.rico@gmail.com',
         passwd='Pelikano_0747', destcorreo='peli0747@gmail.com',
         fileadjunto=filexcel +'.xlsx', subject='Pedido H6NA',
         mensaje='Buenos dias adjunto fichero a pedir',)
+        """
 
         return render( request, 'pedido2.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user }) 
 
