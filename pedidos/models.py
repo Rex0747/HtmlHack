@@ -23,6 +23,15 @@ class pedidos(models.Model):
     def __str__(self):
         return '%s %s %s %s %s %s' %( self.npedido, self.hospital, self.gfh, self.disp, self.codigo, self.cantidad )
 
+class pedidos_temp(models.Model):
+    hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
+    gfh=models.ForeignKey( gfhs ,on_delete=models.CASCADE )
+    disp=models.ForeignKey( dispositivos ,on_delete=models.CASCADE )
+    codigo=models.ForeignKey( articulos  ,on_delete=models.CASCADE )
+    cantidad=models.FloatField()
+    user_temp=models.ForeignKey( usuarios ,on_delete=models.CASCADE)
+
+
 class pedidos_ident(models.Model):
     pedido=models.CharField(max_length=12)
     user=models.ForeignKey( usuarios ,on_delete=models.CASCADE)
