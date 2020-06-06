@@ -151,13 +151,14 @@ def download_file(request):
     res = ''
     gfhId = ''
     gfhNombre = ''
-    #dispNombre = []
-    dispIds = []
+    articulo = None
     dispId = ''
     dispositivo = ''
-    hospitalP = ''
+    hospital = ''
     code = ''
     cqr = ''
+    global gfhdispdown
+
     cqrlist = {}
     if  request.method == 'POST':
         if request.POST['gfh']:
@@ -166,88 +167,90 @@ def download_file(request):
             dispositivo = request.POST['disp']
         if request.POST['code']:
             code = request.POST['code']
-        #ubic = request.POST['ubic']
+        if request.POST['hosp']:
+            hospital = request.POST['hosp']
 
         #__________________________________SQL___________________________________________
         try:
-            cursor = connection.cursor()
+            #_____________Hospital______________
+            hospital_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
+            #___________________________________
             
             if dispositivo:
-                cursor.execute('SELECT gfh_id FROM configuraciones_dispositivos WHERE nombre = %s ', [ dispositivo ])
-                gfhId = cursor.fetchone()[0]
+                gfhId = getIdDB(dispositivos.objects.filter( nombre =dispositivo) , 'gfh_id')
                 print('GFH_id: '+str(gfhId))
-                cursor.execute('SELECT gfh FROM configuraciones_gfhs WHERE id = %s ', [ gfhId ])
-                gfhNombre = cursor.fetchone()[0]
+
+                gfhNombre = getIdDB(gfhs.objects.filter(id=gfhId), 'gfh')
                 print('GFH_nombre: '+str(gfhNombre))
-                cursor.execute('SELECT id FROM configuraciones_dispositivos WHERE nombre = %s', [ dispositivo ])
-                dispId = cursor.fetchone()[0]
+
+                dispId = getIdDB( dispositivos.objects.filter(nombre=dispositivo), 'id')
                 print('IdDisp:'+str(dispId))
 
             if gfhNombre:
-                cursor.execute('SELECT id FROM configuraciones_gfhs WHERE gfh = %s ', [ gfhNombre ])
-                gfhId = cursor.fetchone()[0]  #Aqui tenemos el ID del gfh en una lista de un item 
-                print( 'gfh_id2: '+ str(gfhId))
-                cursor.execute('SELECT id FROM configuraciones_dispositivos WHERE gfh_id = %s', [ gfhId ])
-                #dispIds.clear()
-                dtmp = cursor.fetchall()
-                print('dispId: '+str(dtmp))
-                
-                for i in dtmp: #Aqui tenemos una lista con los IDS de los dispositivos del gfh.
-                    dispIds.append( str(i[0]))
-                    print( 'ids: ' + str(dispIds[-1]))
-                cursor.execute('SELECT nombre FROM configuraciones_dispositivos WHERE gfh_id = %s', [ gfhId ])
-                dtmp = cursor.fetchall()[0]
+                gfhId = getIdDB(gfhs.objects.filter(gfh=gfhNombre), 'id')
+                print( 'gfh_id3: '+ str(gfhId))
+                dtmp = getIdDB(dispositivos.objects.filter(gfh=gfhId), 'nombre')
                 print('dispNombre: '+str(dtmp))
-                cursor.execute('SELECT gfh_id from configuraciones_dispositivos WHERE nombre = %s',[dtmp[0]])
-                gfhId = cursor.fetchone()[0]
-                print(dtmp[0])
-                print('GFH-ID: '+ str(gfhId))
-
-            #     print( 'id: ' + str(dispNombre[-1])+ ' IndiceDispositivo: '+ str(indDisp))
+                gfhId = getIdDB(dispositivos.objects.filter(nombre=dtmp),'gfh_id')
+                print('gfh_id4: '+ str(gfhId))
+                #_________________________numero de mismo codigo en DB_____________________________
+            
+                #__________________________________________________________________________________
             if code and not dispositivo and not gfhNombre:
                 print('Entro en code  ' + str(code) )
-                res = configurations.objects.filter( codigo=code).order_by('gfh','modulo','estanteria','ubicacion')
+                res = configurations.objects.filter(  codigo=code ,hosp=hospital_id ).order_by('gfh','modulo','estanteria','ubicacion')
+                print('codigo: '+ str(code))
+                print('hospital: '+ str(hospital_id))
             elif dispositivo and code:
                 print('Entro en dispositivo and code  ' + str(dispId) + ' '+code )
-                res = configurations.objects.filter( disp=dispId, codigo=code ).order_by('modulo','estanteria','ubicacion')
+                res = configurations.objects.filter( disp=dispId, codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre and code:
                 print('Entro en gfhNombre and code  ' + gfhNombre + ' ' + code )
-                res = configurations.objects.filter( gfh=gfhId , codigo=code ).order_by('modulo','estanteria','ubicacion')
+                res = configurations.objects.filter( gfh=gfhId , codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif dispositivo:
                 print('Entro en dispositivo  ' + str(dispId) )
-                res = configurations.objects.filter( disp=dispId).order_by('modulo','estanteria','ubicacion')
+                res = configurations.objects.filter( disp=dispId ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre:
                 print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
-                res = configurations.objects.filter( gfh=gfhId).order_by('disp','modulo','estanteria','ubicacion')
-                
-            cursor = None
-        except Exception as e:
-            print('Excepcion en la consulta.' + str( e ))
+                res = configurations.objects.filter( gfh=gfhId ,hosp=hospital_id).order_by('disp','modulo','estanteria','ubicacion')  
             
-        #print('GFH: ' + str( gfhP ) + ' DISPOSITIVO:' + str( dispP[0] ) + ' HOSPITAL: ' + hospitalP)
-        #gfh = 'GFH: ' + str( gfhNombre )
+        except Exception as e:
+            print('Excepcion en fase 1.' + str( e ))
+            
         nlineas = 'NUMERO DE LINEAS: ' + str( len(res))
         print('NUMERO DE LINEAS: ' + str( len(res)))
-        print(str(res))
+        #print('RES: '+str(res))
         excel = Excell( 'data' )
-
         ultimaFila = 2
+        repes = None
+        num = 0
         for i in res:
-            #______________________________MODO SQL___________________________________
-            cursor = connection.cursor()
-            cursor.execute( 'SELECT nombre FROM configuraciones_articulos WHERE configuraciones_articulos.idsel = %s', [i.nombre_id] )
-            articulos = cursor.fetchall()[0][0]
-            cursor.execute('SELECT nombre FROM configuraciones_dispositivos WHERE id = %s', [i.disp])
-            dispositivo = cursor.fetchone()[0]
-            cursor.execute('SELECT gfh FROM configuraciones_gfhs WHERE id = %s', [i.gfh])
-            print('ID_Config: '+ str(i.gfh))
-            gfhNombre = cursor.fetchone()[0]
-            cursor.execute('SELECT codigo FROM configuraciones_hospitales WHERE id = %s', [i.hosp_id])
-            hospitalP = cursor.fetchone()[0]
+            #print('objeto i: ' + str(i))
+            cod = articulos.objects.filter(idsel=i.nombre_id).values('codigo')[0].get('codigo')
+            #print('cod: '+ str(cod))
+            num = articulos.objects.filter( codigo=cod  ).count()
+            if num > 1:
+                #print('Numero de ids de articulo: ' + str(num) + ' en id: '+ str(cod)) 
+                repes = articulos.objects.filter(codigo=cod, hospital_id=hospital_id)[0]
+                #print(str(repes.nombre))
+                
+            try:
+                articulo = getIdDB(articulos.objects.filter(idsel=i.nombre_id , hospital_id=hospital_id), 'nombre')
+                #print('objeto articulo: ' + str(articulo) + ' idsel: '+ str(i.nombre_id))
+                if num > 1:
+                    articulo = getIdDB(articulos.objects.filter(codigo=cod , hospital_id=hospital_id), 'nombre')
+                    #articulo.nombre = repes.nombre
+                    #print('Se cambio de nombre a codigo: ' +cod+ ' a: '+ repes.nombre )
+            except Exception as e:
+                print('Excepcion en nombre articulo: ' + str(e) )
+                print('articulo: ' + str(articulo))
+                
 
+            dispositivo = getIdDB(dispositivos.objects.filter(id=i.disp), 'nombre')
+            gfhNombre = getIdDB(gfhs.objects.filter(id=i.gfh), 'gfh')
             cursor = None
-            cqr = str(i.modulo)+'-'+str(i.estanteria)+'-'+str(i.ubicacion)+'-'+str(i.division)+' '+str(i.codigo)+' '+str(articulos)+\
-            ' '+str(i.pacto)+' '+str(i.minimo)+' '+str(i.dc)+' '+str(gfhNombre)+' '+str(dispositivo)+' '+str(hospitalP )
+            cqr = str(i.modulo)+'-'+str(i.estanteria)+'-'+str(i.ubicacion)+'-'+str(i.division)+'|'+str(i.codigo)+'|'+str(articulo)+\
+            '|'+str(i.pacto)+'|'+str(i.minimo)+'|'+str(i.dc)+'|'+str(gfhNombre)+'|'+str(dispositivo)+'|'+str(hospital )
             cqrlist.update({ i.codigo : cqr })
             #_________________________________________________________________________
             ret = []
@@ -256,19 +259,20 @@ def download_file(request):
             ret.append(i.ubicacion )
             ret.append(i.division )
             ret.append(i.codigo )
-            ret.append( articulos ) #i.nombre_id
+            ret.append( articulo ) #i.nombre_id
             ret.append(i.pacto )
             ret.append(i.minimo )
             ret.append(i.dc )
             ret.append( gfhNombre )
             ret.append( dispositivo )
-            ret.append( hospitalP )
+            ret.append( hospital ) #hospitalP
             ret.append( cqr )
             retorno.append( ret )
 # ____________FASE LLENAR EXCEL____________________
             excel.insertar_rangofila( ret , ultimaFila , 1 )
             ultimaFila += 1
             ret = None
+        #print('Retorno: ' + str(retorno))
         ret = ['modulo','estanteria','ubicacion','division','codigo',
         'nombre','pacto','minimo','dc','gfh','disp','hosp_id']
         excel.insertar_rangofila( ret , 1 , 1 )
@@ -453,11 +457,16 @@ def mostrarCodigoGRpng( request ):
 def verCgr( request ):
     #items = request.META.items()
     items = request.GET['data']
-    fila = items.split(' ')
+    #print(str(items))
+    fila = items.split('|')
+    #print(str(fila) + ' long='+ str(len(fila)))
     codigo = fila[1]
-    foto = articulos.objects.filter(codigo=codigo) #.values('foto')[0]
+    hospital = fila[8]
+    hospital_id = hospitales.objects.filter(codigo=hospital ).values('id')
+    #print('Hospital_id: ' + str(hospital_id))
+    foto = articulos.objects.filter(codigo=codigo, hospital=hospital_id[0].get('id') ) #.values('foto')[0]
    
-    print('RUTA: ' + str(foto))
+    #print('RUTA: ' + str(foto))
     img = qrcode.make( items )
     imagen = open( STATIC_ROOT + 'qrcode.png','wb')
     img.save( imagen )
@@ -467,7 +476,10 @@ def verCgr( request ):
 
 
 
-
-    
-
-
+def getIdDB( formula, campo ):
+    d = formula
+    #print(str(d) + ' len: ' +str(len(d)))
+    if len(d)==1:
+        return d.values(campo)[0].get(campo)
+    if len(d)>1:
+        return d.values(campo)[0].get(campo)
