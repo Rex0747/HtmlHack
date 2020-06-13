@@ -4,10 +4,10 @@ from configuraciones.models import articulos, dispositivos, gfhs, hospitales, co
 # Create your models here.
 
 class usuarios(models.Model):
-    nombre=models.CharField(max_length=30)
+    nombre=models.CharField(max_length=50)
     ident= models.CharField(max_length=9, unique=True)
     passwd=models.CharField(max_length=100, null=False)
-    correo=models.EmailField(max_length=30, null=False)
+    correo=models.EmailField(max_length=50, null=False)
 
     def __str__(self):
         return '%s %s %s' %(self.nombre, self.ident, self.correo)
@@ -30,8 +30,9 @@ class pedidos_temp(models.Model):
     codigo=models.ForeignKey( articulos  ,on_delete=models.CASCADE )
     cantidad=models.FloatField()
     user_temp=models.ForeignKey( usuarios ,on_delete=models.CASCADE)
+    #pedido_temp=models.CharField(max_length=12)
 
-
+ 
 class pedidos_ident(models.Model):
     pedido=models.CharField(max_length=12)
     user=models.ForeignKey( usuarios ,on_delete=models.CASCADE)

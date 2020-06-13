@@ -8,6 +8,9 @@
     <title>Pedido2</title>
 </head>
     <body>
+        <form id="fenviar" name="fenviar" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+        <h2>ENVIAR PEDIDO COMPLETO</h2>
         <table>
             <tr>
                 <th>USUARIO</th>
@@ -16,13 +19,18 @@
                 <th>DISPOSITIVO</th>
             </tr>
             <tr>
-                <th>{{user}}</th>
-                <th>{{hospital}}</th>
-                <th>{{gfh}}</th>
-                <th>{{disp}}</th>
+                <td>{{user}}</td>
+                <td>{{hospital}}</td>
+                <td>{{gfh}}</td>
+                <td>{{disp}}</td>
+            </tr>
+            <tr>
+                <td><input id="txenviar" name="txenviar" type="text" value="{{user}}"></td>
+                <td><label id="lenviar">ENVIAR PEDIDO</label></td>
+                <td><input type="submit" id=tenviar></td>
             </tr>
 
         </table>
-    
+        </form>
     </body>
 </html>
