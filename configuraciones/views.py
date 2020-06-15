@@ -226,8 +226,9 @@ def download_file(request):
         num = 0
         for i in res:
             #print('objeto i: ' + str(i))
+            #cod = articulos.objects.filter(idsel=i.nombre_id, hospital_id=hospital_id).values('codigo')[0].get('codigo')
             cod = articulos.objects.filter(idsel=i.nombre_id).values('codigo')[0].get('codigo')
-            #print('cod: '+ str(cod))
+            print('cod: '+ str(cod))
             num = articulos.objects.filter( codigo=cod  ).count()
             if num > 1:
                 #print('Numero de ids de articulo: ' + str(num) + ' en id: '+ str(cod)) 

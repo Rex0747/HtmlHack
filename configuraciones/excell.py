@@ -20,7 +20,7 @@ class Excell:
             hoja = self.mostrar_sheets()  #imprime hojas
             self.ws = self.wb[ hoja[0] ]
 
-            print("se abrio fichero excell correctamente.")
+            print('se abrio fichero excell '+nombre +' correctamente.')
         except:
             self.wb = openpyxl.Workbook()  #cambiado de workbook()
             #self.ws = self.wb.create_sheet()
@@ -30,7 +30,7 @@ class Excell:
             self.ws.title = hoja[0]
             
             self.salvarexcell2()
-            print("se ha creado el fichero excell correctamente.")
+            print('se ha creado el fichero excell '+nombre+' correctamente.')
         # global ws
         self.ws = self.wb.active
 
@@ -40,6 +40,11 @@ class Excell:
         hoja.title = titulo
         # hoja.sheet_properties.tabcolor = "aaaaaa"
         #self.wb.save(nombre)
+
+    def deleteSheet(self, nombre):
+        #hoja= self.wb.get_sheet_by_name(nombre)
+        del self.wb[nombre]
+
 
     def cambiar_hoja(self, nombre):
         self.ws = self.wb[nombre]
@@ -148,6 +153,8 @@ class Excell:
     def salvarexcell2(self):
         self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' )
 
+    def salvarexcell3(self):
+        self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' ) 
 
 
 
