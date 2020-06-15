@@ -17,14 +17,14 @@ global hospital, disp, user, gfh
 
 def pedido( request ):
     global gfh, hospital, disp, user
-    pedid='' ; pedido='' ; lista=[] ; codes={}
+    lista=[] ; codes={}
     if request.method == 'POST':
         
         if request.POST.get('txenviar', False):         #request.POST.get('is_private', False)
             datos = None
             filas = None
             #numpedido = None
-            #user_temp = None
+            user_temp = usuarios.objects.get(ident=user).pk
             #hospital=None;npedido=None;gfh=None;dispositivo=None;codigo=None;cantidad=None
             #ndisp_tmp = -1
             #ped_temp = pedidos_temp.objects.all().values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
@@ -33,6 +33,8 @@ def pedido( request ):
                 datos = conn.execute(data)
                 datos = datos.fetchall()
             #print(str(len(datos)))
+            npedido = GenNumPedido()
+            CrearFicheroExcel()
             for i in datos:
                 fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0])
                 #fila = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
@@ -40,33 +42,11 @@ def pedido( request ):
                 with connection.cursor() as conn:
                     filas = conn.execute(fila)
                     res = filas.fetchall()
-                    InsertarPedido(res)
+                    InsertarPedido(res, npedido)
                 print('---------------------------------')
-
+            InsertarAlbaranPedido(user_temp, npedido )
+            deltem = pedidos_temp.objects.all().delete()
             #ped_temp = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
-
-
-            """for i in range(len(ped_temp))
-                ndisp = ped_temp[i]['disp']
-                if ndisp_tmp == -1:
-                    ndisp_tmp = ndisp
-                    numpedido = GenNumPedido()
-                if ndisp == ndisp_tmp:
-                    #crear dic con datos de ese pedido
-                    hospital = ped_temp[i]['hospital']; gfh = ped_temp[i]['gfh']; dispositivo = ped_temp[i]['disp']
-                    codigo = ped_temp[i]['codigo']; cantidad = ped_temp[i]['cantidad']; user_temp = ped_temp[i]['user_temp']
-                    npedido = numpedido
-
-                    insertarPedido( hospital, npedido, gfh, dispositivo, codigo, cantidad )
-                    
-                else:
-                    insertarPedido( hospital, npedido, gfh, dispositivo, codigo, cantidad )
-                    insertarNumPedido( numpedido, user_temp )
-                    numpedido = GenNumPedido()
-                    ndisp_tmp = ndisp """
-
-
-               
 
             return HttpResponse("Pedido enviado")
 
@@ -91,8 +71,8 @@ def pedido( request ):
             user = request.POST['user']
             print('User: ' + user + '\t'+ 'disp: ' + disp + '\t'+ 'gfh: ' + gfh + '\t'+ 'hosp: ' + hospital )
 
-            gfh_id, disp_id, user_id = GetDatos( disp, user )
-            datos = configurations.objects.filter( disp=disp_id, hosp_id=2).order_by('modulo','estanteria','ubicacion')
+            gfh_id, disp_id, user_id, hospital_id = GetDatos( disp, user)
+            datos = configurations.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
             print('Type: '+ str(type(datos)))
             print(str( datos ))
 
@@ -126,11 +106,7 @@ def insertarNumPedido(numpedido, user_temp ):
     dbped_ident.save()
 
 
-def InsertarPedido( datos ):
-    #print(str(valor))
-    #datos = valor.fetchall()
-    user_temp = -1
-    npedido = GenNumPedido()
+def InsertarPedido( datos, npedido ):
     for i in datos:
         print(str(i))
         hospital = i[5]; gfh = i[4]; dispositivo = i[3]
@@ -143,27 +119,65 @@ def InsertarPedido( datos ):
         ped.codigo=articulos.objects.get(idsel=codigo)
         ped.cantidad=cantidad
         ped.save()
+        CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
         
+        
+def InsertarAlbaranPedido( user_temp , npedido ):
     dbped_ident=pedidos_ident()
     dbped_ident.pedido=npedido
     dbped_ident.user=usuarios.objects.get(id=user_temp)
     dbped_ident.save()
+    #deltem = pedidos_temp.objects.filter(disp_id=disp_id).delete()
 
-    deltem = pedidos_temp.objects.filter(disp=dispositivo).delete()
     
+def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital):
+    tiempo = datetime.datetime.now()
+    tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
+    
+    filexcel = MEDIA_ROOT + '/pedidos/'+'data' + tiempo + '.xlsx'
+    excel = Excell( filexcel )
+    excel.cambiar_hoja('data')
+
+    codigo_r = articulos.objects.get(idsel=codigo)
+    print('CODIGO_R: '+ str(codigo_r))
+    hospital_r = hospitales.objects.get( id=hospital )
+    gfh_r = gfhs.objects.get(id=gfh)
+    disp_r = dispositivos.objects.get(id=dispositivo)
+    nombre_r = articulos.objects.get(codigo=codigo_r.codigo, hospital_id=hospital_r.pk) #Insertar hospital para filtrar
+    cantidad_r = cantidad
+
+    nfilas = excel.getnumerofilas()
+    lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre)
+    excel.insertar_rangofila( lt , nfilas + 1, 1)
+    excel.salvarexcell()
+
+
+def CrearFicheroExcel():
+    tiempo = datetime.datetime.now()
+    tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
+    filexcel = 'pedidos/'+'data' + tiempo
+    print( 'fileexcel: '+ filexcel)
+    excel = Excell( filexcel )
+    excel.createsheet('data')
+    excel.cambiar_hoja('data')
+    head = ['codigo','nombre','cantidad','gfh','dispositivo']
+    excel.insertar_rangofila( head ,1 ,1 )
+    excel.deleteSheet('Sheet')
+    excel.salvarexcell2()
 
 
 def Insert_temp( codes , hospital, disp ):
     for i, j in codes.items():
         i = i[ : i.find('*')]
         print('CODIGO: ' + i )
+        hospital_id = getIdDB(gfhs.objects.filter(nombre=disp), 'hp_id_id')
         art=articulos.objects.filter( codigo=i )
         print( i + '\t' + art[0].nombre + '\t' + str( j ) )
         dbped = pedidos_temp()
         dbped.hospital=hospitales.objects.get( codigo= hospital )
         dbped.gfh=gfhs.objects.get(nombre=disp)
         dbped.disp=dispositivos.objects.get(nombre=disp)
-        dbped.codigo=articulos.objects.get(codigo=i)
+        dbped.codigo=articulos.objects.get(codigo=i , hospital_id=hospital_id) #CAMBIAR SOLO PRUEBAS
         dbped.cantidad=j
         dbped.user_temp=usuarios.objects.get(ident=user)
         dbped.save()
@@ -225,49 +239,7 @@ def GetDatos( disp, user ):
     user_id = getIdDB(usuarios.objects.filter(ident=user),'id')
     print('disp_id:'+str(user_id))
 
-    return gfh_id, disp_id, user_id
+    hospital_id = getIdDB(gfhs.objects.filter(gfh=gfh), 'hp_id_id')
+    print('hospital_id:'+str(hospital_id))
 
-
-
-
-"""
-    rnd = GenNumPedido()
-
-    tiempo = str(int(datetime.datetime.now().timestamp()))
-    filexcel = 'pedidos/'+gfh+'_'+disp+'_' + tiempo 
-    excel = Excell( filexcel )
-    head = ['codigo','nombre','cantidad']
-    excel.insertar_rangofila( head ,1 ,1 )
-    dbped_ident=pedidos_ident()
-    indx = 2
-    for i, j in codes.items():
-        i = i[ : i.find('*')]
-        print('CODIGO: ' + i )
-        art=articulos.objects.filter( codigo=i )
-        print( i + '\t' + art[0].nombre + '\t' + str( j ) )
-        #dbped = pedidos( hospitales.objects.get( codigo= hospital ) ,gfhs.objects.get(gfh=gfh), dispositivos.objects.get(nombre=disp), articulos.objects.get(codigo=i), cantidad=j)
-        #dbped = pedidos( hospital=hospital ,gfh=gfh, disp=disp, codigo=i, cantidad=j)
-
-        dbped = pedidos()
-        dbped.npedido=rnd
-        dbped.hospital=hospitales.objects.get( codigo= hospital )
-        dbped.gfh=gfhs.objects.get(nombre=disp)
-        dbped.disp=dispositivos.objects.get(nombre=disp)
-        dbped.codigo=articulos.objects.get(codigo=i)
-        dbped.cantidad=j
-        dbped.save()
-
-        dbped_ident.pedido=rnd
-        dbped_ident.user=usuarios.objects.get(ident=user)
-        
-
-        lt = ( i, art[0].nombre, j )
-        excel.insertar_rangofila( lt , indx, 1)
-        indx += 1
-
-    excel.salvarexcell2()
-    dbped_ident.save()
-
-
-
-"""
+    return gfh_id, disp_id, user_id, hospital_id
