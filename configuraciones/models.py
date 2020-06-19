@@ -56,7 +56,6 @@ class hospitales(models.Model):
         return '%s %s' %( self.codigo, self.nombre )
         
 
-
 class configurations(models.Model):
     id=models.AutoField( primary_key=True )
     modulo=models.CharField(max_length=2 )

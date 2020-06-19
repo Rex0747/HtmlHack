@@ -12,6 +12,7 @@ class usuarios(models.Model):
     def __str__(self):
         return '%s %s %s' %(self.nombre, self.ident, self.correo)
 
+
 class pedidos(models.Model):
     npedido=models.CharField(max_length=12)
     hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
@@ -22,6 +23,7 @@ class pedidos(models.Model):
 
     def __str__(self):
         return '%s %s %s %s %s %s' %( self.npedido, self.hospital, self.gfh, self.disp, self.codigo, self.cantidad )
+
 
 class pedidos_temp(models.Model):
     hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
