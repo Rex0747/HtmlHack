@@ -24,7 +24,7 @@ SECRET_KEY = '=kq(*cy@&aizy&0tq#+3wlv-&2-rb(r*@g2fnchc1)fv_jh#t7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','192.168.1.34','pedroluisjr.ddns.net','82.158.161.101']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','192.168.1.34','pedroluisjr.ddns.net','82.158.161.101','192.168.1.11']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hacked','configuraciones',
-    'pedidos',
+    'pedidos','bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'HtmlHack.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db2.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db3.sqlite3'),
     }
 }
 

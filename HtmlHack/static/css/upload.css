@@ -28,8 +28,10 @@ body{ background-color: rgba(12, 190, 12, 0.9); margin: 0px; padding: 0px;}
 #tmenu tr td{ border: 1px solid;  }
 #tmenu tr td p{ font-size: 1.6em;margin-left:25px;}
 
-#gfh, #disp, #code, #ubic, #bajarfila{ width: 40%; margin-left: 5%;  font-size: 1.1em;}
+#code, #ubic, #bajarfila{ width: 40%; margin-left: 5%;  font-size: 1.1em;}
+/* #gfh, #disp, #user, #hospital{width: 150px}  */
 #bajarfila{ height: 1.2em;}
+#lba1, #lba2, #lba3, #lba4{ width: 80px;}
 
 #contenedor{ width: 40%; margin: auto;border: solid 2px; }
 .lberror{ padding: 1px 50px; background-color: rgb(23, 209, 63); margin: 40px 80px 40px 40px ;width: 90%;border: solid 2px;height: 36px;font-size: 1.3em ;}

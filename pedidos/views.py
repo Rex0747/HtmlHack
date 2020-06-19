@@ -43,12 +43,13 @@ def pedido( request ):
                     filas = conn.execute(fila)
                     res = filas.fetchall()
                     InsertarPedido(res, npedido)
-                print('---------------------------------')
+                #print('---------------------------------')
             InsertarAlbaranPedido(user_temp, npedido )
             deltem = pedidos_temp.objects.all().delete()
             #ped_temp = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
 
-            return HttpResponse("Pedido enviado")
+            #return HttpResponse("Pedido enviado")
+            return render( request, 'pedidos.html' )
 
         clavesDescartar = ['csrfmiddlewaretoken', 'hospital', 'gfh', 'disp', 'pboton', 'tped', 'user']
         claves = request.POST.keys()
@@ -58,7 +59,7 @@ def pedido( request ):
             else:
                 lista.append(i)
 
-        print('lista: '+ str(lista))
+        #print('lista: '+ str(lista))
 
         for i in lista:
             if int(request.POST[i]) > 0:
@@ -69,12 +70,15 @@ def pedido( request ):
             gfh = request.POST['gfh']
             disp = request.POST['disp']
             user = request.POST['user']
-            print('User: ' + user + '\t'+ 'disp: ' + disp + '\t'+ 'gfh: ' + gfh + '\t'+ 'hosp: ' + hospital )
+            #print('User: ' + user + '\t'+ 'disp: ' + disp + '\t'+ 'gfh: ' + gfh + '\t'+ 'hosp: ' + hospital )
 
             gfh_id, disp_id, user_id, hospital_id = GetDatos( disp, user)
             datos = configurations.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
-            print('Type: '+ str(type(datos)))
-            print(str( datos ))
+            #print('Type: '+ str(type(datos)))
+            #print(str( datos ))
+            for i in datos:
+                tmp = i.nombre
+                i.nombre.nombre = tmp.nombre[0:15]
 
             return render( request, 'pedidos.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user, 'datos': datos })
 

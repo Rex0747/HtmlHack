@@ -1,49 +1,53 @@
 {% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/pedidos.css' %}>
     <title>pedidos</title>
 </head>
     <body>
-            <h1>PEDIDOS</h1>
-
-            <form id="fpedidos" name="fpedido" enctype="multipart/form-data" method="POST" >
+            <div id="cont2" class="container-fluid" >
+                <h2 class="dropdown-header">ENVIAR PEDIDOS</h2>
+            <div class="row	justify-content-md-center">
+            <form id="fpedidos" name="fpedido" enctype="multipart/form-data" method="POST" class="form-group" >
                 {% csrf_token %}
-                <p id="pedidos">PEDIDOS</p>
-                <table>
+                <div class="row	justify-content-md-center">
+                <table id="tbped" class="table table-responsive">
                     <tr>
-                        <td><label>Hospital</label></td>
-                        <td><input type="text" name="hospital" id="hospital" value="CLINICO"></td>
+                        <td class="row"><label class="badge badge-pill badge-primary">Hospital</label></td>
+                        <td><input type="text" name="hospital" id="hospital" value="CLINICO" class="input-group-text"></td>
+                    </tr>   
+                    <tr>    
+                        <td class="row"><label class="badge badge-pill badge-primary">Gfh</label></td>
+                        <td><input type="text" name="gfh" id="gfh" class="input-group-text"></td>
                     </tr>
                     <tr>
-                        <td><label>Gfh</label></td>
-                        <td><input type="text" name="gfh" id="gfh"></td>
+                        <td class="row"><label class="badge badge-pill badge-primary">Dispositivo</label></td>
+                        <td><input type="text" name="disp" id="disp" class="input-group-text"></td>
+                    </tr>   
+                    <tr>
+                        <td class="row"><label class="badge badge-pill badge-primary">Usuario</label></td>
+                        <td><input type="text" name="user" id="user" class="input-group-text"></td>
                     </tr>
                     <tr>
-                        <td><label>Dispositivo</label></td>
-                        <td><input type="text" name="disp" id="disp"></td>
+                        <td><button type="submit" id="boton2_" class="btn btn-success" >Enviar</button></td>
                     </tr>
-                    <tr>
-                        <td><label>Usuario</label></td>
-                        <td><input type="text" name="user" id="user"></td>
-                    </tr>
-                    <tr>
-                        <td><button type="submit" id="boton2">Enviar</button></td>
-                    </tr>
-                </table> 
-        <!--  </form>
+                </table>  
+                </div>
 
-            <form id="tpedidos" name="tpedido" enctype="multipart/form-data" method="POST" >
-                {% csrf_token %}    -->
             {% if hospital %}
                 <table id="config" class="config">
-                  <!-- <tr>
+                    <tr>
                         <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Pacto</th> 
                         <th>Cantidad</th>   
-                    </tr>--> 
+                    </tr>
                     <tr>
             
                 {% for i in datos %}
@@ -52,24 +56,24 @@
                         <td>{{i.ubicacion}}</td>
                         <td>{{i.division}}</td>-->
                         <td>{{i.codigo}}</td>
-                        <td>{{i.nombre}}</td>
+                        <td>{{i.nombre.nombre}}</td>
                         <td>{{i.pacto}}</td>
                         <!--<td>{{i.gfh}}</td>
                         <td>{{i.disp}}</td>-->
+                        <td><input type="text" name="{{i.codigo}}*{{i.ubicacion}}" value="0" class="input-group-text" 
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td>
                         
-                        <td><input type="text" name="{{i.codigo}}*{{i.ubicacion}}" value="0"></td>
-                        
-                
                     </tr>
                 {% endfor %}
                     <tr>
-                        <td><button type="submit" name="pboton" id="pboton">SUBIR PEDIDO</button></td>
+                        <td><button type="submit" name="pboton" id="pboton" class="btn btn-success">SUBIR PEDIDO</button></td>
                         <!--<td><input type="text" name="tped"></td>-->
                     </tr>
                 </table>
             {% endif %}
 
-         </form>    
-
+        </form>    
+        </div>
+        </div>
     </body>
 </html>
