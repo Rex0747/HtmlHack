@@ -36,7 +36,7 @@ def upload_file(request):
         file_url = fs.url( filename )
         nfilas = ''
         if '.xlsx' in fichero.name:
-            print('FICHERO EXCEL DETECTADO: ', fichero.name )
+            #print('FICHERO EXCEL DETECTADO: ', fichero.name )
             #Llamar a funcion para hacer cambio de configuracion.
             excel = Excell( MEDIA_ROOT +'/' + fichero.name )
             nfilas = str( excel.getnumerofilas() -1 )
@@ -62,24 +62,29 @@ def upload_file(request):
                 gfhdisp = gfh
 
             if columnas != 12 or len( vacios ) > 0 or len( duplicados ) > 0 or len( gfh ) > 0:
-                print('Columnas: ' + str(columnas) + '  Vacios: '+ str( vacios) + '  Duplicados: '+str(duplicados) + '  GfhD: '+ str(gfhdisp))
+                #print('Columnas: ' + str(columnas) + '  Vacios: '+ str( vacios) + '  Duplicados: '+str(duplicados) + '  GfhD: '+ str(gfhdisp))
                 remove( MEDIA_ROOT +'/' + fichero.name )
                 return render( request, 'error.html', {'columnas': columnas, 'vacios': vacios, 'duplicados': duplicados ,'gfh': gfhdisp,}) 
 
             #____________________________________________________________________________
             rmgfh = fila[0]
-            print('Dispositivo: ' + str( rmgfh[10] ) )
+            #print('Dispositivo: ' + str( rmgfh[10] ) )
             #____________________________________SQL_____________________________________
             cursor = connection.cursor()
             rmv = cursor.execute('SELECT id , gfh_id FROM configuraciones_dispositivos WHERE nombre = %s',[ rmgfh[10] ])
             try:
                 rmv = rmv.fetchall()[0]
-            except Exception as e:
+                borradas = configurations.objects.filter( gfh=rmv[1], disp=rmv[0] ).delete()
+                print('Borradas: '+str(borradas) , ' gfh: '+str(rmv[1]), ' disp: '+str(rmv[0]))
+                print(str(rmv))
 
+            except Exception as e:
                 rmv = rmv.fetchone() #Si pasa por aqui es porque ese equipo no existe
                 #return HttpResponse('ERROR: Nombre de dispositivo o GFH mal indicado en excel.' + str( e ) + ' '+ str( rmv ) )
                 return render( request, 'error.html', { 'except': str( e ) + '   ' + str( rmv ) })
-            borradas = configurations.objects.filter( gfh=rmv[1], disp=rmv[0] ).delete()
+            
+            #borradas = cursor.execute('DELETE FROM configuraciones_configurations WHERE gfh=%s and disp=%s',[rmv[1], rmv[0]])
+            
             cursor = None
             indice = 1
             #____________________________________________________________________________
@@ -99,12 +104,12 @@ def upload_file(request):
                         consulta = "INSERT INTO configuraciones_articulos(codigo,nombre,hospital_id,foto)VALUES\
                         ('"+str(i[4])+"','"+str(i[5])+"','"+str(i[11])+"','"+str('articulos/'+str(i[4])+'.png')+"')"
                         cursor.execute( consulta )
-                        print('Articulo_Nuevo: ' + str( i[5] ))
+                        #print('Articulo_Nuevo: ' + str( i[5] ))
                         cursor.execute( 'SELECT idsel FROM configuraciones_articulos WHERE codigo = %s',[ i[4] ] )
                         i[5] = cursor.fetchone()[0]
                         
-                    
-                    cursor.execute('SELECT id FROM configuraciones_gfhs WHERE gfh = %s',[i[9] ])
+                    cursor.execute('SELECT gfh_id FROM configuraciones_dispositivos WHERE nombre = %s',[i[10] ])
+                    #cursor.execute('SELECT id FROM configuraciones_gfhs WHERE gfh = %s',[i[9] ])
                     i[9] = str(cursor.fetchone()[0])
                     #print('pk_Gfh: ' + str(i[9]))
                     cursor.execute('SELECT id FROM configuraciones_dispositivos WHERE nombre = %s',[ str(i[10]) ] )
@@ -178,40 +183,40 @@ def download_file(request):
             
             if dispositivo:
                 gfhId = getIdDB(dispositivos.objects.filter( nombre =dispositivo) , 'gfh_id')
-                print('GFH_id: '+str(gfhId))
+                #print('GFH_id: '+str(gfhId))
 
                 gfhNombre = getIdDB(gfhs.objects.filter(id=gfhId), 'gfh')
-                print('GFH_nombre: '+str(gfhNombre))
+                #print('GFH_nombre: '+str(gfhNombre))
 
                 dispId = getIdDB( dispositivos.objects.filter(nombre=dispositivo), 'id')
-                print('IdDisp:'+str(dispId))
+                #print('IdDisp:'+str(dispId))
 
             if gfhNombre:
                 gfhId = getIdDB(gfhs.objects.filter(gfh=gfhNombre), 'id')
-                print( 'gfh_id3: '+ str(gfhId))
+                #print( 'gfh_id3: '+ str(gfhId))
                 dtmp = getIdDB(dispositivos.objects.filter(gfh=gfhId), 'nombre')
-                print('dispNombre: '+str(dtmp))
+                #print('dispNombre: '+str(dtmp))
                 gfhId = getIdDB(dispositivos.objects.filter(nombre=dtmp),'gfh_id')
-                print('gfh_id4: '+ str(gfhId))
+                #print('gfh_id4: '+ str(gfhId))
                 #_________________________numero de mismo codigo en DB_____________________________
             
                 #__________________________________________________________________________________
             if code and not dispositivo and not gfhNombre:
-                print('Entro en code  ' + str(code) )
+                #print('Entro en code  ' + str(code) )
                 res = configurations.objects.filter(  codigo=code ,hosp=hospital_id ).order_by('gfh','modulo','estanteria','ubicacion')
-                print('codigo: '+ str(code))
-                print('hospital: '+ str(hospital_id))
+                #print('codigo: '+ str(code))
+                #print('hospital: '+ str(hospital_id))
             elif dispositivo and code:
-                print('Entro en dispositivo and code  ' + str(dispId) + ' '+code )
+                #print('Entro en dispositivo and code  ' + str(dispId) + ' '+code )
                 res = configurations.objects.filter( disp=dispId, codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre and code:
-                print('Entro en gfhNombre and code  ' + gfhNombre + ' ' + code )
+                #print('Entro en gfhNombre and code  ' + gfhNombre + ' ' + code )
                 res = configurations.objects.filter( gfh=gfhId , codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif dispositivo:
-                print('Entro en dispositivo  ' + str(dispId) )
+                #print('Entro en dispositivo  ' + str(dispId) )
                 res = configurations.objects.filter( disp=dispId ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre:
-                print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
+                #print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
                 res = configurations.objects.filter( gfh=gfhId ,hosp=hospital_id).order_by('disp','modulo','estanteria','ubicacion')  
             
         except Exception as e:
@@ -228,7 +233,7 @@ def download_file(request):
             #print('objeto i: ' + str(i))
             #cod = articulos.objects.filter(idsel=i.nombre_id, hospital_id=hospital_id).values('codigo')[0].get('codigo')
             cod = articulos.objects.filter(idsel=i.nombre_id).values('codigo')[0].get('codigo')
-            print('cod: '+ str(cod))
+            #print('cod: '+ str(cod))
             num = articulos.objects.filter( codigo=cod  ).count()
             if num > 1:
                 #print('Numero de ids de articulo: ' + str(num) + ' en id: '+ str(cod)) 
@@ -283,7 +288,7 @@ def download_file(request):
 # ____________FASE DOWNLOAD FILA____________________        
         #print( excel.nombre )
         fila = MEDIA_ROOT +'/' + 'data.xlsx'
-        print('FilaExcel: '+ fila)
+        #print('FilaExcel: '+ fila)
         if 'bajarfila' in request.POST:
             import os
             with open( fila , 'rb') as fh:
@@ -307,7 +312,7 @@ def articulosAdd(request):
     excel = Excell( MEDIA_ROOT +'/' + 'articulos.xlsx' )# , 'Hoja1')
     nfilas = str( excel.getnumerofilas() -1 )
     fila = excel.leer_fichero()
-    print( 'Numero de lineas: ' + str( nfilas) )
+    #print( 'Numero de lineas: ' + str( nfilas) )
     #indice = 0
     for item in fila:
         try:
@@ -330,7 +335,7 @@ def gfhsAdd(request):
     excel = Excell( MEDIA_ROOT +'/' + 'gfhs.xlsx' )
     nfilas = str( excel.getnumerofilas() -1 )
     fila = excel.leer_fichero()
-    print( 'Numero de lineas: ' + str( nfilas) )
+    #print( 'Numero de lineas: ' + str( nfilas) )
     for item in fila:
         try:
             gfh = gfhs( gfh=item[0], nombre=item[1])
@@ -346,10 +351,10 @@ def dispositivosAdd(request):
     excel = Excell( MEDIA_ROOT +'/' + 'dispositivos.xlsx' )
     nfilas = str( excel.getnumerofilas() -1 )
     fila = excel.leer_fichero()
-    print( 'Numero de lineas: ' + str( nfilas) )
+    #print( 'Numero de lineas: ' + str( nfilas) )
     for item in fila:
         try:
-             #______________________________MODO SQL___________________________________
+            #______________________________MODO SQL___________________________________
             cursor = connection.cursor()
             cursor.execute('SELECT id FROM configuraciones_gfhs WHERE configuraciones_gfhs.gfh = %s', [item[1]] )
 
@@ -367,22 +372,12 @@ def dispositivosAdd(request):
 
 
 def addFotoArticulo( rutaNombreFichero , codigo ):
-    #consulta = 'UPDATE configuraciones_articulos set foto = %s WHERE codigo = %s ',[ rutaNombreFichero , codigo ]
-    #print( consulta )
-    #cursor = connection.cursor()
-   # res = ''
+
     try:
-        #cursor.execute( consulta )
-        #print ('Codigo ' + codigo +' añadido correctamente.')
-        #cursor = None
         p = articulos.objects.filter(codigo=codigo, hospital_id=2 ).update(foto=rutaNombreFichero)
-        #print(str(p))
-        #p.save()
         return '0'
     except Exception as e:
-        #print('Fallo al insertar foto en el codigo ' + str(codigo))
         res = 'Fallo al actualizar: ' + str( e ) + ' Codigo: '+codigo+' Ruta: '+rutaNombreFichero
-        #cursor = None
     return str( res )
 
 
@@ -397,21 +392,18 @@ def AñadirFotosArticulos( request ):
             codigo = i.rstrip('.jpg')
         #print('CODIGO: '+codigo + ' RUTA: '+ ruta + i )
         res = addFotoArticulo( str('articulos/' + i) , str(codigo) )
-        print('res: '+res )
+        #print('res: '+res )
         if res == '0':
             #return HttpResponse( 'Ruta fotos añadida correctamente' )
             print('Codigo '+codigo+' añadido correctamente')
     return HttpResponse( res)
     
 def verArticulo( request ):
-    #img = '010181.png' 
-    #image_data = open( MEDIA_ROOT + "/articulos/" + img , "rb").read()
-    #return HttpResponse(image_data, content_type="image/png")
     img = None
     if request.method == 'POST' and request.POST['verimg']:
         codigo = request.POST['verimg']
         img = articulos.objects.filter(codigo= codigo)[0]
-        print( str(img))
+        #print( str(img))
     return render( request , 'galeria.html',{'img': img })
 
 def verGaleria( request ):
@@ -425,7 +417,7 @@ def verGaleria( request ):
             return render( request , 'galeria.html',{'error': img })
         img = articulos.objects.filter(hospital_id=id_hospi)
         #img = articulos.objects.filter(~Q(foto = ''))
-        print('Numero de registros: ' + str(len(img)))
+        #print('Numero de registros: ' + str(len(img)))
         #print(str('HOSPITAL: '+ hospi))
         return render( request , 'galeria.html',{'imagen': img })
     else:
@@ -464,10 +456,10 @@ def verCgr( request ):
     codigo = fila[1]
     hospital = fila[8]
     hospital_id = hospitales.objects.filter(codigo=hospital ).values('id')
-    #print('Hospital_id: ' + str(hospital_id))
+    print('Hospital_id: ' + str(hospital_id) + ' CODIGO: '+ str(codigo))
     foto = articulos.objects.filter(codigo=codigo, hospital=hospital_id[0].get('id') ) #.values('foto')[0]
-   
-    #print('RUTA: ' + str(foto))
+
+    print('RUTA: ' + str(foto))
     img = qrcode.make( items )
     imagen = open( STATIC_ROOT + 'qrcode.png','wb')
     img.save( imagen )

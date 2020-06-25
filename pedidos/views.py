@@ -24,7 +24,10 @@ def pedido( request ):
             datos = None
             filas = None
             #numpedido = None
-            user_temp = usuarios.objects.get(ident=user).pk
+            user_temp = request.POST['txenviar']  #usuarios.objects.get(ident=user).pk 
+            #print(str(user_temp))
+            user_temp = usuarios.objects.get(ident=user_temp).pk
+            #print(str(user_temp))
             #hospital=None;npedido=None;gfh=None;dispositivo=None;codigo=None;cantidad=None
             #ndisp_tmp = -1
             #ped_temp = pedidos_temp.objects.all().values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
@@ -34,9 +37,9 @@ def pedido( request ):
                 datos = datos.fetchall()
             #print(str(len(datos)))
             npedido = GenNumPedido()
-            CrearFicheroExcel()
+            filexcel = CrearFicheroExcel()
             for i in datos:
-                fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0])
+                fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
                 #fila = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
                 #filas = pedidos_temp.objects.filter(disp_id=i).order_by('id')
                 with connection.cursor() as conn:
@@ -45,7 +48,13 @@ def pedido( request ):
                     InsertarPedido(res, npedido)
                 #print('---------------------------------')
             InsertarAlbaranPedido(user_temp, npedido )
-            deltem = pedidos_temp.objects.all().delete()
+            deltem = pedidos_temp.objects.filter(user_temp_id=user_temp).delete()
+            """
+            envcorreogmail( remcorreo='pedro.luis.jimenez.rico@gmail.com',
+            passwd='R***7', destcorreo='peli0747@gmail.com',
+            fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
+            mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+            """
             #ped_temp = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
 
             #return HttpResponse("Pedido enviado")
@@ -70,6 +79,12 @@ def pedido( request ):
             gfh = request.POST['gfh']
             disp = request.POST['disp']
             user = request.POST['user']
+
+            userres = usuarios.objects.filter(ident=user).exists()
+            print(str(userres))
+            if userres == False:
+                return HttpResponse("Usuario no valido.")
+
             #print('User: ' + user + '\t'+ 'disp: ' + disp + '\t'+ 'gfh: ' + gfh + '\t'+ 'hosp: ' + hospital )
 
             gfh_id, disp_id, user_id, hospital_id = GetDatos( disp, user)
@@ -88,13 +103,6 @@ def pedido( request ):
 
         Insert_temp( codes, hospital, disp )
 
-
-        """
-        envcorreogmail( remcorreo='pedro.luis.jimenez.rico@gmail.com',
-        passwd='Pe******7', destcorreo='peli0747@gmail.com',
-        fileadjunto=filexcel +'.xlsx', subject='Pedido H6NA',
-        mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
-        """
 
         return render( request, 'pedido2.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user }) 
 
@@ -116,7 +124,7 @@ def InsertarPedido( datos, npedido ):
         hospital = i[5]; gfh = i[4]; dispositivo = i[3]
         codigo = i[2]; cantidad = i[1]; user_temp = i[6]
         ped = pedidos()
-        ped.hospital=hospitales.objects.get( id=hospital )
+        ped.hospital=hospitales.objects.get(id=hospital)
         ped.npedido=npedido
         ped.gfh=gfhs.objects.get(id=gfh)
         ped.disp=dispositivos.objects.get(id=dispositivo)
@@ -168,7 +176,7 @@ def CrearFicheroExcel():
     excel.insertar_rangofila( head ,1 ,1 )
     excel.deleteSheet('Sheet')
     excel.salvarexcell2()
-
+    return filexcel
 
 def Insert_temp( codes , hospital, disp ):
     for i, j in codes.items():

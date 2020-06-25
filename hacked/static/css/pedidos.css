@@ -4,6 +4,7 @@ body{ background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 .row{ margin: auto;}
 #cont,  #cont2{ border: solid 2px #000; width: 75% ; background-color: rgb(252, 252, 252);}
 #tbped{border: solid 2px #000;}
+.btn-primary{width: 120px;}
 
 #config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
 

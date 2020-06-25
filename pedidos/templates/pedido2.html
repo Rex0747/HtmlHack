@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
-    <link rel="STYLESHEET" type="text/css" href={% static 'css/pedidos.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/pedidos.css' %} 	media="screen and (max-device-width: 480px")>
     <title>Pedido2</title>
 </head>
     <body>
@@ -33,6 +33,9 @@
                 <td><input id="txenviar" name="txenviar" type="text" class="input-group-text" value="{{user}}"></td>
                 <td><label id="lenviar" class="badge badge-pill badge-primary">ENVIAR PEDIDO</label></td>
                 <td><input type="submit" id="tenviar" class="btn btn-success" ></td>
+            </tr>
+            <tr>
+                <td></td>
             </tr>
             <tr>
                 <td><a href="" id="envpedidos" class="btn btn-success" >Volver a Pedidos</a></td>
