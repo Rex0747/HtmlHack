@@ -16,6 +16,8 @@ from django.db.models import Q
 #from configuraciones.qrcode import generate
 #from configuraciones.qrcode import make
 import qrcode
+import glob
+
 
 #from somewhere import handle_uploaded_file
 # Create your views here.
@@ -28,9 +30,15 @@ def config1( request ):
 def upload_file(request):
     if request.method == 'POST' and request.FILES['upload']:
         fichero = request.FILES['upload']
+        #print( str(fichero ))
         #print( fichero.name )
         #print( fichero.size )
         #print(fichero.content_type)
+
+        rta = glob.glob(MEDIA_ROOT+'/*.xlsx')
+        for f in rta:
+            remove(f)
+
         fs = FileSystemStorage()
         filename = fs.save( fichero.name , fichero  )
         file_url = fs.url( filename )
@@ -48,6 +56,7 @@ def upload_file(request):
             comprobar = comprobarExcel( fila )
 
             columnas = excel.getnumerocolumnas()
+            print('Ncolumnas: '+str(columnas))
 
             v = comprobar.comprobarVacios()
             if len( v ) > 1:
@@ -61,7 +70,7 @@ def upload_file(request):
             if len( gfh ) > 0:
                 gfhdisp = gfh
 
-            if columnas != 12 or len( vacios ) > 0 or len( duplicados ) > 0 or len( gfh ) > 0:
+            if (columnas != 12) and (len( vacios ) > 0) and (len( duplicados ) > 0) and (len( gfh ) > 0):
                 #print('Columnas: ' + str(columnas) + '  Vacios: '+ str( vacios) + '  Duplicados: '+str(duplicados) + '  GfhD: '+ str(gfhdisp))
                 remove( MEDIA_ROOT +'/' + fichero.name )
                 return render( request, 'error.html', {'columnas': columnas, 'vacios': vacios, 'duplicados': duplicados ,'gfh': gfhdisp,}) 
@@ -144,6 +153,7 @@ def upload_file(request):
                     return HttpResponse( file_url)
                     
         remove( MEDIA_ROOT +'/' + fichero.name )
+        
         return render(request, 'SubirConfig.html', {'uploaded_file': file_url , 'borradas': borradas[0], 'nfilas': nfilas })
     #else:
         #form = UploadFileForm()

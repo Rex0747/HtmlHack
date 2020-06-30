@@ -209,9 +209,12 @@ class comprobarExcel:
         l = []
         err = []
         ind = 0
-        for i in self.Lista:
-            l.append( ( i[9], i[10], i[11] ) )
-
+        try:
+            for i in self.Lista:
+                l.append( ( i[9], i[10], i[11] ) )
+        except Exception as e:
+            print('Exception en ' + str(e))
+            return err
         for i in l:
             #print( 'Lista: ' + str( self.Lista[ind][9] ))
             #print( 'Tupla: ' + str( i[0] ))

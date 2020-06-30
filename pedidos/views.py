@@ -23,7 +23,7 @@ def pedido( request ):
         if request.POST.get('txenviar', False):         #request.POST.get('is_private', False)
             datos = None
             filas = None
-            #numpedido = None
+            npedido = None
             user_temp = request.POST['txenviar']  #usuarios.objects.get(ident=user).pk 
             #print(str(user_temp))
             user_temp = usuarios.objects.get(ident=user_temp).pk
@@ -36,7 +36,12 @@ def pedido( request ):
                 datos = conn.execute(data)
                 datos = datos.fetchall()
             #print(str(len(datos)))
-            npedido = GenNumPedido()
+            tmpPed = True
+            #npedido = GenNumPedido()
+            while(tmpPed == True):
+                npedido = GenNumPedido()
+                tmpPed = pedidos_ident.objects.filter(pedido=npedido).exists()
+                
             filexcel = CrearFicheroExcel()
             for i in datos:
                 fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
@@ -189,7 +194,7 @@ def Insert_temp( codes , hospital, disp ):
         dbped.hospital=hospitales.objects.get( codigo= hospital )
         dbped.gfh=gfhs.objects.get(nombre=disp)
         dbped.disp=dispositivos.objects.get(nombre=disp)
-        dbped.codigo=articulos.objects.get(codigo=i , hospital_id=hospital_id) #CAMBIAR SOLO PRUEBAS
+        dbped.codigo=articulos.objects.get(codigo=i , hospital_id=hospital_id)
         dbped.cantidad=j
         dbped.user_temp=usuarios.objects.get(ident=user)
         dbped.save()
@@ -235,6 +240,7 @@ def GenNumPedido():
     rnd += str(nr)
     rnd += random.choice(l1)
     rnd += random.choice(l1)
+    
     return rnd
 
 
