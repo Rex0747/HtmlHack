@@ -73,7 +73,7 @@ def pedido( request ):
             else:
                 lista.append(i)
 
-        #print('lista: '+ str(lista))
+        print('lista: '+ str(lista))  #Comentar de nuevo
 
         for i in lista:
             if int(request.POST[i]) > 0:
