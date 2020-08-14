@@ -185,6 +185,13 @@ def download_file(request):
         if request.POST['hosp']:
             hospital = request.POST['hosp']
 
+        if gfhNombre:
+            dispdown = gfhNombre
+        if dispositivo:
+            dispdown = dispositivo
+        if code:
+            dispdown = code
+
         #__________________________________SQL___________________________________________
         try:
             #_____________Hospital______________
@@ -235,9 +242,9 @@ def download_file(request):
         nlineas = 'NUMERO DE LINEAS: ' + str( len(res))
         print('NUMERO DE LINEAS: ' + str( len(res)))
         #print('RES: '+str(res))
-        excel = Excell( 'data' )
+        excel = Excell( dispdown ) #Excell( 'data' )
         ultimaFila = 2
-        repes = None
+        #repes = None
         num = 0
         for i in res:
             #print('objeto i: ' + str(i))
@@ -297,7 +304,7 @@ def download_file(request):
 # ____________END FASE LLENAR EXCEL________________
 # ____________FASE DOWNLOAD FILA____________________        
         #print( excel.nombre )
-        fila = MEDIA_ROOT +'/' + 'data.xlsx'
+        fila = MEDIA_ROOT +'/' + dispdown + '.xlsx' #'data.xlsx'
         #print('FilaExcel: '+ fila)
         if 'bajarfila' in request.POST:
             import os
@@ -305,7 +312,7 @@ def download_file(request):
                 #print('ENTRO')
                 response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
                 response['Content-Disposition'] = 'inline; filename=' + os.path.basename( fila )
-                remove( fila )
+                #remove( fila )
                 return response
         try:
             remove( fila )  #eliminamos fichero del servidor.
