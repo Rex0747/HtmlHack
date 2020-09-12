@@ -15,7 +15,7 @@ class stocks(models.Model):
     hosp= models.ForeignKey('hospitales',on_delete=models.CASCADE)
     
     def __str(self):
-        return '%s %s %s %s %s %s %s %s %s %s' %( self.codigo, self.stock, self.dc, \
+        return '%s %s %s %s %s %s' %( self.codigo, self.stock, self.dc, \
         self.gfh, self.disp, self.hosp )
 
 
