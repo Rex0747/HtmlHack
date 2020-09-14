@@ -84,7 +84,7 @@ def pedido( request ):
             gfh = request.POST['gfh']
             disp = request.POST['disp']
             user = request.POST['user']
-
+            
             userres = usuarios.objects.filter(ident=user).exists()
             print(str(userres))
             if userres == False:
@@ -96,6 +96,7 @@ def pedido( request ):
             datos = configurations.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
             #print('Type: '+ str(type(datos)))
             #print(str( datos ))
+            
             for i in datos:
                 tmp = i.nombre
                 i.nombre.nombre = tmp.nombre[0:15]

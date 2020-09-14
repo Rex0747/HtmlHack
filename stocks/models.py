@@ -10,12 +10,12 @@ class stocks(models.Model):
     codigo=models.CharField(max_length=6 )
     stock=models.FloatField( )
     dc=models.CharField(max_length=2 )
-    gfh=models.ForeignKey('gfhs',on_delete=models.CASCADE) 
-    disp=models.ForeignKey('dispositivos',on_delete=models.CASCADE)
-    hosp= models.ForeignKey('hospitales',on_delete=models.CASCADE)
-
+    gfh=models.ForeignKey(gfhs ,on_delete=models.CASCADE) 
+    disp=models.ForeignKey(dispositivos ,on_delete=models.CASCADE)
+    hosp= models.ForeignKey(hospitales ,on_delete=models.CASCADE)
+    
     def __str(self):
-        return '%s %s %s %s %s %s %s %s %s %s' %( self.codigo, self.stock, self.dc, \
+        return '%s %s %s %s %s %s' %( self.codigo, self.stock, self.dc, \
         self.gfh, self.disp, self.hosp )
 
 

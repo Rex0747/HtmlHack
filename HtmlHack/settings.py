@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hacked','configuraciones',
-    'pedidos','bootstrap4',
+    'pedidos','bootstrap4','stocks',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [ os.path.join(BASE_DIR, 'hacked/templates/'),
-         os.path.join(BASE_DIR, 'pedidos/templates/'),],
+        os.path.join(BASE_DIR, 'pedidos/templates/'),
+        os.path.join(BASE_DIR, 'stocks/templates/'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
