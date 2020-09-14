@@ -21,7 +21,10 @@ from hacked import views as v0
 from configuraciones import views as v1
 from pedidos import views as v2
 from stocks import views as v3
+<<<<<<< HEAD
 
+=======
+>>>>>>> 88646d09418ddf19ea363273f0a0798c90c817dc
 
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
