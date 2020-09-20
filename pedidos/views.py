@@ -73,7 +73,7 @@ def pedido( request ):
             else:
                 lista.append(i)
 
-        print('lista: '+ str(lista))  #Comentar de nuevo
+        #print('lista: '+ str(lista))  #Comentar de nuevo
 
         for i in lista:
             if int(request.POST[i]) > 0:
@@ -86,7 +86,7 @@ def pedido( request ):
             user = request.POST['user']
             
             userres = usuarios.objects.filter(ident=user).exists()
-            print(str(userres))
+            #print(str(userres))
             if userres == False:
                 return HttpResponse("Usuario no valido.")
 
@@ -126,7 +126,7 @@ def insertarNumPedido(numpedido, user_temp ):
 
 def InsertarPedido( datos, npedido ):
     for i in datos:
-        print(str(i))
+        #print(str(i))
         hospital = i[5]; gfh = i[4]; dispositivo = i[3]
         codigo = i[2]; cantidad = i[1]; user_temp = i[6]
         ped = pedidos()
@@ -148,7 +148,8 @@ def InsertarAlbaranPedido( user_temp , npedido ):
     #deltem = pedidos_temp.objects.filter(disp_id=disp_id).delete()
 
     
-def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital):
+def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital, idconf=None, ubicacion=None):
+    #print('CODIGO_ID: ', codigo)
     tiempo = datetime.datetime.now()
     tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
     
@@ -156,8 +157,8 @@ def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital):
     excel = Excell( filexcel )
     excel.cambiar_hoja('data')
 
-    codigo_r = articulos.objects.get(idsel=codigo)
-    print('CODIGO_R: '+ str(codigo_r))
+    codigo_r = articulos.objects.get(idsel=codigo , hospital_id=hospital) #
+    #print('CODIGO_R: '+ str(codigo_r))
     hospital_r = hospitales.objects.get( id=hospital )
     gfh_r = gfhs.objects.get(id=gfh)
     disp_r = dispositivos.objects.get(id=dispositivo)
@@ -165,7 +166,7 @@ def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital):
     cantidad_r = cantidad
 
     nfilas = excel.getnumerofilas()
-    lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre)
+    lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre, idconf, ubicacion)
     excel.insertar_rangofila( lt , nfilas + 1, 1)
     excel.salvarexcell()
 
@@ -174,11 +175,11 @@ def CrearFicheroExcel():
     tiempo = datetime.datetime.now()
     tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
     filexcel = 'pedidos/'+'data' + tiempo
-    print( 'fileexcel: '+ filexcel)
+    #print( 'fileexcel: '+ filexcel)
     excel = Excell( filexcel )
     excel.createsheet('data')
     excel.cambiar_hoja('data')
-    head = ['codigo','nombre','cantidad','gfh','dispositivo']
+    head = ['codigo','nombre','cantidad','gfh','dispositivo','rfid','ubicacion']
     excel.insertar_rangofila( head ,1 ,1 )
     excel.deleteSheet('Sheet')
     excel.salvarexcell2()
@@ -187,10 +188,10 @@ def CrearFicheroExcel():
 def Insert_temp( codes , hospital, disp ):
     for i, j in codes.items():
         i = i[ : i.find('*')]
-        print('CODIGO: ' + i )
+        #print('CODIGO: ' + i )
         hospital_id = getIdDB(gfhs.objects.filter(nombre=disp), 'hp_id_id')
         art=articulos.objects.filter( codigo=i )
-        print( i + '\t' + art[0].nombre + '\t' + str( j ) )
+        #print( i + '\t' + art[0].nombre + '\t' + str( j ) )
         dbped = pedidos_temp()
         dbped.hospital=hospitales.objects.get( codigo= hospital )
         dbped.gfh=gfhs.objects.get(nombre=disp)
@@ -229,7 +230,7 @@ def envcorreogmail( remcorreo, passwd, destcorreo, fileadjunto, subject, mensaje
     server.login(msg['From'], password)
     server.sendmail(msg['From'], msg['To'], msg.as_string())
     server.quit()
-    print("Enviado email a %s:" % (msg['To']))
+    #print("Enviado email a %s:" % (msg['To']))
 
 
 def GenNumPedido():
@@ -247,18 +248,69 @@ def GenNumPedido():
 
 def GetDatos( disp, user ):
     gfh_id = getIdDB(dispositivos.objects.filter(nombre=disp),'gfh_id')
-    print('gfh_id: '+str(gfh_id))
+    #print('gfh_id: '+str(gfh_id))
 
     gfh = getIdDB(gfhs.objects.filter(id=gfh_id), 'gfh')
-    print('gfh: '+str(gfh))
+    #print('gfh: '+str(gfh))
 
     disp_id = getIdDB(dispositivos.objects.filter(nombre=disp), 'id')
-    print('disp_id:'+str(disp_id))
+    #print('disp_id:'+str(disp_id))
 
     user_id = getIdDB(usuarios.objects.filter(ident=user),'id')
-    print('disp_id:'+str(user_id))
+    #print('disp_id:'+str(user_id))
 
     hospital_id = getIdDB(gfhs.objects.filter(gfh=gfh), 'hp_id_id')
-    print('hospital_id:'+str(hospital_id))
+    #print('hospital_id:'+str(hospital_id))
 
     return gfh_id, disp_id, user_id, hospital_id
+
+def getEtiquetas(request, code ):
+    mtx = code.split('|')
+    #print('Code: ', code)
+    #print('mtx: ', str(mtx))
+    filexcel = CrearFicheroExcel()
+
+    for i in mtx:
+        m = getIdDB( configurations.objects.filter(id=i),'modulo')
+        e = getIdDB( configurations.objects.filter(id=i),'estanteria')
+        u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
+        d = getIdDB( configurations.objects.filter(id=i),'division')
+        ubicacion = m + '.' + e + '.' + u + '.' + d
+
+        hospital_id = getIdDB( configurations.objects.filter(id=i),'hosp_id')
+        codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
+        #print('codigo_id:', codigo)
+        codigo_id = getIdDB( articulos.objects.filter(codigo=codigo),'idsel')
+        #print('codigo:', codigo_id)
+        idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
+        nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=hospital_id ), 'nombre')
+        pacto = getIdDB( configurations.objects.filter(id=i),'pacto')
+        gfhid = getIdDB( configurations.objects.filter(id=i),'gfh')
+        gfh = getIdDB(gfhs.objects.filter(id=gfhid), 'gfh')
+        dispid= getIdDB(configurations.objects.filter(id=i),'disp')
+        dispo = getIdDB(dispositivos.objects.filter(id=dispid), 'nombre')
+        idconf = i
+        CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+
+    # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
+    # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
+    # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
+    # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+    #yuquspczcabheluw
+
+    return HttpResponse('OK')
+    #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })
+
+def imprimirEtiquetas( request, gfh):
+    gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
+    #print('GFH_ID: ', gfh_id)
+    mtx = configurations.objects.filter(gfh=gfh_id)
+    csv = ''
+    for i in mtx:
+        csv += '|' + str(i.id)
+    csv = csv[1 : ]
+    #print(csv)
+
+    getEtiquetas(request, csv)
+
+    return HttpResponse()

@@ -14,10 +14,16 @@ class stocks(models.Model):
     disp=models.ForeignKey(dispositivos ,on_delete=models.CASCADE)
     hosp= models.ForeignKey(hospitales ,on_delete=models.CASCADE)
     
-    def __str(self):
+    def __str__(self):
         return '%s %s %s %s %s %s' %( self.codigo, self.stock, self.dc, \
         self.gfh, self.disp, self.hosp )
 
+
+class prueba(models.Model):
+    prb=models.CharField(max_length=16)
+
+    def __str__(self):
+        return '%s' %(self.prb)
 
 
 

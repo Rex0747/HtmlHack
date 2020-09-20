@@ -14,13 +14,13 @@ class Excell:
 
         global nombre
         nombre = nombre_
-        print('Nombre: ' + nombre )
+        #print('Nombre: ' + nombre )
         try:
             self.wb = openpyxl.load_workbook(nombre)  # workbook()
             hoja = self.mostrar_sheets()  #imprime hojas
             self.ws = self.wb[ hoja[0] ]
 
-            print('se abrio fichero excell '+nombre +' correctamente.')
+            #print('se abrio fichero excell '+nombre +' correctamente.')
         except:
             self.wb = openpyxl.Workbook()  #cambiado de workbook()
             #self.ws = self.wb.create_sheet()
@@ -30,7 +30,7 @@ class Excell:
             self.ws.title = hoja[0]
             
             self.salvarexcell2()
-            print('se ha creado el fichero excell '+nombre+' correctamente.')
+            #print('se ha creado el fichero excell '+nombre+' correctamente.')
         # global ws
         self.ws = self.wb.active
 
@@ -137,8 +137,7 @@ class Excell:
 
     def cambiarcolorcolumna(self, fila, col, inicol, fincol):
         for i in range(fila):
-            self.ws.cell(row=i + 1, column=col).fill = patternfill(start_color=inicol, end_color=fincol,
-                                                                   fill_type='solid')
+            self.ws.cell(row=i + 1, column=col).fill = patternfill(start_color=inicol, end_color=fincol, fill_type='solid')
         
 
     def getnumerofilas(self):
