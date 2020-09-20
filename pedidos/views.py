@@ -149,7 +149,7 @@ def InsertarAlbaranPedido( user_temp , npedido ):
 
     
 def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital, idconf=None, ubicacion=None):
-    #print('CODIGO_ID: ', codigo)
+    print('CODIGO_ID: ', codigo)
     tiempo = datetime.datetime.now()
     tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
     
@@ -279,7 +279,8 @@ def getEtiquetas(request, code ):
 
         hospital_id = getIdDB( configurations.objects.filter(id=i),'hosp_id')
         codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-        #print('codigo_id:', codigo)
+        print('rfid: ', str(i))
+        print('codigo_id:', codigo)
         codigo_id = getIdDB( articulos.objects.filter(codigo=codigo),'idsel')
         #print('codigo:', codigo_id)
         idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
@@ -304,7 +305,7 @@ def getEtiquetas(request, code ):
 def imprimirEtiquetas( request, gfh):
     gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
     #print('GFH_ID: ', gfh_id)
-    mtx = configurations.objects.filter(gfh=gfh_id)
+    mtx = configurations.objects.filter(gfh=gfh_id, hosp_id=1) #poner bien id hospital
     csv = ''
     for i in mtx:
         csv += '|' + str(i.id)
