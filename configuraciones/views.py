@@ -484,8 +484,6 @@ def verCgr( request ):
     return render( request , 'cqr.html',{'cqr': items , 'qrcode': STATIC_ROOT + 'qrcode.png' ,'img': foto ,} )
 
 
-
-
 def getIdDB( formula, campo ):
     d = formula
     #print(str(d) + ' len: ' +str(len(d)))
