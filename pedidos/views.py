@@ -125,19 +125,29 @@ def insertarNumPedido(numpedido, user_temp ):
 
 
 def InsertarPedido( datos, npedido ):
+    
+    listaM = []
     for i in datos:
         #print(str(i))
-        hospital = i[5]; gfh = i[4]; dispositivo = i[3]
-        codigo = i[2]; cantidad = i[1]; user_temp = i[6]
+        listaT = []
+        listaT.append( i[5] ) #hospital        0
+        listaT.append( i[4] ) #gfh             1
+        listaT.append( i[3] ) #dispositivo     2
+        listaT.append( i[2] ) #codigo          3
+        listaT.append( i[1] ) #cantidad        4
+        listaM.append(listaT)
+
+        user_temp = i[6] 
         ped = pedidos()
-        ped.hospital=hospitales.objects.get(id=hospital)
+        ped.hospital=hospitales.objects.get(id=listaT[0])
         ped.npedido=npedido
-        ped.gfh=gfhs.objects.get(id=gfh)
-        ped.disp=dispositivos.objects.get(id=dispositivo)
-        ped.codigo=articulos.objects.get(idsel=codigo)
-        ped.cantidad=cantidad
+        ped.gfh=gfhs.objects.get(id=listaT[1])
+        ped.disp=dispositivos.objects.get(id=listaT[2])
+        ped.codigo=articulos.objects.get(idsel=listaT[3])
+        ped.cantidad=listaT[4]
         ped.save()
-        CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
+        #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
+    CrearExcel_2( listaM )
         
         
 def InsertarAlbaranPedido( user_temp , npedido ):
@@ -168,6 +178,31 @@ def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital, idconf=None, ubicac
     nfilas = excel.getnumerofilas()
     lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre, idconf, ubicacion)
     excel.insertar_rangofila( lt , nfilas + 1, 1)
+    excel.salvarexcell()
+
+def CrearExcel_2(lista):
+    tiempo = datetime.datetime.now()
+    tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)   
+    filexcel = MEDIA_ROOT + '/pedidos/'+'data' + tiempo + '.xlsx'
+    excel = Excell( filexcel )
+    excel.cambiar_hoja('data')
+
+    for i in lista:
+                        #2        3       4      5       1            6         0
+        #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+        #print('CODIGO_ID: ', i[2])
+
+        codigo_r = articulos.objects.get(idsel=i[2] , hospital_id=i[1]) #
+        #print('CODIGO_R: '+ str(codigo_r))
+        hospital_r = hospitales.objects.get( id=i[1] )
+        gfh_r = gfhs.objects.get(id=i[4])
+        disp_r = dispositivos.objects.get(id=i[5])
+        nombre_r = articulos.objects.get(codigo=codigo_r.codigo, hospital_id=hospital_r.pk) #Insertar hospital para filtrar
+        cantidad_r = i[3]
+
+        nfilas = excel.getnumerofilas()
+        lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre, i[6], i[0])
+        excel.insertar_rangofila( lt , nfilas + 1, 1)
     excel.salvarexcell()
 
 
@@ -269,14 +304,12 @@ def getEtiquetas(request, code ):
     #print('Code: ', code)
     #print('mtx: ', str(mtx))
     filexcel = CrearFicheroExcel()
-
     for i in mtx:
         m = getIdDB( configurations.objects.filter(id=i),'modulo')
         e = getIdDB( configurations.objects.filter(id=i),'estanteria')
         u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
         d = getIdDB( configurations.objects.filter(id=i),'division')
         ubicacion = m + '.' + e + '.' + u + '.' + d
-
         hospital_id = getIdDB( configurations.objects.filter(id=i),'hosp_id')
         codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
         print('rfid: ', str(i))
@@ -291,7 +324,9 @@ def getEtiquetas(request, code ):
         dispid= getIdDB(configurations.objects.filter(id=i),'disp')
         dispo = getIdDB(dispositivos.objects.filter(id=dispid), 'nombre')
         idconf = i
-        CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+        #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+        lista.append( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+    
 
     # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
     # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
@@ -301,6 +336,50 @@ def getEtiquetas(request, code ):
 
     return HttpResponse('OK')
     #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })
+
+def getEtiquetas2(request, code ):
+    mtx = code.split('|')
+    #print('Code: ', code)
+    #print('mtx: ', str(mtx))
+    filexcel = CrearFicheroExcel()
+    
+    listaM = []
+    for i in mtx:
+        listaT = []
+        m = getIdDB( configurations.objects.filter(id=i),'modulo')
+        e = getIdDB( configurations.objects.filter(id=i),'estanteria')
+        u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
+        d = getIdDB( configurations.objects.filter(id=i),'division')
+        listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+        listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
+        codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
+        #print('rfid: ', str(i))
+        #print('codigo_id:', codigo)
+        listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
+        #print('codigo:', codigo_id)
+        idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
+        nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[1] ), 'nombre')
+        listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
+        listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
+        gfh = getIdDB(gfhs.objects.filter(id=listaT[4]), 'gfh')
+        listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
+        dispo = getIdDB(dispositivos.objects.filter(id=listaT[5]), 'nombre')
+        listaT.append( i ) #6  idconf
+        listaM.append( listaT )
+    
+                        #2        3       4      5       1            6         0
+        #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+    CrearExcel_2( listaM )
+    
+
+    # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
+    # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
+    # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
+    # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+    #yuquspczcabheluw
+
+    return HttpResponse('OK')
+    #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })    
 
 def imprimirEtiquetas( request, gfh):
     gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
@@ -312,6 +391,6 @@ def imprimirEtiquetas( request, gfh):
     csv = csv[1 : ]
     #print(csv)
 
-    getEtiquetas(request, csv)
+    getEtiquetas2(request, csv)
 
-    return HttpResponse()
+    return HttpResponse('Fichero creado correctamente.')
