@@ -191,17 +191,20 @@ def CrearExcel_2(lista):
                         #2        3       4      5       1            6         0
         #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
         #print('CODIGO_ID: ', i[2])
-
-        codigo_r = articulos.objects.get(idsel=i[2] , hospital_id=i[1]) #
+        print(str(i))
+        codigo_r = articulos.objects.get(idsel=i[3] , hospital_id=i[0]) #
         #print('CODIGO_R: '+ str(codigo_r))
-        hospital_r = hospitales.objects.get( id=i[1] )
-        gfh_r = gfhs.objects.get(id=i[4])
-        disp_r = dispositivos.objects.get(id=i[5])
+        hospital_r = hospitales.objects.get( id=i[0] )
+        gfh_r = gfhs.objects.get(id=i[1])
+        disp_r = dispositivos.objects.get(id=i[2])
         nombre_r = articulos.objects.get(codigo=codigo_r.codigo, hospital_id=hospital_r.pk) #Insertar hospital para filtrar
-        cantidad_r = i[3]
-
+        cantidad_r = i[4]
+        lt = None
         nfilas = excel.getnumerofilas()
-        lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre, i[6], i[0])
+        if len( i ) == 7:
+            lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre, i[5], i[6] )
+        else:
+            lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre )
         excel.insertar_rangofila( lt , nfilas + 1, 1)
     excel.salvarexcell()
 
@@ -350,21 +353,25 @@ def getEtiquetas2(request, code ):
         e = getIdDB( configurations.objects.filter(id=i),'estanteria')
         u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
         d = getIdDB( configurations.objects.filter(id=i),'division')
-        listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+        
         listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
+        listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
+        gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
+        listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
         codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
+        listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
+        listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
         #print('rfid: ', str(i))
         #print('codigo_id:', codigo)
-        listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
+        
         #print('codigo:', codigo_id)
+
         idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
-        nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[1] ), 'nombre')
-        listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
-        listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
-        gfh = getIdDB(gfhs.objects.filter(id=listaT[4]), 'gfh')
-        listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
-        dispo = getIdDB(dispositivos.objects.filter(id=listaT[5]), 'nombre')
+        nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
+        
+        dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
         listaT.append( i ) #6  idconf
+        listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
         listaM.append( listaT )
     
                         #2        3       4      5       1            6         0

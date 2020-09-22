@@ -44,7 +44,7 @@ urlpatterns = [
     path('cqr',v1.verCgr),
     path('pedidos/', v2.pedido),
     path('stocks/<modo>' , v3.Stocks), #, { 'mode': 'mode'}),
-    path('etiquetas/<code>', v2.getEtiquetas),
+    path('etiquetas/<code>', v2.getEtiquetas2),
     path('imprimirEtiquetas/<gfh>', v2.imprimirEtiquetas),
 
 
