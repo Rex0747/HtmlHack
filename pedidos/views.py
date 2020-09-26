@@ -180,18 +180,17 @@ def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital, idconf=None, ubicac
     excel.insertar_rangofila( lt , nfilas + 1, 1)
     excel.salvarexcell()
 
-def CrearExcel_2(lista):
+def CrearExcel_2( lista ):
     tiempo = datetime.datetime.now()
     tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)   
     filexcel = MEDIA_ROOT + '/pedidos/'+'data' + tiempo + '.xlsx'
     excel = Excell( filexcel )
     excel.cambiar_hoja('data')
-
+    
     for i in lista:
                         #2        3       4      5       1            6         0
         #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
         #print('CODIGO_ID: ', i[2])
-        print(str(i))
         codigo_r = articulos.objects.get(idsel=i[3] , hospital_id=i[0]) #
         #print('CODIGO_R: '+ str(codigo_r))
         hospital_r = hospitales.objects.get( id=i[0] )
@@ -239,7 +238,6 @@ def Insert_temp( codes , hospital, disp ):
         dbped.user_temp=usuarios.objects.get(ident=user)
         dbped.save()
 
-
 def envcorreogmail( remcorreo, passwd, destcorreo, fileadjunto, subject, mensaje ):
     from email.mime.multipart import MIMEMultipart
     from email.mime.base import MIMEBase  #MIMEImage import MIMEImage
@@ -270,7 +268,6 @@ def envcorreogmail( remcorreo, passwd, destcorreo, fileadjunto, subject, mensaje
     server.quit()
     #print("Enviado email a %s:" % (msg['To']))
 
-
 def GenNumPedido():
     rnd= ''
     l1 = 'A','B','C','D','E','F','X','Y','Z'
@@ -282,7 +279,6 @@ def GenNumPedido():
     rnd += random.choice(l1)
     
     return rnd
-
 
 def GetDatos( disp, user ):
     gfh_id = getIdDB(dispositivos.objects.filter(nombre=disp),'gfh_id')
@@ -363,7 +359,6 @@ def getEtiquetas2(request, code ):
         listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
         #print('rfid: ', str(i))
         #print('codigo_id:', codigo)
-        
         #print('codigo:', codigo_id)
 
         idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
@@ -376,14 +371,14 @@ def getEtiquetas2(request, code ):
     
                         #2        3       4      5       1            6         0
         #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-    CrearExcel_2( listaM )
-    
+    CrearExcel_2(listaM )
 
     # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
     # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
     # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
     # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
     #yuquspczcabheluw
+
 
     return HttpResponse('OK')
     #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })    
@@ -400,4 +395,5 @@ def imprimirEtiquetas( request, gfh):
 
     getEtiquetas2(request, csv)
 
-    return HttpResponse('Fichero creado correctamente.')
+    
+    return HttpResponse( 'Final' )
