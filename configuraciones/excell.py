@@ -14,7 +14,7 @@ class Excell:
 
         global nombre
         nombre = nombre_
-        #print('Nombre: ' + nombre )
+        print('NombreFichero: ' + nombre )
         try:
             self.wb = openpyxl.load_workbook(nombre)  # workbook()
             hoja = self.mostrar_sheets()  #imprime hojas
@@ -151,6 +151,7 @@ class Excell:
 
     def salvarexcell2(self):
         self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' )
+        print('Salvado nombre: '+ MEDIA_ROOT +'/' + nombre +'.xlsx' )
 
     def salvarexcell3(self):
         self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' ) 

@@ -1,6 +1,6 @@
 {
     "djangointellisense.debugMessages": true,
-    "djangointellisense.projectRoot": "\\\\DENEBOLA\\python\\django\\HtmlHack",
+    "djangointellisense.projectRoot": "C:/Users/Pedro/OneDrive/Documentos/Python/django/HtmlHack",
     "djangointellisense.settingsModule": "HtmlHack.settings",
-    "python.pythonPath": "D:\\Portable_APP\\Python_Portable_3.8\\WPy64-3830b3\\python-3.8.3rc1.amd64\\python.exe"
+    "python.pythonPath": "C:/Programas/Portable_APP/Python_3.8_Portable/python-3.8.3rc1.amd64/python.exe"
 }
