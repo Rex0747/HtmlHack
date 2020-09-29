@@ -414,8 +414,13 @@ def imprimirEtiquetas( request, gfh):
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename( fila )
     return response
     #return HttpResponse( 'Final' )
-def pedidodc( request ):
 
-    return render(request,'pedidodc.html')    
+def pedidodc( request ):
+    direccion = None
+    if request.POST.get('gfhs', False):
+        gfh = request.POST['gfhs']
+        direccion = 'localhost:8082/imprimirEtiquetas/' + gfh
+
+    return render(request, 'pedidodc.html', {'direccion': direccion })    
 
 
