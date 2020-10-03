@@ -11,8 +11,13 @@
     <title>Pedido DC</title>
 </head>
     <body>
+        <form id="pedidosdc" name="pedidosdc" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
             <label>GFH a pedir</label>
-            <input type="text" name="gfh">
-            <input type="button" value="gfh">
+            <a name="dir" href={{direccion}}>enlace</a>
+           
+            <input type="submit" name="sboton" id="sboton">
+
+        </form>
     </body>
 </html>

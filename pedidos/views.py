@@ -311,52 +311,14 @@ def GetDatos( disp, user ):
 
     return gfh_id, disp_id, user_id, hospital_id
 
-# def getEtiquetas(request, code ):
-#     mtx = code.split('|')
-#     #print('Code: ', code)
-#     #print('mtx: ', str(mtx))
-#     filexcel = CrearFicheroExcel()
-#     for i in mtx:
-#         m = getIdDB( configurations.objects.filter(id=i),'modulo')
-#         e = getIdDB( configurations.objects.filter(id=i),'estanteria')
-#         u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
-#         d = getIdDB( configurations.objects.filter(id=i),'division')
-#         ubicacion = m + '.' + e + '.' + u + '.' + d
-#         hospital_id = getIdDB( configurations.objects.filter(id=i),'hosp_id')
-#         codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-#         print('rfid: ', str(i))
-#         print('codigo_id:', codigo)
-#         codigo_id = getIdDB( articulos.objects.filter(codigo=codigo),'idsel')
-#         #print('codigo:', codigo_id)
-#         idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
-#         nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=hospital_id ), 'nombre')
-#         pacto = getIdDB( configurations.objects.filter(id=i),'pacto')
-#         gfhid = getIdDB( configurations.objects.filter(id=i),'gfh')
-#         gfh = getIdDB(gfhs.objects.filter(id=gfhid), 'gfh')
-#         dispid= getIdDB(configurations.objects.filter(id=i),'disp')
-#         dispo = getIdDB(dispositivos.objects.filter(id=dispid), 'nombre')
-#         idconf = i
-#         #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-#         lista.append( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-    
-
-#     # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
-#     # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
-#     # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
-#     # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
-#     #yuquspczcabheluw
-
-#     return HttpResponse('OK')
-#     #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })
-
-def getEtiquetas2(request, code , gfh):
+def getEtiquetas(request, code ):
     mtx = code.split('|')
     #print('Code: ', code)
     #print('mtx: ', str(mtx))
-    filexcel = CrearFicheroExcel(gfh)
-
+    
     listaM = []
     for i in mtx:
+        #try:
         listaT = []
         m = getIdDB( configurations.objects.filter(id=i),'modulo')
         e = getIdDB( configurations.objects.filter(id=i),'estanteria')
@@ -370,30 +332,91 @@ def getEtiquetas2(request, code , gfh):
         codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
         listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
         listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
-        #print('rfid: ', str(i))
-        #print('codigo_id:', codigo)
+        print('rfid: ', str(i))
+        print('codigo_id:', codigo)
         #print('codigo:', codigo_id)
 
         idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
         nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
         
         dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
+        
         listaT.append( i ) #6  idconf
         listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
         listaM.append( listaT )
     
+        #except Exception as e:
+            #print('El codigo ', str(i), ' No existe en BBDD.')
                         #2        3       4      5       1            6         0
         #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-    file = CrearExcel_2(listaM , filexcel)
+    
+    file = CrearExcel_2(listaM )
 
     # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
     # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
     # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
     # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
     #yuquspczcabheluw
-
     return file
+    #else:
     #return HttpResponse('OK')
+    #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })    
+
+
+def getEtiquetas2(request, code , gfh=None):
+    mtx = code.split('|')
+    #print('Code: ', code)
+    #print('mtx: ', str(mtx))
+    filexcel = None
+    file = None
+    if gfh:
+        filexcel = CrearFicheroExcel(gfh)
+
+    listaM = []
+    
+    for i in mtx:
+        try:
+            listaT = []
+            m = getIdDB( configurations.objects.filter(id=i),'modulo')
+            e = getIdDB( configurations.objects.filter(id=i),'estanteria')
+            u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
+            d = getIdDB( configurations.objects.filter(id=i),'division')
+            
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
+            gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
+            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
+            codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
+            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
+            #print('rfid: ', str(i))
+            #print('codigo_id:', codigo)
+            #print('codigo:', codigo_id)
+
+            idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
+            nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
+            
+            dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
+            if m and e and u and d:
+                listaT.append( i ) #6  idconf
+                listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+                listaM.append( listaT )
+    
+        except Exception as e:
+            print('El codigo ', str(i), ' No existe en BBDD.')
+                        #2        3       4      5       1            6         0
+        #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
+    if gfh:
+        file = CrearExcel_2(listaM , filexcel)
+
+    # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
+    # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
+    # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
+    # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+    #yuquspczcabheluw
+        return file
+    else:
+        return HttpResponse('OK')
     #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })    
 
 def imprimirEtiquetas( request, gfh):
