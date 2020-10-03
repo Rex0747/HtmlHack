@@ -422,7 +422,11 @@ def getEtiquetas2(request, code , gfh=None):
 def imprimirEtiquetas( request, gfh):
     gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
     #print('GFH_ID: ', gfh_id)
-    mtx = configurations.objects.filter(gfh=gfh_id, hosp_id=1) #poner bien id hospital
+    mtx = None
+    try:
+        mtx = configurations.objects.filter(gfh=gfh_id) #, hosp_id=1) #poner bien id hospital
+    except Exception as e:
+        print('Fallo en seleccion de ids.', e)
     csv = ''
     for i in mtx:
         csv += '|' + str(i.id)
@@ -438,12 +442,40 @@ def imprimirEtiquetas( request, gfh):
     return response
     #return HttpResponse( 'Final' )
 
-def pedidodc( request ):
-    direccion = None
-    if request.POST.get('gfhs', False):
-        gfh = request.POST['gfhs']
-        direccion = 'localhost:8082/imprimirEtiquetas/' + gfh
+def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
+    mtx = data.split('|')
 
-    return render(request, 'pedidodc.html', {'direccion': direccion })    
+    listaM = []
+    for i in mtx:
+        try:
+            listaT = []
+            m = getIdDB( configurations.objects.filter(id=i),'modulo')
+            e = getIdDB( configurations.objects.filter(id=i),'estanteria')
+            u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
+            d = getIdDB( configurations.objects.filter(id=i),'division')
+            
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
+            gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
+            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
+            codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
+            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
+            print('rfid: ', str(i))
+            print('codigo_id:', codigo)
+            print('__________________')
+
+            idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
+            nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
+            
+            dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
+            listaT.append( i ) #6  idconf
+            #listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+            listaM.append( listaT )
+        except Exception as e:
+            print('Articulo inexistente ',str(i) + '  '+ e)
+            
+
+    return HttpResponse('ok')   
 
 

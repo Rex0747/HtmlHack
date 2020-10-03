@@ -46,7 +46,7 @@ urlpatterns = [
     path('stocks/<modo>' , v3.Stocks), #, { 'mode': 'mode'}),
     path('etiquetas/<code>', v2.getEtiquetas),
     path('imprimirEtiquetas/<gfh>', v2.imprimirEtiquetas),
-    path('pedidodc', v2.pedidodc),
+    path('pedidodc/<data>', v2.pedidodc),
 
 
 ]
