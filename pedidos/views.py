@@ -3,7 +3,7 @@ from django.http import HttpResponse
 import os, random
 from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos
 import datetime
-from pedidos.models import pedidos, pedidos_ident, pedidos_temp, usuarios
+from pedidos.models import pedidos, pedidos_ident, pedidos_temp, usuarios, pedidos_dc, pedidos_ident_dc
 from django.db import connection
 from configuraciones.excell import Excell
 from configuraciones.views import getIdDB
@@ -148,7 +148,35 @@ def InsertarPedido( datos, npedido ):
         ped.save()
         #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
     CrearExcel_2( listaM )
-        
+
+def InsertarPedido_dc( datos, npedido ):
+    print('InsertarPedido DC: ', str(datos))
+    listaM = []
+    for i in datos:
+        #print(str(i))
+        listaT = []
+        listaT.append( i[0] ) #hospital        0
+        listaT.append( i[1] ) #gfh             1
+        listaT.append( i[2] ) #disp            2
+        listaT.append( i[3] ) #codigo          3
+        listaT.append( i[4] ) #cantidad        4
+
+        listaT.append( i[5] ) #codigo          5
+        listaT.append( i[6] ) #ubicacion       6
+        listaM.append(listaT)
+        #user_temp = i[6] 
+
+        ped = pedidos_dc()
+        ped.hospital=hospitales.objects.get(id=i[0])
+        ped.npedido=npedido
+        ped.gfh=gfhs.objects.get(id=i[1])
+        #ped.disp=dispositivos.objects.get(id=listaT[2])
+        ped.codigo=articulos.objects.get(idsel=i[3])
+        ped.cantidad=i[4]
+        ped.save()
+        #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
+    filexcel = CrearFicheroExcel('data')
+    CrearExcel_2( listaM )
         
 def InsertarAlbaranPedido( user_temp , npedido ):
     dbped_ident=pedidos_ident()
@@ -157,6 +185,10 @@ def InsertarAlbaranPedido( user_temp , npedido ):
     dbped_ident.save()
     #deltem = pedidos_temp.objects.filter(disp_id=disp_id).delete()
 
+def InsertarAlbaranPedido_dc( npedido ):
+    dbped_ident=pedidos_ident_dc()
+    dbped_ident.pedido=npedido
+    dbped_ident.save()
     
 # def CrearExcel(codigo, cantidad, gfh, dispositivo, hospital, idconf=None, ubicacion=None):
 #     print('CODIGO_ID: ', codigo)
@@ -181,7 +213,7 @@ def InsertarAlbaranPedido( user_temp , npedido ):
 #     excel.salvarexcell()
 
 def CrearExcel_2( lista, filexcel=None ):
-    #print(str(lista))
+    print( 'CrearExcel_2_Array: ', str(lista))
     tiempo = datetime.datetime.now()
     tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
     if filexcel is None:
@@ -193,6 +225,7 @@ def CrearExcel_2( lista, filexcel=None ):
     
     print('FileExcel: ', filexcel)
     excel = Excell( filexcel )
+
     #excel.cambiar_hoja('data')
     
     for i in lista:
@@ -215,7 +248,6 @@ def CrearExcel_2( lista, filexcel=None ):
         excel.insertar_rangofila( lt , nfilas + 1, 1)
     excel.salvarexcell()
     return filexcel
-
 
 def CrearFicheroExcel(nombre= None):
     filexcel = None
@@ -421,7 +453,7 @@ def imprimirEtiquetas( request, gfh):
 
 def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
     mtx = data.split('|')
-
+    
     listaM = []
     for i in mtx:
         try:
@@ -431,15 +463,21 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
             u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
             d = getIdDB( configurations.objects.filter(id=i),'division')
             
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#0
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#1
             gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
-            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
+            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#2
             codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
+            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#3
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#4
+
+            print('Hospital_id: ',  getIdDB( configurations.objects.filter(id=i),'hosp_id') )
             print('rfid: ', str(i))
-            print('codigo_id:', codigo)
+            print('codigo: ', codigo)
+            print('gfh: ', gfh)
+            print('disp: ', getIdDB(configurations.objects.filter(id=i),'disp'))
+            print('articulo_id: ', getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )
+            print('pacto: ', getIdDB( configurations.objects.filter(id=i),'pacto') )
             print('__________________')
 
             idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
@@ -447,12 +485,18 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
             
             dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
             listaT.append( i ) #6  idconf
-            #listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+            listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
             listaM.append( listaT )
         except Exception as e:
-            print('Articulo inexistente ',str(i) + '  '+ e)
+            print('Articulo inexistente ',str(i) + '  '+ str(e) )
+
+    npedido = GenNumPedido()  
+    InsertarPedido_dc(listaM,npedido)
+    InsertarAlbaranPedido_dc( npedido )
             
 
-    return HttpResponse('ok')   
+    return HttpResponse('ok') 
+
+
 
 
