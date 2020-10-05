@@ -1,0 +1,36 @@
+{% load  static %}
+{% include 'menu.html' %}
+<html>
+    <head>
+        <title>ARTICULOS</title>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+    </head>
+    <body>
+        <div id="cont1">
+
+            <table id="art1" class="config">
+                <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                </tr>
+                {% for i in configuraciones %}
+                <tr>
+                    {{data}}
+                    {% for j in i %}
+                        {% if forloop.counter != 13 %}      
+                            <td>{{j}}</td>
+                        {% endif %}
+                        {% if forloop.last  %} <!-- tambien tiene first ,counter -->
+                            <td><a id="blink" href="cqr?data={{j}}">CQR</a></td>
+                        {% endif %}
+                    {% endfor %}
+                                                            
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+
+
+    </body>
