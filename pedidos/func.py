@@ -11,11 +11,11 @@ from django.db import connection
 
 class funciones:
 
-    def __init__(self):
-        pass
+    #def __init__(self):
+        #pass
 
     @staticmethod
-    def getEtiquetas2(request, code , gfh):
+    def getEtiquetas2( code , gfh):
         mtx = code.split('|')
         #print('Code: ', code)
         #print('mtx: ', str(mtx))

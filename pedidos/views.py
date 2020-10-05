@@ -117,53 +117,6 @@ def pedido( request ):
 
         return render( request, 'pedidos.html')
 
-def getEtiquetas2(request, code , gfh):
-    mtx = code.split('|')
-    #print('Code: ', code)
-    #print('mtx: ', str(mtx))
-    filexcel = CrearFicheroExcel(gfh)
-
-    listaM = []
-    for i in mtx:
-        listaT = []
-        m = getIdDB( configurations.objects.filter(id=i),'modulo')
-        e = getIdDB( configurations.objects.filter(id=i),'estanteria')
-        u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
-        d = getIdDB( configurations.objects.filter(id=i),'division')
-        
-        listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
-        listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
-        gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
-        listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
-        codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-        listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
-        listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
-        #print('rfid: ', str(i))
-        #print('codigo_id:', codigo)
-        #print('codigo:', codigo_id)
-
-        idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
-        nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
-        
-        dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
-        listaT.append( i ) #6  idconf
-        listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
-        listaM.append( listaT )
-    
-                        #2        3       4      5       1            6         0
-        #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-    file = CrearExcel_2(listaM , filexcel)
-
-    # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
-    # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
-    # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
-    # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
-    #yuquspczcabheluw
-
-    return file
-    #return HttpResponse('OK')
-    #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })    
-
 def imprimirEtiquetas( request, gfh):
     gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
     #print('GFH_ID: ', gfh_id)
@@ -178,8 +131,8 @@ def imprimirEtiquetas( request, gfh):
     csv = csv[1 : ]
     #print(csv)
 
-    fila = getEtiquetas2(request, csv, gfh)
-    reponse = None
+    fila = funciones.getEtiquetas2( csv, gfh)
+    response = None
     with open( fila , 'rb') as fh:
             print('ENTRO')
             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
@@ -237,8 +190,7 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
 
 
 
-
-    
+#region
 # def insertarNumPedido(numpedido, user_temp ):
 
 #     dbped_ident=pedidos_ident()
@@ -443,3 +395,4 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
 #     #print('hospital_id:'+str(hospital_id))
 
 #     return gfh_id, disp_id, user_id, hospital_id
+#endregion

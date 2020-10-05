@@ -172,7 +172,8 @@ def download_file(request):
     hospital = ''
     code = ''
     cqr = ''
-    global gfhdispdown
+    nombre = ''
+    #global gfhdispdown
 
     cqrlist = {}
     if  request.method == 'POST':
@@ -184,6 +185,7 @@ def download_file(request):
             code = request.POST['code']
         if request.POST['hosp']:
             hospital = request.POST['hosp']
+
 
         if gfhNombre:
             dispdown = gfhNombre
@@ -218,6 +220,7 @@ def download_file(request):
                 #_________________________numero de mismo codigo en DB_____________________________
             
                 #__________________________________________________________________________________
+            
             if code and not dispositivo and not gfhNombre:
                 #print('Entro en code  ' + str(code) )
                 res = configurations.objects.filter(  codigo=code ,hosp=hospital_id ).order_by('gfh','modulo','estanteria','ubicacion')
@@ -236,6 +239,8 @@ def download_file(request):
                 #print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
                 res = configurations.objects.filter( gfh=gfhId ,hosp=hospital_id).order_by('disp','modulo','estanteria','ubicacion')  
             
+
+
         except Exception as e:
             print('Excepcion en fase 1.' + str( e ))
             
@@ -387,17 +392,6 @@ def dispositivosAdd(request):
             print('COLISION AL INSERTAR gfh: ' + item[1]+ ' , ERROR: ' + str( e ) )
     return HttpResponse( 'Lista dispositivos correctamente' )
 
-
-def addFotoArticulo( rutaNombreFichero , codigo ):
-
-    try:
-        p = articulos.objects.filter(codigo=codigo, hospital_id=2 ).update(foto=rutaNombreFichero)
-        return '0'
-    except Exception as e:
-        res = 'Fallo al actualizar: ' + str( e ) + ' Codigo: '+codigo+' Ruta: '+rutaNombreFichero
-    return str( res )
-
-
 def AñadirFotosArticulos( request ):
     ruta = MEDIA_ROOT+'/articulos/'
     filas =  listdir( ruta )
@@ -413,6 +407,7 @@ def AñadirFotosArticulos( request ):
         if res == '0':
             #return HttpResponse( 'Ruta fotos añadida correctamente' )
             print('Codigo '+codigo+' añadido correctamente')
+
     return HttpResponse( res)
     
 def verArticulo( request ):
@@ -483,7 +478,6 @@ def verCgr( request ):
     imagen.close()
     return render( request , 'cqr.html',{'cqr': items , 'qrcode': STATIC_ROOT + 'qrcode.png' ,'img': foto ,} )
 
-
 def getIdDB( formula, campo ):
     d = formula
     #print(str(d) + ' len: ' +str(len(d)))
@@ -491,3 +485,12 @@ def getIdDB( formula, campo ):
         return d.values(campo)[0].get(campo)
     if len(d)>1:
         return d.values(campo)[0].get(campo)
+
+def addFotoArticulo( rutaNombreFichero , codigo ):
+
+    try:
+        p = articulos.objects.filter(codigo=codigo, hospital_id=2 ).update(foto=rutaNombreFichero)
+        return '0'
+    except Exception as e:
+        res = 'Fallo al actualizar: ' + str( e ) + ' Codigo: '+codigo+' Ruta: '+rutaNombreFichero
+    return str( res )
