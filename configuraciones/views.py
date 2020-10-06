@@ -494,3 +494,30 @@ def addFotoArticulo( rutaNombreFichero , codigo ):
     except Exception as e:
         res = 'Fallo al actualizar: ' + str( e ) + ' Codigo: '+codigo+' Ruta: '+rutaNombreFichero
     return str( res )
+
+
+def selarticulo( request ):
+    nombre = ''
+    hospital = ''
+    if request.method == 'POST':
+        if request.POST['art']:
+            nombre = request.POST['art']
+            hospital = request.POST['hospi']
+            print('Hospital: ', hospital )
+
+    hosp_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
+    print( 'Hosp_id: ', hosp_id )
+    cursor = connection.cursor()
+    articulos = cursor.execute('SELECT codigo, nombre from configuraciones_articulos  WHERE nombre LIKE  %s  AND hospital_id = %s ',[ '%'+nombre+'%', hosp_id ])
+ 
+    try:
+        art = articulos.fetchall()
+        
+        #print(str(art))
+
+    except Exception as e:
+        pass
+
+
+
+    return render( request , 'selarticulo.html',{ 'articulos': art } )
