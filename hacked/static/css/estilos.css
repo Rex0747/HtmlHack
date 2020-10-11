@@ -1,0 +1,67 @@
+
+* {margin:0; padding:0;}
+html, body {width:100%; height:100%; overflow:auto;}
+/*.nomove{ position: fixed; }*/
+#h1A{color: #fff;background-color: #080;padding: 10 25;margin: auto; text-align: center;width: 80%; border:2px solid #005 ;border-radius: 10px;}
+body{ background-color: rgb(0, 110, 59);background-repeat: no-repeat, repeat;background-position: center; background-size: 100%}
+#cont1{ background-color: #000 ; margin: auto; width: 95%;  margin-top: 1%; opacity: 0.7 ;border-radius: 10px; overflow: auto;   }
+#contenido{ background-color: #474 ; float: left; width: 70%; margin-top: 2%;margin-left: 1%; border-radius: 10px; padding-bottom: 2%; }
+#lateral{ background-color: #474 ; float: right; width: 25%; margin-top: 2%; margin-right: 1%; border-radius: 10px;padding-bottom: 2%;  }
+#pie{ margin: auto; background-color: #282 ; width: 94%; height: 200px;margin-top: 10px; border-radius: 10px; overflow: hidden; }
+#h2b ,#h2c{ margin: auto; margin-top: 25px; color: #FFF; width: 50%;text-align: center; border-radius: 5px; }
+#imgp1{ float: left;width: 20%; margin-left: 10px; margin-top: inherit; border-radius: 10px;}
+#imgp2{ width: 20%; margin-right: 10px; margin-top: inherit; float: right; border-radius: 10px;}
+#firm{ float: left; width: 57%; height: 90%; background-color:#282; margin-top: 1%;margin-left:10px; border-radius: 10px;   }
+#fcorreo{ margin: 25 20; font-size: 125%;  }
+#ccont1 { background-image: url("file:///C|/Users/Pedro/Desktop/HtmlHack/hack3A.jpg"); opacity: 0.8; margin: auto; margin-top: 25px; background-color:#CFC; width: 90%; border-radius: 25px; background-size: contain; padding-bottom: 2%; overflow: auto;  } 
+#lcont1 { background-image: url("file:///C|/Users/Pedro/Desktop/HtmlHack/hadk3A.jpg"); opacity: 0.8;  margin: auto; margin-top: 25px; background-color:#CFC; width: 90%;      border-radius: 25px; background-size: contain; padding-bottom: 6%;  } 
+#fcorreo{ padding: 10px 20px;color: #FFF; background-color: #373; border: solid 2px #FFF; border-radius: 10px;   }
+#menu{ list-style: none; margin: auto; color: #FFF;  width: 95%; margin-top: 20px;    }
+#menu li {  margin: 10px;  display: inline; font-size: 20px  }
+#menu li a { text-align: center; padding: 10px 10px; text-decoration: none;color: #FFF;  }
+#menu li a:hover { color:#005; transition-duration: 0.4s;}
+#cont1:hover {opacity: 1; transition-duration: 0.8s;}
+pre {display: block; font-family: monospace; white-space: pre-wrap; margin: 1em 0; }
+
+#fblat{ margin-left: 7%;  margin-top: 30px; width: 86%; background-size: contain; border: solid 3px #0F0; border-radius: 10px;   }
+.txtcontenido{ margin: auto; width: 90%; font-size: 20px; background-color: #FFF; border: solid 2px rgb(22, 20, 160); padding: 10px 12px;    }
+#vid1{ float: right; margin-right: 10%; }
+#vtitulo{ width: 50%; margin: auto; text-align: center; font-size: 25px; color: rgb(179, 25, 25); text-emphasis-style: inherit; }
+
+.youtube{  margin: auto; border: solid 2px rgb(22, 20, 160); padding: 10px 12px; background-color: #FFF;   }
+table tr td >p{ font-size: 15px; border: solid  2px black; }
+table tr { border: solid  2px black; }
+
+ nav a{
+    text-decoration:none;
+    color:inherit;
+    font-size:14px;
+    } 
+          
+nav li{
+    display:inline-block;
+    /* width:250px;
+    height:50px; */
+    padding:5px 10px;
+    /* background-color:#4f4; */
+    /* border:1px solid #000; */
+    text-align:center;
+    /* color:#fff; */
+    position:relative;
+}
+
+nav ul li li{
+    width: 150px;
+}
+          
+nav li>ul{
+    display:none;
+    }
+
+nav li:hover>ul{
+    display:block;
+    position:absolute;
+    top:30px;
+    left:0px;
+}
+ 

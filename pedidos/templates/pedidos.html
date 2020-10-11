@@ -1,0 +1,80 @@
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/pedidos.css' %}>
+    <title>pedidos</title>
+</head>
+    <body>
+            <div id="cont2" class="container" >
+            <div class="row	justify-content-md-center">
+            <form id="fpedidos" name="fpedido" enctype="multipart/form-data" method="POST" class="form-group" >
+                {% csrf_token %}
+                <div class="row	justify-content-md-center">
+                <h2 id="ptit" class="dropdown-header">ENVIAR PEDIDOS</h2>
+                <table id="tbped" class="table table-bordered">
+                    <tr>
+                        <td class="row"><label class="label label-primary">Hospital</label></td>
+                        <td><input type="text" name="hospital" id="hospital" value="CLINICO" class="input-group-text"></td>
+                    </tr>   
+                    <tr>    
+                        <td class="row"><label class="label label-primary">Gfh</label></td>
+                        <td><input type="text" name="gfh" id="gfh" class="input-group-text"></td>
+                    </tr>
+                    <tr>
+                        <td class="row"><label class="label label-primary">Dispositivo</label></td>
+                        <td><input type="text" name="disp" id="disp" class="input-group-text"></td>
+                    </tr>   
+                    <tr>
+                        <td class="row"><label class="label label-primary">Usuario</label></td>
+                        <td><input type="text" name="user" id="user" class="input-group-text"></td>
+                    </tr>
+                    <tr>
+                        <td><button type="submit" id="boton2_" class="btn btn-success" >Enviar</button></td>
+                        <td></td>
+                    </tr>
+                </table>  
+                </div>
+
+            {% if hospital %}
+                <table id="config" class="config">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Pacto</th> 
+                        <th>Cantidad</th>   
+                    </tr>
+                    <tr>
+            
+                {% for i in datos %}
+                        <!--<td>{{i.modulo}}</td>
+                        <td>{{i.estanteria}}</td>
+                        <td>{{i.ubicacion}}</td>
+                        <td>{{i.division}}</td>-->
+                        <td>{{i.codigo}}</td>
+                        <td>{{i.nombre.nombre}}</td>
+                        <td>{{i.pacto}}</td>
+                        <!--<td>{{i.gfh}}</td>
+                        <td>{{i.disp}}</td>-->
+                        <td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}" value="0" class="input-group-text" 
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td>
+                        
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td><button type="submit" name="pboton" id="pboton" class="btn btn-success">SUBIR PEDIDO</button></td>
+                        <!--<td><input type="text" name="tped"></td>-->
+                    </tr>
+                </table>
+            {% endif %}
+
+        </form>    
+        </div>
+        </div>
+    </body>
+</html>

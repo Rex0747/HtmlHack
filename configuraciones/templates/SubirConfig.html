@@ -1,0 +1,43 @@
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+{% include 'menu.html' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SUBIR CONFIGURACION</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+    </head>
+    <body>
+        <p id="portada">SUBIR CONFIGURACION</p>
+    {% block content %}
+        <div id="formupload" class="container-fluid">
+            
+            <form id="formu" enctype="multipart/form-data" method="POST" >
+                {% csrf_token %}
+                <p id="fila">CARGAR FICHERO A SUBIR:
+                <table>
+                    <tr>
+                        <td><input type="file" name="upload" id="upload" class="label label-primary" onchange="enableBoton()"></td>
+                    </tr>
+                    <tr>
+                        <td><button type="submit" id="boton2" class="input-group-text">SUBIR FILA</button></td>
+                    </tr>
+                </table> 
+                {% if uploaded_file %}
+                <p id="enlace">Configuracion actualizada: {{ uploaded_file }}</p>
+                <p id="nfilas">Numero de filas agregadas: {{ nfilas }}</p>
+                <p id="bfilas">Numero de filas borradas: {{ borradas }}</p><br>
+            {% endif %}
+            </form>
+
+            
+    {% endblock %}
+        </div>
+    </body>
+
+
+</html>

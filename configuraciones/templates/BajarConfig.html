@@ -1,0 +1,79 @@
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+{% include 'menu.html' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BAJAR CONFIGURACION</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    </head>
+    <body>
+    {% block content %}
+        <div id="flota" class="container-fluid">
+            <!-- <p id="portada">BAJANDO CONFIGURACION DEL SERVIDOR</p> --> 
+            <form id="formulario"  method="post" enctype="multipart/form-data" >
+                            {% csrf_token %} 
+                <!-- <p id="fila">Configuracion a bajar:</p> -->
+                <table id="tmenu">
+                    <tr>
+                        <td><p>GFH: &nbsp &nbsp &nbsp <input type="text" name="gfh" id="gfh" class="label label-primary"></p></td>
+                        <td><p>DISPOSITIVO:<input type="text" name="disp" id="disp" class="label label-primary"></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CODIGO:<input type="text" name="code" id="code" class="label label-primary"></p></td>  
+                        <!-- <td><p>HOSPITAL:<input type="text" name="hosp" id="hosp" class="label label-primary"></p></td>   -->
+                        <td><p>HOSPITAL:<select name="hosp" class="label label-primary"><option value="CLINICO">HCSC</option><option value="HUPA">HUPA</option></p></select</td>                   
+                    </tr>
+                    <tr>
+                        <td><p><input type="checkbox" name="bajarfila" id="bajarfila" class="label label-primary">BAJAR FILA</p></td>
+                        <td><button type="submit" id="boton" class="input-group-text">BAJAR CONFIGURACION</button></td>
+                    </tr>
+                    <tr>
+                        <td> <p id="nombre">{{nombre}}</p></td>
+                        <td><p id="lineas">{{lineas}}</p></td>
+                    </tr>
+                </table>
+                
+            </form>
+        </div>
+        <table id="config" class="config">
+            <tr>
+                <th>Modulo</th>
+                <th>Estanteria</th>
+                <th>Ubicacion</th>
+                <th>Division</th>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Pacto</th>
+                <th>Minimo</th>
+                <th>DC</th>
+                <th>Gfh</th>
+                <th>Disp</th> 
+                <th>Hosp</th>
+                <!-- <th>Ubic</th> -->
+                <th>VerQR</th>
+            </tr>
+            {% for i in configuraciones %}
+            <tr>
+                {{data}}
+                {% for j in i %}
+                    {% if forloop.counter != 13 %}      
+                        <td>{{j}}</td>
+                    {% endif %}
+                    {% if forloop.last  %} <!-- tambien tiene first ,counter -->
+                        <td><a id="blink" href="cqr?data={{j}}">CQR</a></td>
+                    {% endif %}
+                {% endfor %}
+                                                        
+            </tr>
+            {% endfor %}
+        </table>
+            
+    {% endblock %}
+    </body>
+
+
+</html>

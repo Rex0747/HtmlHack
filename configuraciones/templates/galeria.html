@@ -1,0 +1,50 @@
+{% load  static %}
+{% include 'menu.html' %}
+<html>
+    <head>
+        <title>GALERIA DE ARTICULOS</title>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+    </head>
+    <body>
+        <div id="hgal" name="hgal">
+            <h2 id="tgaltitulo">GALERIA DE ARTICULOS</h2>
+            <form id="fgaleria" name="fgaleria" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <table id="tgalmenu">
+                    <tr>
+                        <td><label>CODIGO &nbsp &nbsp</label><input type="text" name="verimg" id="verimg" onchange="enableBoton()"></td>
+                    </tr>
+                    <tr>
+                        <td><label>HOSPITAL</label><input type="text" name="hospital" id="hospital"></td>
+                    </tr>
+                    <tr>
+                        <td><button type="submit" id="bimg">VER CODIGO</button></td>
+                    </tr>
+
+                </table> 
+            </form>
+        </div>
+
+        <div id="imagen" name="imagen">
+            <h2>{{error}}</h2>
+            <table id="tgal">
+        {% for i in imagen %}
+
+            <tr>
+                <td><p>{{i.nombre}}</p></td>
+                <td><p>{{i.codigo}}</p></td>
+                <td><img src={{i.foto.url}}  width="300" ></td>
+            </tr>
+            
+        {% endfor %}
+            <tr>
+                <td><img src={{img}}  width="300" ></td>
+            </tr>
+            </table>
+        </div>
+        
+
+    </body>
+
+</html>
