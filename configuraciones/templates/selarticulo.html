@@ -9,25 +9,31 @@
     <body>
         <div id="cont1">
 
-            <table id="art1" class="config">
+            <table id="tmenu2" class="config">
                 <tr>
                     <form id="fart"  method="post" enctype="multipart/form-data" >
                         {% csrf_token %} 
-                    <td><p>ARTICULO A BUSCAR: &nbsp &nbsp &nbsp <input type="text" name="art" id="art" class="label label-primary"></p></td>
+                    <td>&nbsp<p>ARTICULO A BUSCAR: &nbsp &nbsp &nbsp <input type="text" name="art" id="art" class="label label-primary"></p></td>
+                    <td><button type="submit" id="boton1" class="input-group-text">MOSTRAR</button></td>
                     <td><p>HOSPITAL:<select name="hospi" class="label label-primary"><option value="CLINICO">HCSC</option><option value="HUPA">HUPA</option></p></select</td>
-                    <th><button type="submit" id="boton1" class="input-group-text">MOSTRAR</button></th>
-                    <th><p>SE PUEDE PONER SOLO PARTE DE LA DESCRIPCION.</p></th>
+                    <td>&nbsp</td>
                     </form>
                 </tr>
+            </table>
+            <table id="art1" class="config">
+                <tr>
+                    <th>INDICE</th>
+                    <th>CODIGO</th>
+                    <th>NOMBRE</th>
+                    <th>FOTO</th>
+                </tr>
+
                 {% for i in articulos %}
                 <tr>
-                    
-                    {% for j in i %}
-                              
-                        <td>{{j}}</td>
-                            
-                    {% endfor %}
-                                                            
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.codigo}}</td>
+                    <td>{{i.nombre}}</td>
+                    <td><img src={{i.foto.url}}  width="150" ></td>
                 </tr>
                 {% endfor %}
             </table>

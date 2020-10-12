@@ -507,17 +507,18 @@ def selarticulo( request ):
 
     hosp_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
     print( 'Hosp_id: ', hosp_id )
-    cursor = connection.cursor()
-    articulos = cursor.execute('SELECT codigo, nombre from configuraciones_articulos  WHERE nombre LIKE  %s  AND hospital_id = %s ',[ '%'+nombre+'%', hosp_id ])
- 
+    #cursor = connection.cursor()
+    #articulos = cursor.execute('SELECT codigo, nombre, foto from configuraciones_articulos  WHERE nombre LIKE  %s  AND hospital_id = %s ',[ '%'+nombre+'%', hosp_id ])
+    if nombre == "":
+        nombre = "POQWERYEUUEYEUWYUYWUWYWY"
+
     try:
-        art = articulos.fetchall()
-        
-        #print(str(art))
+        #art = articulos.fetchall()
+        art = articulos.objects.filter(nombre__contains=nombre, hospital_id=hosp_id)
+        print(str(art))
 
     except Exception as e:
-        pass
-
+        print( 'Error: ', str(e) )
 
 
     return render( request , 'selarticulo.html',{ 'articulos': art } )

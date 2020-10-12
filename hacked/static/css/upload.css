@@ -17,12 +17,12 @@ body{ background-color: rgba(143, 156, 233, 0.9); margin: 0px; padding: 0px;}
 
 #config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
 
-#config th{ border: 1px solid; background-color: rgb(15, 104, 82); color: cornsilk; font-size: 1.5em; height: 1.8em}
-#config tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
-#config td{ border: 1px solid; }
-#config tr:nth-child(odd){ background-color:#d3f690; }
-#config tr:nth-child(even){ background-color:#b6f6ad; }
-#config tr td{font-size: 1.2em; height: 1.5em;}
+.config th{ border: 1px solid; background-color: rgb(15, 104, 82); color: cornsilk; font-size: 1.5em; height: 1.8em}
+.config tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
+.config td{ border: 1px solid; }
+.config tr:nth-child(odd){ background-color:#d3f690; }
+.config tr:nth-child(even){ background-color:#b6f6ad; }
+.config tr td{font-size: 1.2em; height: 1.5em;}
 
 #tmenu{ margin: auto; border: 2px solid #000; background-color: aliceblue;margin-top: 50px; width: 100%;;  }
 #tmenu tr{  background-color: rgb(173, 236, 231); }
