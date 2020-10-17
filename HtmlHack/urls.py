@@ -42,6 +42,7 @@ urlpatterns = [
     path('verqr',v1.mostrarCodigoQR),
     path('verqr2',v1.mostrarCodigoGRpng),
     path('cqr',v1.verCgr),
+    path('mfoto',v1.mfoto),
     path('pedidos/', v2.pedido),
     path('stocks/<modo>' , v3.Stocks),
     path('imprimirEtiquetas/<gfh>', v2.imprimirEtiquetas),

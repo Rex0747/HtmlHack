@@ -33,7 +33,7 @@
                     <td>{{forloop.counter}}</td>
                     <td>{{i.codigo}}</td>
                     <td>{{i.nombre}}</td>
-                    <td><img src={{i.foto.url}}  width="150" ></td>
+                    <td><a title="fotoart" href="mfoto?data={{i.foto}}"><img src={{i.foto.url}} alt={{i.foto}}  width="150" ></a></td>
                 </tr>
                 {% endfor %}
             </table>

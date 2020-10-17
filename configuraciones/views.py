@@ -478,6 +478,15 @@ def verCgr( request ):
     imagen.close()
     return render( request , 'cqr.html',{'cqr': items , 'qrcode': STATIC_ROOT + 'qrcode.png' ,'img': foto ,} )
 
+def mfoto(request):
+    items = request.GET['data']
+
+    foto = articulos.objects.filter( foto=items )
+    print(str(items))
+    print(str(foto))
+
+    return render(request,'mfoto.html',{'foto': foto} )
+
 def getIdDB( formula, campo ):
     d = formula
     #print(str(d) + ' len: ' +str(len(d)))
