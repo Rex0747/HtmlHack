@@ -24,8 +24,8 @@ SECRET_KEY = '=kq(*cy@&aizy&0tq#+3wlv-&2-rb(r*@g2fnchc1)fv_jh#t7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','192.168.1.34','pedroluisjr.ddns.net','82.158.161.101','192.168.1.11']
-
+#ALLOWED_HOSTS = ['127.0.0.1','localhost','192.168.1.34','pedroluisjr.ddns.net','82.158.161.101','192.168.1.11']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
