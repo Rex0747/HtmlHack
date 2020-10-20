@@ -2,6 +2,11 @@ from django.db import models
 from configuraciones.models import articulos, dispositivos, gfhs, hospitales, configurations
 
 # Create your models here.
+class datos_email(models.Model):
+    ucorreo = models.EmailField(max_length=50, null=False)
+
+    def __str__(self):
+        return '%' %(self.ucorreo)
 
 class usuarios(models.Model):
     nombre=models.CharField(max_length=50)
@@ -11,7 +16,6 @@ class usuarios(models.Model):
 
     def __str__(self):
         return '%s %s %s' %(self.nombre, self.ident, self.correo)
-
 
 class pedidos(models.Model):
     npedido=models.CharField(max_length=12)
@@ -34,8 +38,6 @@ class pedidos_dc(models.Model):
     def __str__(self):
         return '%s %s %s %s %s' %( self.npedido, self.hospital, self.gfh, self.codigo, self.cantidad )
 
-
-
 class pedidos_temp(models.Model):
     hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
     gfh=models.ForeignKey( gfhs ,on_delete=models.CASCADE )
@@ -44,7 +46,6 @@ class pedidos_temp(models.Model):
     cantidad=models.FloatField()
     user_temp=models.ForeignKey( usuarios ,on_delete=models.CASCADE)
     #pedido_temp=models.CharField(max_length=12)
-
 
 class pedidos_ident(models.Model):
     pedido=models.CharField(max_length=12)
