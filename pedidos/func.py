@@ -214,8 +214,9 @@ class funciones:
         #deltem = pedidos_temp.objects.filter(disp_id=disp_id).delete()
 
     @staticmethod
-    def InsertarPedido_dc( datos, npedido ):
+    def InsertarPedido_dc( datos, npedido = None ):
         print('InsertarPedido DC: ', str(datos))
+        nomExcel = 'data'
         listaM = []
         for i in datos:
             #print(str(i))
@@ -225,22 +226,21 @@ class funciones:
             listaT.append( i[2] ) #disp            2
             listaT.append( i[3] ) #codigo          3
             listaT.append( i[4] ) #cantidad        4
-
             listaT.append( i[5] ) #codigo          5
             listaT.append( i[6] ) #ubicacion       6
             listaM.append(listaT)
             #user_temp = i[6] 
-
-            ped = pedidos_dc()
-            ped.hospital=hospitales.objects.get(id=i[0])
-            ped.npedido=npedido
-            ped.gfh=gfhs.objects.get(id=i[1])
-            #ped.disp=dispositivos.objects.get(id=listaT[2])
-            ped.codigo=articulos.objects.get(idsel=i[3])
-            ped.cantidad=i[4]
-            ped.save()
-            #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
-        filexcel = funciones.CrearFicheroExcel('data')
+            if npedido != None:
+                ped = pedidos_dc()
+                ped.hospital=hospitales.objects.get(id=i[0])
+                ped.npedido=npedido
+                ped.gfh=gfhs.objects.get(id=i[1])
+                #ped.disp=dispositivos.objects.get(id=listaT[2])
+                ped.codigo=articulos.objects.get(idsel=i[3])
+                ped.cantidad=i[4]
+                ped.save()
+                #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
+        filexcel = funciones.CrearFicheroExcel(nomExcel)
         funciones.CrearExcel_2( listaM )
 
     @staticmethod

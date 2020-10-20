@@ -142,7 +142,7 @@ def imprimirEtiquetas( request, gfh):
 
 def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
     mtx = data.split('|')
-    
+    revisar = mtx[-1]
     listaM = []
     for i in mtx:
         try:
@@ -178,11 +178,12 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
             listaM.append( listaT )
         except Exception as e:
             print('Articulo inexistente ',str(i) + '  '+ str(e) )
-
-    npedido = funciones.GenNumPedido()
-    funciones.InsertarPedido_dc(listaM,npedido)
-    
-    funciones.InsertarAlbaranPedido_dc( npedido )
+    if revisar == 'ReViSiOn':
+        funciones.InsertarPedido_dc(listaM)
+    else:
+        npedido = funciones.GenNumPedido()
+        funciones.InsertarPedido_dc(listaM,npedido)
+        funciones.InsertarAlbaranPedido_dc( npedido )
             
 
     return HttpResponse('ok')
@@ -190,7 +191,46 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
 
 
 
+#__________________Prueba DataGrid______________________________
+
+
 #region
+# from datagrid.grids import *
+# from blogango.models import BlogEntry
+
+# def grid_data_func(value):
+#     return value.upper() 
+
+# def slug_link_func(obj, value):
+#     # return  args[0]
+#     return 'http://google.com/404/'
+
+# def non_db_col_value(obj):
+#     return obj.title
+
+# class BlogGrid(DataGrid):
+#     created_by = Column(sortable=True, link=True, cell_clickable=True, css_class='red')
+    
+#     created_on = DateTimeColumn("created on", format='d b, Y', sortable=True, link=False)
+    
+#     created_on_since = DateTimeSinceColumn("created on ", sortable=True, db_field='created_on')
+    
+#     slug = Column("Slug", sortable=False, link=False, link_func=slug_link_func, image_url='/site_media/blogango/images/date_icon.png')
+    
+#     title = Column("Title", sortable=True, link=False, db_field='title', image_url='http://media.agiliq.com/images/terminal.png', image_width=20, image_height=20, image_alt='foo bar', data_func=grid_data_func)
+    
+#     blog_title = NonDatabaseColumn("Second Title", sortable=True, link=True, data_func=non_db_col_value)
+#     col1 = NonDatabaseColumn(sortable=True, link=True, data_func=non_db_col_value)
+
+# def blog_grid(request):
+#     posts = BlogEntry.objects.all()
+#     blog_grid = BlogGrid(request=request, queryset=posts, title='Blog Grid View')
+
+#     return blog_grid.render_to_response('blog_grid/blog_grid.html', {'blog_grid': blog_grid})
+#endregion
+
+#region
+
 # def insertarNumPedido(numpedido, user_temp ):
 
 #     dbped_ident=pedidos_ident()
