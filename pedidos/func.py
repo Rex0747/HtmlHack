@@ -1,7 +1,8 @@
 import os, random
 from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos
 import datetime
-from pedidos.models import pedidos, pedidos_ident, pedidos_temp, usuarios, pedidos_dc, pedidos_ident_dc
+from pedidos.models import pedidos, pedidos_ident, pedidos_temp, usuarios, \
+            pedidos_dc, pedidos_ident_dc, datos_email
 from django.db import connection
 from configuraciones.excell import Excell
 from configuraciones.views import getIdDB
@@ -52,11 +53,9 @@ class funciones:
             #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
         file = funciones.CrearExcel_2(listaM , filexcel)
 
-        # envcorreogmail( remcorreo='pedro.*.rico@gmail.com',
-        # passwd='yuquspczcabheluw', destcorreo='peli0747@gmail.com',
-        # fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
-        # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
-        #yuquspczcabheluw
+        #funciones.envcorreogmail(fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
+            #mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+    #    #ifwehvkeekzbcrok
 
         return file
         #return HttpResponse('OK')
@@ -95,7 +94,12 @@ class funciones:
         return rnd
 
     @staticmethod
-    def envcorreogmail( remcorreo, passwd, destcorreo, fileadjunto, subject, mensaje ):
+    def envcorreogmail( fileadjunto, subject, mensaje ):
+        dataCorreo = datos_email.objects.all()
+        remcorreo = dataCorreo[0].ucorreo
+        destcorreo = dataCorreo[1].ucorreo
+        passwd = dataCorreo[2].ucorreo[ : 16 ]
+
         from email.mime.multipart import MIMEMultipart
         from email.mime.base import MIMEBase  #MIMEImage import MIMEImage
         from email.mime.text import MIMEText
@@ -226,7 +230,7 @@ class funciones:
             listaT.append( i[2] ) #disp            2
             listaT.append( i[3] ) #codigo          3
             listaT.append( i[4] ) #cantidad        4
-            listaT.append( i[5] ) #codigo          5
+            listaT.append( i[5] ) #                5
             listaT.append( i[6] ) #ubicacion       6
             listaM.append(listaT)
             #user_temp = i[6] 
@@ -241,7 +245,13 @@ class funciones:
                 ped.save()
                 #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
         filexcel = funciones.CrearFicheroExcel(nomExcel)
+        print('Fichero Excel: ', filexcel)
         funciones.CrearExcel_2( listaM )
+        funciones.envcorreogmail(fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
+            mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+    #    #ifwehvkeekzbcrok
+        return filexcel
+
 
     @staticmethod
     def InsertarPedido( datos, npedido ):

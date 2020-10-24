@@ -4,9 +4,10 @@ from configuraciones.models import articulos, dispositivos, gfhs, hospitales, co
 # Create your models here.
 class datos_email(models.Model):
     ucorreo = models.EmailField(max_length=50, null=False)
+    #item[0] = passwd, item[1] = emisor correo, item[2] = correo recepcion
 
     def __str__(self):
-        return '%' %(self.ucorreo)
+        return '%s' %(self.ucorreo)
 
 class usuarios(models.Model):
     nombre=models.CharField(max_length=50)

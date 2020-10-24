@@ -55,12 +55,10 @@ def pedido( request ):
                 #print('---------------------------------')
             funciones.InsertarAlbaranPedido(user_temp, npedido )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_temp).delete()
-            """
-            envcorreogmail( remcorreo='pedro.luis.jimenez.rico@gmail.com',
-            passwd='R***7', destcorreo='peli0747@gmail.com',
-            fileadjunto=filexcel +'.xlsx', subject='Pedido material.',
-            mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
-            """
+            
+            funciones.envcorreogmail( fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
+                    mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+
             #ped_temp = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
 
             #return HttpResponse("Pedido enviado")
@@ -184,7 +182,6 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
         npedido = funciones.GenNumPedido()
         funciones.InsertarPedido_dc(listaM,npedido)
         funciones.InsertarAlbaranPedido_dc( npedido )
-            
 
     return HttpResponse('ok')
 
