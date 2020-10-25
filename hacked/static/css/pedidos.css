@@ -2,9 +2,13 @@ body{ background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 
 .input-group-text{width: 100px;background-color: rgb(202, 200, 197);}
 .row{ margin: auto;}
-#cont,  #cont2{ border: solid 2px #000; width: 75% ; background-color: rgb(252, 252, 252);}
+#cont,  #cont2{ border: solid 2px #000; width: 50% ; background-color: white; margin-top: 20px;}
+#cont{margin-top: 20px}
 #tbped{border: solid 2px #000;}
 .btn-primary{width: 120px;}
+#ptit{ margin-top: 10px;  }
+
+#fenviar H2{ text-align: center; margin-bottom: 20px; margin-top: 10px; }
 
 #config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
 
@@ -17,7 +21,7 @@ body{ background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 
 #tmenu{ margin: auto; border: 2px solid #000; background-color: aliceblue;margin-top: 50px; width: 100%;;  }
 #tmenu tr{  background-color: rgb(173, 236, 231); }
-#tmenu tr td{ border: 1px solid;  }
-#tmenu tr td p{ font-size: 1.6em;margin-left:25px;}
+#tmenu tr td{ border: 1px solid;   }
+#tmenu tr td p{ font-size: 1.6em;}
 #blink{margin-left: 7px; padding: 10px 15px; color: #fc022c; background-color: #f6f7f5;text-decoration: none;
     border: 2px solid #0016b0; border-radius: 2px;  }

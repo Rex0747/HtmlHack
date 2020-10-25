@@ -185,7 +185,9 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
 
     return HttpResponse('ok')
 
+def imprimirGfh( request):
 
+    return render( request, 'imprimirGfh.html')
 
 
 #__________________Prueba DataGrid______________________________

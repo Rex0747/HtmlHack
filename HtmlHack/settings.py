@@ -62,6 +62,7 @@ TEMPLATES = [
         'DIRS': [ os.path.join(BASE_DIR, 'hacked/templates/'),
         os.path.join(BASE_DIR, 'pedidos/templates/'),
         os.path.join(BASE_DIR, 'stocks/templates/'),
+        os.path.join(BASE_DIR, 'configuraciones/templates/'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

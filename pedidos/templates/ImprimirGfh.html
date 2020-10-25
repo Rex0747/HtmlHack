@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Imprimir GFH</title>
 </head>
 <body>
+    <p>Imprimir GFH</p>
+    <input type="text" id="tbenlace">
+
     {% block content %}
-        <p>Sube Pedido</p>
+        
         <p>{{pedido|safe}}</p>
         <p>{{pedido2|safe}}</p>
     {% endblock %}

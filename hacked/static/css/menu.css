@@ -4,21 +4,25 @@ body{
  }
  
  #nav{
-    width: 12%;
-    float: left;
-    margin-top: 25%;
-    position: fixed;
- }
+    width: 15%;
+    float: right;
+    margin-top: 2%;
+    position: relative;
+    visibility: visible;
+   }
+
  
  .titulonav{   
-    border-width: 1px;
+    border-width: 2px;
     border-style: solid;
     border-color: #000000;
-    font-size: 8pt;
+    font-size: 12pt;
     font-weight: bold;
-    background-color: #999999;
-    color: #ffffff;
+    background-color: rgb(240, 149, 75);
+    color: rgb(40, 4, 243);
     padding: 4px;
+    text-align: center;
+    
  }
  
  .cuerporec{
@@ -26,6 +30,7 @@ body{
     margin-right: 0pt;
     margin-bottom: 10px;
     margin-left: 0pt;
+    
  }
  
  .cuerporec ul{
@@ -46,18 +51,26 @@ body{
  .cuerporec li{
     border-width: 1px;
     border-style: solid;
-    border-color: #d7d7d7;
+    border-color: black;
     padding: 1px 10 2px 2px;
-    font-size: 18pt;
+    font-size: 12pt;
     padding-bottom: 10px;
     margin-top: 2px;
     margin-right: 0pt;
     margin-bottom: 2px;
     margin-left: 0pt;
-    background-image: url(fondo_gris.gif);
+    
  }
  
  .cuerporec a{
     text-decoration: none;
  }
  
+ ul li {
+    background-color: antiquewhite;
+ }
+
+ ul li a { 
+    color: black;
+    margin-left: 5px;
+ }

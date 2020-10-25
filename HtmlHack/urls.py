@@ -47,7 +47,7 @@ urlpatterns = [
     path('stocks/<modo>' , v3.Stocks),
     path('expgfh/<gfh>', v2.imprimirEtiquetas),
     path('pedidodc/<data>', v2.pedidodc),
-    #path('pedidoMan/',v2.pedidoman ),
+    path('imprimirgfh/',v2.imprimirGfh ),
     path('selarticulo', v1.selarticulo ),
 
 
