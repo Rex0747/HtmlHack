@@ -1,16 +1,21 @@
 {% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
 {% include 'menu.html' %}
 <html>
     <head>
         <title>ARTICULOS</title>
         <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/selarticulo.css' %}>
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
     </head>
     <body>
         <div id="mfoto" class="config">
-        <p>{{foto}}</p>
+        
             {%for i in foto%}
-                <img src={{i.foto.url}} alt={{i.foto}} width="750">
+                <img id= "image" class="img-fluid" src={{i.foto.url}} alt={{i.foto}} width="750">
+                <p>{{i.nombre}}</p>
             {%endfor%}
         </div>
     </body>

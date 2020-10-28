@@ -1,22 +1,28 @@
 {% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
 {% include 'menu.html' %}
 <html>
     <head>
         <title>ARTICULOS</title>
         <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/selarticulo.css' %}>
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
     </head>
     <body>
         <div id="cont1">
-
+            <h2>Consulta de articulos</h2>
             <table id="tmenu2" class="config">
+                <tr>
+                    <td></td>
+                </tr>
                 <tr>
                     <form id="fart"  method="post" enctype="multipart/form-data" >
                         {% csrf_token %} 
-                    <td>&nbsp<p>ARTICULO A BUSCAR: &nbsp &nbsp &nbsp <input type="text" name="art" id="art" class="label label-primary"></p></td>
-                    <td><button type="submit" id="boton1" class="input-group-text">MOSTRAR</button></td>
-                    <td><p>HOSPITAL:<select name="hospi" class="label label-primary"><option value="CLINICO">HCSC</option><option value="HUPA">HUPA</option></p></select</td>
-                    <td>&nbsp</td>
+                    <td id="td1">&nbsp<p>ARTICULO A BUSCAR: &nbsp &nbsp &nbsp <input type="text" name="art" id="art" class="label label-primary"></p></td>
+                    <td id="td2"><p>HOSPITAL:<select name="hospi" class="label label-primary"><option value="CLINICO">HCSC</option><option value="HUPA">HUPA</option></p></select</td>
+                    <td id="td3"><button type="submit" id="boton1" class="btn-outline-primary">MOSTRAR</button></td>
                     </form>
                 </tr>
             </table>

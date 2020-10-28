@@ -1,19 +1,19 @@
 body{ background-color: rgba(255, 255, 255, 0.9); margin: 0px; padding: 0px;}
-#portada{ background-color: rgb(142, 233, 184); text-align: center; font-size: 28px; color:darkblue; margin: auto; width: 50%; padding: 25px 0px;margin-top: 20px; border: solid 2px #000; }
+/*#portada{ background-color: rgb(142, 233, 184); text-align: center; font-size: 28px; color:darkblue; margin: auto; width: 50%; padding: 25px 0px;margin-top: 20px; border: solid 2px #000; }*/
 
-#flota{ margin: auto ; width: 50% ; margin-bottom: 20px;    } /*opacity: 0; transition: 2.6s cubic-bezier(0.5, 0, 0,0.5);*/
+#flota , #formupload{ margin: auto ; width: 50% ; margin-bottom: 20px;    } /*opacity: 0; transition: 2.6s cubic-bezier(0.5, 0, 0,0.5);*/
 /*#flota:hover{ opacity: 1;}*/
 #formulario{ margin: auto; width: 100%;  margin-top: 20px; margin-bottom: 20px; background-color: rgb(245, 245, 245); border-radius: 20px; box-shadow: 12px 20px 30px black;   }
 
-#formupload{ width: 80%; margin: auto; background-color: rgb(202, 193, 224);   }
+/*#formupload{ width: 80%; margin: auto; background-color: rgb(202, 193, 224);   }*/
 #fila{ text-align: center; font-size: 25px; color:darkblue; padding-top: 15px; }
-#upload{  margin-left: 30px; padding: 20px; background-color: rgb(149, 230, 199); width: 100%;font-size: 18px;
-    border: 2px solid #000; display: inline-block; padding: 6px 12px; cursor: pointer; }
-#enlace, #nfilas, #bfilas{ margin: auto; font-size: 22px;  border: 2px solid #333; padding: 10px 5px 10px 5px; background-color: #CCC;
-    width: 80%; margin-bottom: 20px; }
-
+/*#upload{  margin-left: 30px; padding: 20px; background-color: rgb(149, 230, 199); width: 100%;font-size: 18px;
+    border: 2px solid #000; display: inline-block; padding: 6px 12px; cursor: pointer; }*/
+/*#enlace, #nfilas, #bfilas{ margin: auto; font-size: 22px;  border: 2px solid #333; padding: 10px 5px 10px 5px; background-color: #CCC;
+    width: 80%; margin-bottom: 20px; }*/
+*#enlace, #nfilas, #bfilas{margin-top: 60px; text-align: center; text-shadow: 5px 5px 10px black;};
 /*#boton{ padding: 10px; background-color: rgb(98, 177, 98); margin-left: 18%;font-size: 1.1em;color: #fff;}*/
-#boton2{ padding: 10px; margin-left: 30px;margin-top: 30px; margin-bottom: 30px;background-color: rgb(99, 235, 117);font-size:18px;width: 50%; }
+/*#boton2{ padding: 10px; margin-left: 30px;margin-top: 30px; margin-bottom: 30px;background-color: rgb(99, 235, 117);font-size:18px;width: 50%; }*/
 #nombre , #lineas{ margin: auto; font-size: 15px; margin: 10px; }
 
 #config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
@@ -31,10 +31,10 @@ body{ background-color: rgba(255, 255, 255, 0.9); margin: 0px; padding: 0px;}
 #tmenu tr td p{  margin-left: 10%; font-size: 14px; margin-top: 15px; }
 #tmenu tr td input{ width: 100px; height: 25px; box-shadow: 10px 10px 20px black;}
 #tmenu tr td label{ font-size: 14px; margin-left: 30%; }
-#blink{margin-left: 7px; padding: 10px 15px; color: #777; background-color: #f6f7f5;text-decoration: none;
+#blink{margin-left: 7px; padding: 1px 10px; color: #777; background-color: #f6f7f5;text-decoration: none;
     border: 2px solid #0016b0; border-radius: 2px;  }
 
-#tituloBajar{ text-align: center; margin-top: 10px; text-shadow: 5px 5px 10px black;}
+#tituloBajar ,#portada, #fila{ text-align: center; margin-top: 10px; text-shadow: 5px 5px 10px black;}
 #ubic, #bajarfila{ width: 40%; margin-left: 5%;  font-size: 1.1em;}
 /*#bajarfila{ margin-left: 0px; margin-bottom: 0px;}*/
 

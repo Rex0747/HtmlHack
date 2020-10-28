@@ -1,0 +1,12 @@
+
+body{background-color: rgba(0,0,0,0.7)}
+#mfoto{ width: 65%; margin: auto; margin-top: 90px; }
+#cont1{ margin: auto; width: 70%;}
+h2{ text-align: center;margin-top: 10px;}
+#tmenu2 tr td p{ text-align: center;}
+#art1 tr td a{margin-left: 50px;}
+#td1{width: 60%;}
+#td2{width: 30%;}
+#td3{width: 10%;}
+#image{border: 2px solid black}
+

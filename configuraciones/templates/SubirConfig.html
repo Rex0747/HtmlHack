@@ -12,19 +12,20 @@
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
     </head>
     <body>
-        <p id="portada">SUBIR CONFIGURACION</p>
+        <h2 id="portada">SUBIR CONFIGURACION</h2>
     {% block content %}
         <div id="formupload" class="container-fluid">
             
             <form id="formu" enctype="multipart/form-data" method="POST" >
                 {% csrf_token %}
-                <p id="fila">CARGAR FICHERO A SUBIR:
+                <p id="fila"></p>
                 <table>
                     <tr>
-                        <td><input type="file" name="upload" id="upload" class="label label-primary" onchange="enableBoton()"></td>
+                        <td><input type="file" name="upload" id="upload" class="btn btn-light" onchange="enableBoton()"></td>
                     </tr>
                     <tr>
-                        <td><button type="submit" id="boton2" class="input-group-text">SUBIR FILA</button></td>
+                        
+                        <td><button type="submit" id="boton2" class="form-check-input">SUBIR FILA</button></td>
                     </tr>
                 </table> 
                 {% if uploaded_file %}
