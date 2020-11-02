@@ -10,8 +10,13 @@
     <title>Imprimir GFH</title>
 </head>
 <body>
-    <p>Imprimir GFH</p>
-    <input type="text" id="tbenlace">
+    <form id="enl1" name="enl1" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <p>Imprimir GFH</p>
+        <input type="text" id="tbenlace" name="tbenlace">
+        <a href={{gfh}}>exportar gfh</a>
+    </form>
+
 
     {% block content %}
         

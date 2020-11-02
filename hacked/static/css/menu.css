@@ -18,8 +18,8 @@ body{
     border-color: #000000;
     font-size: 12pt;
     font-weight: bold;
-    background-color: rgb(240, 149, 75);
-    color: rgb(40, 4, 243);
+    background-color: rgb(0, 235, 106);
+    color: rgb(0, 0, 0);
     padding: 4px;
     text-align: center;
     
@@ -67,7 +67,7 @@ body{
  }
  
  ul li {
-    background-color: antiquewhite;
+    background-color: rgb(207, 206, 206);
  }
 
  ul li a { 

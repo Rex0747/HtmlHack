@@ -1,0 +1,37 @@
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+{% include 'menu.html' %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="cont1" name="cont1">
+        <form id="formulario"  method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <h2>AÑADIR DISPOSITIVO & GFH</h2>
+            <div id="contGfhCod" name="contGfhCod">
+                <label>GFH codigo<input type="text" name="addgfhC" id="addgfhC" class="form-control"></label>
+            </div>
+            <!-- <div id="contGfhNom" name="contDisp">
+                <label>GFH nombre<input type="text" name="addgfhN" id="addgfhN" class="form-control"></label>
+            </div> -->
+            <div id="contDisp" name="contDisp">
+                <label>DISP<input type="text" name="addisp" id="addisp" class="form-control"></label>
+            </div>
+            <div id="contHosp" name="contHosp">
+                <label>HOSPITAL<input type="text" name="hosp" id="hosp" class="form-control"></label>
+            </div>
+                <button type="submit" id="addDisGfh" name="addDisGfh" class="form-check-input">Añadir</button>
+                <label>{{mensaje}}</label>
+        </form>
+    </div>
+    
+</body>
+</html>

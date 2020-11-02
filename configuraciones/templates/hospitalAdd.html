@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AÑADIR HOSPITAL</title>
+</head>
+<body>
+    <div id="cont2" name="cont2">
+        <form id="formulario"  method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <h2>AÑADIR HOSPITAL</h2>
+            <div id="contHosp" name="contHosp">
+                <label>CODIGO<input type="text" name="codhosp" id="codhosp" class="form-control"></label>
+            </div>
+            <div id="contGfh" name="contGfh">
+                <label>NOMBRE<input type="text" name="codisp" id="codisp" class="form-control"></label>
+            </div>
+                <button type="submit" id="addHospital" name="addHospital" class="form-check-input">Añadir</button>
+                <label>{{mensaje}}</label>
+        </form>
+    </div>
+</body>
+</html>

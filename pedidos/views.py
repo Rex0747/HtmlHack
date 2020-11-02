@@ -186,8 +186,12 @@ def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear ex
     return HttpResponse('ok')
 
 def imprimirGfh( request):
-
-    return render( request, 'imprimirGfh.html')
+    gfh = 'expgfh/'
+    if request.method == 'POST':
+        if request.POST['tbenlace']:
+            gfh += request.POST['tbenlace']
+    print('LINK: ', gfh)
+    return render( request, 'imprimirGfh.html', {'gfh': gfh})
 
 
 #__________________Prueba DataGrid______________________________

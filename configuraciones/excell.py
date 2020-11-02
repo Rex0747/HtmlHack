@@ -154,9 +154,26 @@ class Excell:
         print('Salvado nombre: '+ MEDIA_ROOT +'/' + nombre +'.xlsx' )
 
     def salvarexcell3(self):
-        self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' ) 
+        self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' )
 
 
+    
+class campos:
+    
+    def __init__(self,mod, est, ubc, div, cod, nom, pac, mim , dc, gfh, disp, hosp ):
+        self.modulo = mod
+        self.estanteria = est
+        self.ubicacion = ubc
+        self.division = div
+        self.codigo = cod
+        self.nombre = nom
+        self.pacto = pac
+        self.minimo = mim
+        self.dc = dc
+        self.gfh = gfh
+        self.dispositivo = disp
+        self.hospital = hosp
+        
 
 class comprobarExcel:
     ListaUb = []

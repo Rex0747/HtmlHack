@@ -18,12 +18,12 @@ body{ background-color: rgba(255, 255, 255, 0.9); margin: 0px; padding: 0px;}
 
 #config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
 
-.config th{ border: 1px solid; background-color: lightgreen(15, 104, 82); color: black; font-size: 1.5em; height: 1.8em; text-align: center;}
+.config th{ border: 1px solid; background-color: lightgreen(15, 104, 82); color: black; font-size: 1.1em; height: 1.1em; text-align: center;}
 .config tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
 .config td{ border: 1px solid; }
 .config tr:nth-child(odd){ background-color:lightgrey; }
 .config tr:nth-child(even){ background-color: white; }
-.config tr td{font-size: 1.2em; height: 1.5em;}
+.config tr td{font-size: 1em; height: 1em;}
 
 #tmenu{ margin: auto; background-color: transparent; margin-top: 50px; width: 100%;;  }
 #tmenu tr{  background-color: transparent; }

@@ -37,6 +37,8 @@ urlpatterns = [
     path('articulos',v1.articulosAdd),
     path('addgfh',v1.gfhsAdd ),
     path('adddisp',v1.dispositivosAdd ),
+    path('addispgfh',v1.adDispGfh ),
+    path('hospitalAdd',v1.addHospital ),
     path('addFotos',v1.AñadirFotosArticulos ),
     path('verGaleria',v1.verGaleria ),
     path('verqr',v1.mostrarCodigoQR),

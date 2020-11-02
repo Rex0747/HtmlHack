@@ -50,7 +50,7 @@ class dispositivos(models.Model):
 
 class hospitales(models.Model):
     id=models.AutoField( primary_key=True )
-    codigo=models.CharField(max_length=12 )  #unique=True
+    codigo=models.CharField(max_length=12, unique=True )  #unique=True
     nombre=models.CharField(max_length=30)
     def __str__(self):
         return '%s %s' %( self.codigo, self.nombre )

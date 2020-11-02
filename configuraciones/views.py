@@ -6,7 +6,7 @@ from django.http import HttpResponse , Http404
 from configuraciones.models import  articulos , configurations , gfhs , dispositivos, hospitales
 from django.core.files.storage import FileSystemStorage
 from .forms import UploadFileForm
-from os import remove , listdir
+from os import remove , listdir , mkdir
 from configuraciones.excell import Excell
 from configuraciones.excell import comprobarExcel
 from HtmlHack.settings import MEDIA_ROOT
@@ -84,8 +84,8 @@ def upload_file(request):
             try:
                 rmv = rmv.fetchall()[0]
                 borradas = configurations.objects.filter( gfh=rmv[1], disp=rmv[0] ).delete()
-                print('Borradas: '+str(borradas) , ' gfh: '+str(rmv[1]), ' disp: '+str(rmv[0]))
-                print(str(rmv))
+                #print('Borradas: '+str(borradas) , ' gfh: '+str(rmv[1]), ' disp: '+str(rmv[0]))
+                #print(str(rmv))
 
             except Exception as e:
                 rmv = rmv.fetchone() #Si pasa por aqui es porque ese equipo no existe
@@ -102,6 +102,7 @@ def upload_file(request):
                     #_________________________MODO SQL____________________________________
                     cursor = connection.cursor()
                     try:
+                        codHosp = i[11]
                         cursor.execute('SELECT id FROM configuraciones_hospitales WHERE codigo = %s',[ i[11] ] )
                         i[11] = cursor.fetchone()[0]
                         cursor.execute( 'SELECT idsel FROM configuraciones_articulos WHERE codigo = %s',[ i[4] ] )
@@ -111,7 +112,7 @@ def upload_file(request):
                         #artnew = articulos(codigo=i[4] ,nombre=i[5] ,hospital=i[11])
                         #artnew.save()
                         consulta = "INSERT INTO configuraciones_articulos(codigo,nombre,hospital_id,foto)VALUES\
-                        ('"+str(i[4])+"','"+str(i[5])+"','"+str(i[11])+"','"+str('articulos/'+str(i[4])+'.png')+"')"
+                        ('"+str(i[4])+"','"+str(i[5])+"','"+str(i[11])+"','"+str('articulos/fotos-'+codHosp+'/'+str(i[4])+'.png')+"')"
                         cursor.execute( consulta )
                         #print('Articulo_Nuevo: ' + str( i[5] ))
                         cursor.execute( 'SELECT idsel FROM configuraciones_articulos WHERE codigo = %s',[ i[4] ] )
@@ -391,6 +392,64 @@ def dispositivosAdd(request):
             #return HttpResponse( 'Hubo un fallo al subir lista de dispositivos. ' +str(e))
             print('COLISION AL INSERTAR gfh: ' + item[1]+ ' , ERROR: ' + str( e ) )
     return HttpResponse( 'Lista dispositivos correctamente' )
+
+def adDispGfh( request ):
+    gfh = None
+    disp = None     # tabla disp = gfh_id , nombre
+    hosp_id = None  # tabla gfh  = gfh, nombre , hp_id_id
+    hosp_id = hospitales.objects.all().count()
+    print('Numero Hospitales: ', str(hosp_id))
+    if hosp_id == 0:
+        msg = 'Antes de añadir dispositivos y gfhs es necesario crear un hospital.'
+
+        return render(request, 'addDispGfh.html', {'mensaje': msg})
+    if request.method == 'POST':
+        if request.POST['addgfhC']:
+            gfh = request.POST['addgfhC']
+            if request.POST['hosp']:
+                hosp_id = request.POST['hosp']
+                if request.POST['addisp']:
+                    disp = request.POST['addisp']
+                    try:
+                        hosp_id = getIdDB( hospitales.objects.filter(codigo=hosp_id),'id')
+                        print('gfh: ', gfh)
+                        print('hosp: ', hosp_id)
+                        dataGfh = gfhs(gfh=gfh, nombre=disp, hp_id_id=hosp_id)
+                        dataGfh.save()
+                        #gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh, hp_id_id=hosp_id),'id')
+                        dataDisp = dispositivos(gfh_id=dataGfh.id, nombre=disp)
+                        dataDisp.save()
+
+
+                    except Exception as e:
+                        print('Error al crear gfh/disp.')
+                        print(str(e))
+
+
+    return render(request, 'addDispGfh.html')
+
+def addHospital( request ):
+    codigo = None
+    hospital = None
+    mensaje = None
+    if request.method == 'POST':
+        if request.POST['codhosp']:
+            codigo = request.POST['codhosp']
+            if request.POST['codisp']:
+                hospital = request.POST['codisp']
+                try:
+                    hosp = hospitales(codigo=codigo, nombre=hospital)
+                    hosp.save()
+                    fila = MEDIA_ROOT +'/' + 'articulos/fotos-'+hosp.codigo
+                    mkdir(fila)
+                    mensaje = hosp.nombre+' creado correctamente'
+                except Exception as e:
+                    print('Error al crear hospital.')
+                    print(str(e))
+
+
+    return render(request, 'HospitalAdd.html', {'mensaje': mensaje})
+
 
 def AñadirFotosArticulos( request ):
     ruta = MEDIA_ROOT+'/articulos/'
