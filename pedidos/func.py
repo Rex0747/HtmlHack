@@ -16,50 +16,37 @@ class funciones:
         #pass
 
     @staticmethod
-    def getEtiquetas2( code , gfh):
-        mtx = code.split('|')
-        #print('Code: ', code)
-        #print('mtx: ', str(mtx))
-        filexcel = funciones.CrearFicheroExcel(gfh)
+    def splitdatos(mtx, dlm):
+        datos = mtx.split(dlm)
+        return datos
 
+    @staticmethod
+    def getEtiquetas2( code , gfh):     #0 ubic  1 cod  2 nombre 3 pacto  4 gfh  5 disp  6 hosp 7 rfid
+        #print('Code: ', code)
+        mtx = code.split('|')
+        print('mtx: ', str(mtx))
+        datos = []
         listaM = []
         for i in mtx:
+            datos = i.split('~')
             listaT = []
-            m = getIdDB( configurations.objects.filter(id=i),'modulo')
-            e = getIdDB( configurations.objects.filter(id=i),'estanteria')
-            u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
-            d = getIdDB( configurations.objects.filter(id=i),'division')
-            
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#1
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#4
-            gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
-            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#5
-            codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#2
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#3
-            #print('rfid: ', str(i))
-            #print('codigo_id:', codigo)
-            #print('codigo:', codigo_id)
-
-            idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
-            nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
-            
-            dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
-            listaT.append( i ) #6  idconf
-            listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+            listaT.append( datos[0])
+            listaT.append( datos[1])
+            listaT.append( datos[2])
+            listaT.append( datos[3])
+            listaT.append( datos[4])
+            listaT.append( datos[5])
+            listaT.append( datos[6])
+            listaT.append( i )
             listaM.append( listaT )
-        
-                            #2        3       4      5       1            6         0
-            #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-        file = funciones.CrearExcel_2(listaM , filexcel)
 
+        filexcel = funciones.CrearFicheroExcel(gfh)
+        file = funciones.CrearExcel_2(listaM , filexcel)
+        
         #funciones.envcorreogmail(fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
             #mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
     #    #ifwehvkeekzbcrok
-
         return file
-        #return HttpResponse('OK')
-        #return render(request,'etiquetas.html',{'hospital': hospital_id, 'nombre': nombre ,'codigo': codigo, 'pacto': pacto, 'gfh': gfh, 'disp': dispo })    
 
     @staticmethod
     def GetDatos( disp, user ):
@@ -151,6 +138,7 @@ class funciones:
         filexcel = None
         tiempo = datetime.datetime.now()
         tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
+        print('Nombre Fila: ' + str(nombre))
         if nombre:
             filexcel = 'pedidos/'+ nombre + tiempo
         else:
@@ -159,47 +147,31 @@ class funciones:
         excel = Excell( filexcel )
         excel.createsheet('data')
         excel.cambiar_hoja('data')
-        head = ['codigo','nombre','cantidad','gfh','dispositivo','rfid','ubicacion']
+        head = ['Ubicacion','Codigo','Nombre','Cantidad','Gfh','Dispositivo','Hospital','Rfid']
         excel.insertar_rangofila( head ,1 ,1 )
         excel.deleteSheet('Sheet')
         excel.salvarexcell2()
         return filexcel
 
     @staticmethod
-    def CrearExcel_2( lista, filexcel=None ):
+    def CrearExcel_2( lista, filexcel=None ): #0 ubic  1 cod  2 nombre 3 pacto  4 gfh  5 disp  6 hosp
         print( 'CrearExcel_2_Array: ', str(lista))
         tiempo = datetime.datetime.now()
         tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
         if filexcel is None:
             filexcel = MEDIA_ROOT + '/pedidos/'+ 'data' + tiempo + '.xlsx'
         else:
-            gfh_temp = gfhs.objects.get( id=lista[0][2] )
-            print('GFH: ', gfh_temp.gfh)
-            filexcel = MEDIA_ROOT + '/pedidos/'+ gfh_temp.gfh + tiempo + '.xlsx'
+            print('GFH: ', lista[1])
+            filexcel = MEDIA_ROOT + '/pedidos/'+ lista[0][4] + tiempo + '.xlsx'
         
         print('FileExcel: ', filexcel)
         excel = Excell( filexcel )
-
-        #excel.cambiar_hoja('data')
-        
+        #print('Datos Hospital : ', str(lista))
         for i in lista:
-                            #2        3       4      5       1            6         0
-            #CrearExcel( codigo_id, pacto, gfhid, dispid, hospital_id, idconf, ubicacion )
-            #print('CODIGO_ID: ', i[2])
-            codigo_r = articulos.objects.get(idsel=i[3] , hospital_id=i[0]) #
-            #print('CODIGO_R: '+ str(codigo_r))
-            hospital_r = hospitales.objects.get( id=i[0] )
-            gfh_r = gfhs.objects.get(id=i[1])
-            disp_r = dispositivos.objects.get(id=i[2])
-            nombre_r = articulos.objects.get(codigo=codigo_r.codigo, hospital_id=hospital_r.pk) #Insertar hospital para filtrar
-            cantidad_r = i[4]
-            lt = None
+
             nfilas = excel.getnumerofilas()
-            if len( i ) == 7:
-                lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre, i[5], i[6] )
-            else:
-                lt = (codigo_r.codigo, nombre_r.nombre, cantidad_r, gfh_r.gfh, disp_r.nombre )
-            excel.insertar_rangofila( lt , nfilas + 1, 1)
+            excel.insertar_rangofila( i , nfilas + 1, 1 )
+            #print('Se Insert: ' + str(i))
         excel.salvarexcell()
         return filexcel
 
@@ -236,19 +208,19 @@ class funciones:
             #user_temp = i[6] 
             if npedido != None:
                 ped = pedidos_dc()
-                ped.hospital=hospitales.objects.get(id=i[0])
+                ped.hospital= hospitales.objects.get(codigo=i[6]) #hospitales.objects.get(id=i[0])
                 ped.npedido=npedido
-                ped.gfh=gfhs.objects.get(id=i[1])
+                ped.gfh = gfhs.objects.get(gfh=i[4])  #gfhs.objects.get(id=i[1])
                 #ped.disp=dispositivos.objects.get(id=listaT[2])
-                ped.codigo=articulos.objects.get(idsel=i[3])
-                ped.cantidad=i[4]
+                ped.codigo= articulos.objects.get(codigo=i[1], hospital_id=ped.hospital.id ) #articulos.objects.get(idsel=i[3])
+                ped.cantidad= i[3] #i[4]
                 ped.save()
                 #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
         filexcel = funciones.CrearFicheroExcel(nomExcel)
         print('Fichero Excel: ', filexcel)
         funciones.CrearExcel_2( listaM )
-        funciones.envcorreogmail(fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
-            mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+        #funciones.envcorreogmail(fileadjunto=filexcel, subject='Pedido material.',\
+        # mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
     #    #ifwehvkeekzbcrok
         return filexcel
 
@@ -256,27 +228,34 @@ class funciones:
     @staticmethod
     def InsertarPedido( datos, npedido ):
         print('InsertarPedido: ', str(datos))
+        
         listaM = []
         for i in datos:
-            #print(str(i))
+            print('Hospital: ', i.hospital.pk)
+            print('Codigo: ', i.codigo.nombre )
+            #print('Ubicacion: ',str(configurations.objects.get(codigo=i.codigo.codigo, hosp=i.hospital.id )))
+            #tmp = configurations.objects.get(codigo=i.codigo.codigo, gfh=i.gfh.id, hosp=i.hospital.id )
             listaT = []
-            listaT.append( i[5] ) #hospital        0
-            listaT.append( i[4] ) #gfh             1
-            listaT.append( i[3] ) #dispositivo     2
-            listaT.append( i[2] ) #codigo          3
-            listaT.append( i[1] ) #cantidad        4
+            listaT.append( '####')#tmp.modulo+"-"+tmp.estanteria+"-"+tmp.ubicacion+"-"+tmp.division )
+            listaT.append( i.codigo.codigo) #codigo         
+            listaT.append( i.codigo.nombre)#nombre
+            listaT.append( i.cantidad ) #cantidad  
+            listaT.append( i.gfh.gfh ) #gfh           
+            listaT.append( i.disp.nombre ) #dispositivo   
+            listaT.append( i.hospital.codigo ) #hospital      
             listaM.append(listaT)
 
-            user_temp = i[6] 
+            user_temp = i.user_temp 
             ped = pedidos()
-            ped.hospital=hospitales.objects.get(id=listaT[0])
+            ped.hospital= i.hospital
             ped.npedido=npedido
-            ped.gfh=gfhs.objects.get(id=listaT[1])
-            ped.disp=dispositivos.objects.get(id=listaT[2])
-            ped.codigo=articulos.objects.get(idsel=listaT[3])
-            ped.cantidad=listaT[4]
+            ped.gfh= i.gfh
+            ped.disp= i.disp
+            ped.codigo= i.codigo
+            ped.cantidad= i.cantidad
             ped.save()
             #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
+            print('ListaM: ', str(listaM))
         funciones.CrearExcel_2( listaM )
 
     @staticmethod

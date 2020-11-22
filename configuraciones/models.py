@@ -13,6 +13,7 @@ class articulos(models.Model):
 
     def __str__(self):
         return '%s %s %s' %( self.codigo, self.nombre, self.foto )
+        #return '%s' %( self.nombre )
 
     class Meta:
         #pass
@@ -20,6 +21,7 @@ class articulos(models.Model):
         #    models.UniqueConstraint( fields=['codigo', 'hospital'] )
         #]
         unique_together = ('codigo', 'hospital')
+        
     class Admin:
         list_display = ('codigo', 'nombre', 'hospital_id')
         list_filter = ('hospital_id',)
@@ -52,8 +54,9 @@ class hospitales(models.Model):
     id=models.AutoField( primary_key=True )
     codigo=models.CharField(max_length=12, unique=True )  #unique=True
     nombre=models.CharField(max_length=30)
+    rutaFotos=models.CharField(max_length=30, null=True, blank=True)
     def __str__(self):
-        return '%s %s' %( self.codigo, self.nombre )
+        return '%s %s %s' %( self.codigo, self.nombre, self.rutaFotos )
         
 
 class configurations(models.Model):
@@ -67,21 +70,46 @@ class configurations(models.Model):
     pacto=models.FloatField( )
     minimo=models.FloatField( )
     dc=models.CharField(max_length=2 )
-    gfh=models.CharField(max_length=8 ) 
-    disp=models.CharField(max_length=6 )
+    gfh=models.ForeignKey('gfhs', on_delete=models.CASCADE ) 
+    disp=models.ForeignKey('dispositivos', on_delete=models.CASCADE )
     hosp= models.ForeignKey('hospitales',on_delete=models.CASCADE)
-
+    nconfig= models.CharField(max_length=8, unique=False)
+    fechalta= models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '%s %s %s %s %s %s %s %s %s %s %s' %( 
+        return '%s %s %s %s %s %s %s %s %s %s %s %s %s %s' %( 
             self.modulo,self.estanteria,self.ubicacion,
             self.division,self.codigo,self.nombre,self.pacto,
-            self.minimo,self.dc,self.gfh,self.disp )
+            self.minimo,self.dc,self.gfh,self.disp,self.hosp,self.nconfig,self.fechalta)
 
     class Meta: 
-        unique_together = ( 'modulo','estanteria','ubicacion','division','disp' )
+        unique_together = ( 'modulo','estanteria','ubicacion','division','disp','hosp','gfh','nconfig' ) 
 
 
+class excel(models.Model):
+    modulo=models.CharField(max_length=2 )
+    estanteria=models.CharField(max_length=2 )
+    ubicacion=models.CharField(max_length=5 )
+    division=models.CharField(max_length=1 )
+    codigo=models.CharField(max_length=6 )
+    nombre=models.ForeignKey('articulos', on_delete=models.CASCADE )
+    pacto=models.FloatField( )
+    minimo=models.FloatField( )
+    dc=models.CharField(max_length=2 )
+    #gfh=models.CharField(max_length=4 )
+    #disp=models.CharField(max_length=6 )
+    #hosp= models.CharField(max_length=4 )
+    gfh=models.ForeignKey('gfhs', on_delete=models.CASCADE ) 
+    disp=models.ForeignKey('dispositivos', on_delete=models.CASCADE )
+    hosp= models.ForeignKey('hospitales',on_delete=models.CASCADE)
+    sesion= models.CharField(max_length=8,unique=False,default=False)# filtra solo para gfh a cambiar
 
+    def __str__(self):
+        return '%s %s %s %s %s %s %s %s %s %s %s %s' %( 
+            self.modulo,self.estanteria,self.ubicacion,
+            self.division,self.codigo,self.nombre,self.pacto,
+            self.minimo,self.dc,self.gfh,self.disp,self.hosp )
 
-    
+    class Meta: 
+        unique_together = ( 'modulo','estanteria','ubicacion','division','disp','hosp' ) 
+

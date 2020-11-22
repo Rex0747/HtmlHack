@@ -11,7 +11,7 @@ class Excell:
     nombre = ''
 
     def __init__(self, nombre_):
-
+        self.lista = []
         global nombre
         nombre = nombre_
         print('NombreFichero: ' + nombre )
@@ -29,7 +29,7 @@ class Excell:
             self.ws = self.wb[ hoja[0] ]
             self.ws.title = hoja[0]
             
-            self.salvarexcell2()
+            self.salvarexcell() #self.salvarexcell2()
             #print('se ha creado el fichero excell '+nombre+' correctamente.')
         # global ws
         self.ws = self.wb.active
@@ -87,6 +87,32 @@ class Excell:
         ret.pop( 0 )
         return ret
 
+    def leer_fichero2(self):
+        #lista = self.ws.rows
+        #return lista
+        cmps = None
+        self.lista = []
+        mtx = self.ws.rows
+        for row in mtx:
+            if row != '':
+                m = row[0].value
+                e = row[1].value
+                u = row[2].value
+                d = row[3].value
+                codigo = row[4].value
+                nombre = row[5].value
+                pacto = row[6].value
+                minimo = row[7].value
+                dc = row[8].value
+                gfh = row[9].value
+                disp = row[10].value
+                hosp = row[11].value
+                cmps = campos(m,e,u,d,codigo,nombre,pacto,minimo,dc,gfh,disp,hosp)
+                #cmps = (m+'#'+e+'#'+u+'#'+d+'#'+codigo+'#'+nombre+'#'+pacto+'#'+minimo+'#'+dc+'#'+gfh+'#'+disp+'#'+hosp).split('#')
+                
+                self.lista.append(cmps)
+        return self.lista[1 : ]
+
 
     def leer_fila(self):
         ret = []
@@ -122,7 +148,7 @@ class Excell:
     def insertar_rangofila(self, rango, fila, columna):
         for i, value in enumerate(rango):
             self.ws.cell(column=columna + i, row=fila, value=value)
-        
+            print('Fila: '+ str(fila) + '  Columna: '+ str(columna) + '  Value: '+ str(value))
 
     def insertar_rangocolumna(self, rango, fila, columna):
         for i, value in enumerate(rango):
@@ -151,11 +177,15 @@ class Excell:
 
     def salvarexcell2(self):
         self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' )
-        print('Salvado nombre: '+ MEDIA_ROOT +'/' + nombre +'.xlsx' )
-
+        
     def salvarexcell3(self):
         self.wb.save( MEDIA_ROOT +'/' + nombre +'.xlsx' )
 
+    def __repr__(self):
+        return str(self.lista)
+
+    def __str__(self):
+        return str(self.lista)
 
     
 class campos:
@@ -173,7 +203,33 @@ class campos:
         self.gfh = gfh
         self.dispositivo = disp
         self.hospital = hosp
-        
+
+#region revision
+class ListaToQuerySet(list):
+
+    def __init__(self, *args, model, **kwargs):
+        self.model = model
+        super().__init__(*args, **kwargs)
+
+    def filter(self, *args, **kwargs):
+        return self  # filter ignoring, but you can impl custom filter
+
+    def order_by(self, *args, **kwargs):
+        return self
+
+def list_to_queryset(model, data):
+    from django.db.models.base import ModelBase
+
+    if not isinstance(model, ModelBase):
+        raise ValueError("%s must be Model" % model)
+
+    if not isinstance(data, list):
+        raise ValueError("%s must be List Object" % data)
+
+    pk_list = [obj.pk for obj in data]
+    return model.objects.filter(pk__in=pk_list)
+
+#endregion
 
 class comprobarExcel:
     ListaUb = []

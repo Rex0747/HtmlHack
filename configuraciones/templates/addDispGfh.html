@@ -17,16 +17,16 @@
             {% csrf_token %}
             <h2>AÑADIR DISPOSITIVO & GFH</h2>
             <div id="contGfhCod" name="contGfhCod">
-                <label>GFH codigo<input type="text" name="addgfhC" id="addgfhC" class="form-control"></label>
+                <input type="text" name="addgfhC" id="addgfhC" placeholder="GFH" class="form-control">
             </div>
             <!-- <div id="contGfhNom" name="contDisp">
                 <label>GFH nombre<input type="text" name="addgfhN" id="addgfhN" class="form-control"></label>
             </div> -->
             <div id="contDisp" name="contDisp">
-                <label>DISP<input type="text" name="addisp" id="addisp" class="form-control"></label>
+                <input type="text" name="addisp" id="addisp" placeholder="DISPOSITIVO" class="form-control">
             </div>
             <div id="contHosp" name="contHosp">
-                <label>HOSPITAL<input type="text" name="hosp" id="hosp" class="form-control"></label>
+                <input type="text" name="hosp" id="hosp" placeholder="HOSPITAL" class="form-control">
             </div>
                 <button type="submit" id="addDisGfh" name="addDisGfh" class="form-check-input">Añadir</button>
                 <label>{{mensaje}}</label>

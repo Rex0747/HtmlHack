@@ -11,10 +11,10 @@
             {% csrf_token %}
             <h2>AÑADIR HOSPITAL</h2>
             <div id="contHosp" name="contHosp">
-                <label>CODIGO<input type="text" name="codhosp" id="codhosp" class="form-control"></label>
+                <input type="text" name="codhosp" id="codhosp" placeholder="CODIGO" class="form-control">
             </div>
             <div id="contGfh" name="contGfh">
-                <label>NOMBRE<input type="text" name="codisp" id="codisp" class="form-control"></label>
+                <input type="text" name="codisp" id="codisp" placeholder="NOMBRE" class="form-control">
             </div>
                 <button type="submit" id="addHospital" name="addHospital" class="form-check-input">Añadir</button>
                 <label>{{mensaje}}</label>

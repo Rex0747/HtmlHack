@@ -45,17 +45,18 @@ def pedido( request ):
                 
             filexcel = funciones.CrearFicheroExcel()
             for i in datos:
-                fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
-                #fila = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
-                #filas = pedidos_temp.objects.filter(disp_id=i).order_by('id')
+                #fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
+                pedi = pedidos_temp.objects.filter(disp_id=i[0], user_temp_id=user_temp).select_related('gfh','disp','codigo','user_temp')
+
                 with connection.cursor() as conn:
-                    filas = conn.execute(fila)
-                    res = filas.fetchall()
-                    funciones.InsertarPedido(res, npedido)
+                    #filas = conn.execute(fila)
+                    #res = filas.fetchall()
+
+                    funciones.InsertarPedido(pedi, npedido)
                 #print('---------------------------------')
             funciones.InsertarAlbaranPedido(user_temp, npedido )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_temp).delete()
-            
+            print('Fichero Excel2: ', filexcel)
             funciones.envcorreogmail( fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
                     mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
 
@@ -118,6 +119,8 @@ def pedido( request ):
 def imprimirEtiquetas( request, gfh):
     gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
     #print('GFH_ID: ', gfh_id)
+    if gfh_id == None:
+        return HttpResponse('El gfh '+ gfh + ' no existe.')
     mtx = None
     try:
         mtx = configurations.objects.filter(gfh=gfh_id) #, hosp_id=1) #poner bien id hospital
@@ -125,11 +128,25 @@ def imprimirEtiquetas( request, gfh):
         print('Fallo en seleccion de ids.', e)
     csv = ''
     for i in mtx:
-        csv += '|' + str(i.id)
+
+        m = str(i.modulo)
+        e = str(i.estanteria)
+        u = str(i.ubicacion)
+        d = str(i.division)
+        codigo = str(str(i.codigo))
+        nombre = str(i.nombre.nombre)
+        pacto = str(i.pacto)
+        gfh = i.gfh
+        disp = i.disp
+        hosp = i.hosp
+
+        ubic = m + "-" + e + "-" + u +"-" + d
+        csv += '|' + ubic + '~' + codigo + '~' + nombre + '~' + pacto + '~' + gfh.gfh + '~' + disp.nombre + '~' + hosp.codigo     #str(i.id)
     csv = csv[1 : ]
     #print(csv)
+    #print('Gfh: ', str(gfh))
 
-    fila = funciones.getEtiquetas2( csv, gfh)
+    fila = funciones.getEtiquetas2( csv, gfh.gfh)
     response = None
     with open( fila , 'rb') as fh:
             print('ENTRO')
@@ -138,11 +155,92 @@ def imprimirEtiquetas( request, gfh):
     return response
     #return HttpResponse( 'Final' )
 
-def pedidodc( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
+def pedidodcBack( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
+    mtx = data.split('|')
+    revisar = mtx[-1]
+    print('data: ', str(data))
+    print('revisar: ', str(revisar))
+    listaM = []
+    for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
+
+        try:
+            listaT = []
+            m = getIdDB( configurations.objects.filter(id=i),'modulo')
+            e = getIdDB( configurations.objects.filter(id=i),'estanteria')
+            u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
+            d = getIdDB( configurations.objects.filter(id=i),'division')
+            
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#0
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#1
+            gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
+            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#2
+            codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
+            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#3
+            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#4
+
+            print('Hospital_id: ',  getIdDB( configurations.objects.filter(id=i),'hosp_id') )
+            print('rfid: ', str(i))
+            print('codigo: ', codigo)
+            print('gfh: ', gfh)
+            print('disp: ', getIdDB(configurations.objects.filter(id=i),'disp'))
+            print('articulo_id: ', getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )
+            print('pacto: ', getIdDB( configurations.objects.filter(id=i),'pacto') )
+            print('__________________')
+
+            idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
+            nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
+            
+            dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
+            listaT.append( i ) #6  idconf
+            listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
+            listaM.append( listaT )
+        except Exception as e:
+            print('Articulo inexistente ',str(i) + '  '+ str(e) )
+    if revisar == 'ReViSiOn':
+        funciones.InsertarPedido_dc(listaM)
+    else:
+        npedido = funciones.GenNumPedido()
+        funciones.InsertarPedido_dc(listaM,npedido)
+        funciones.InsertarAlbaranPedido_dc( npedido )
+
+    return HttpResponse('ok')
+
+def pedidodc( request, data ):
+    mtx = data.split('|')
+    revisar = mtx[-1]
+    #print('data: ', str(data))
+    print('mtx: ', str(mtx))
+    listaM = []
+    for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
+        
+        try:
+            listaT = i.split('~')
+            articulo = articulos.objects.get(codigo=listaT[1] , hospital_id=hospitales.objects.get(codigo=listaT[5]) )
+            listaT.insert( 2 , articulo.nombre )
+            listaM.append(listaT)
+            print(str(listaT))
+            listaT = []
+            
+        except Exception as e:
+            print('Exception ', str(e))
+
+    #print('ListaM: ' + str(listaM))
+    try:
+        npedido = funciones.GenNumPedido()
+        funciones.InsertarPedido_dc(listaM,npedido)
+        funciones.InsertarAlbaranPedido_dc( npedido )
+    except Exception as e:
+        print('Exception Insertar pedido DC', str(e))
+        return HttpResponse('ko')
+
+    return HttpResponse('ok')
+            
+
+def pedidodcBak( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
     mtx = data.split('|')
     revisar = mtx[-1]
     listaM = []
-    for i in mtx:
+    for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
         try:
             listaT = []
             m = getIdDB( configurations.objects.filter(id=i),'modulo')
