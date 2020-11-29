@@ -31,7 +31,7 @@ class articulos(models.Model):
 class gfhs(models.Model):
     id=models.AutoField( primary_key=True )
     gfh=models.CharField(max_length=4 ) #unique=True
-    nombre=models.CharField(max_length=25)
+    nombre=models.CharField(max_length=25, unique=True)
     hp_id=models.ForeignKey( 'hospitales' , models.SET_NULL,blank=True, null=True )
     def __str__(self):
         return '%s %s' %(self.gfh, self.nombre)
@@ -73,7 +73,8 @@ class configurations(models.Model):
     gfh=models.ForeignKey('gfhs', on_delete=models.CASCADE ) 
     disp=models.ForeignKey('dispositivos', on_delete=models.CASCADE )
     hosp= models.ForeignKey('hospitales',on_delete=models.CASCADE)
-    nconfig= models.CharField(max_length=8, unique=False)
+    #nconfig= models.CharField(max_length=8, unique=False)
+    nconfig= models.IntegerField(unique=False)
     fechalta= models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -96,13 +97,9 @@ class excel(models.Model):
     pacto=models.FloatField( )
     minimo=models.FloatField( )
     dc=models.CharField(max_length=2 )
-    #gfh=models.CharField(max_length=4 )
-    #disp=models.CharField(max_length=6 )
-    #hosp= models.CharField(max_length=4 )
     gfh=models.ForeignKey('gfhs', on_delete=models.CASCADE ) 
     disp=models.ForeignKey('dispositivos', on_delete=models.CASCADE )
     hosp= models.ForeignKey('hospitales',on_delete=models.CASCADE)
-    sesion= models.CharField(max_length=8,unique=False,default=False)# filtra solo para gfh a cambiar
 
     def __str__(self):
         return '%s %s %s %s %s %s %s %s %s %s %s %s' %( 

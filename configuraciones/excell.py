@@ -93,24 +93,27 @@ class Excell:
         cmps = None
         self.lista = []
         mtx = self.ws.rows
-        for row in mtx:
-            if row != '':
-                m = row[0].value
-                e = row[1].value
-                u = row[2].value
-                d = row[3].value
-                codigo = row[4].value
-                nombre = row[5].value
-                pacto = row[6].value
-                minimo = row[7].value
-                dc = row[8].value
-                gfh = row[9].value
-                disp = row[10].value
-                hosp = row[11].value
-                cmps = campos(m,e,u,d,codigo,nombre,pacto,minimo,dc,gfh,disp,hosp)
-                #cmps = (m+'#'+e+'#'+u+'#'+d+'#'+codigo+'#'+nombre+'#'+pacto+'#'+minimo+'#'+dc+'#'+gfh+'#'+disp+'#'+hosp).split('#')
-                
-                self.lista.append(cmps)
+        try:
+            for row in mtx:
+                if row != '':
+                    m = row[0].value
+                    e = row[1].value
+                    u = row[2].value
+                    d = row[3].value
+                    codigo = row[4].value
+                    nombre = row[5].value
+                    pacto = row[6].value
+                    minimo = row[7].value
+                    dc = row[8].value
+                    gfh = row[9].value
+                    disp = row[10].value
+                    hosp = row[11].value
+                    cmps = campos(m,e,u,d,codigo,nombre,pacto,minimo,dc,gfh,disp,hosp)
+                    #cmps = (m+'#'+e+'#'+u+'#'+d+'#'+codigo+'#'+nombre+'#'+pacto+'#'+minimo+'#'+dc+'#'+gfh+'#'+disp+'#'+hosp).split('#')
+                    self.lista.append(cmps)
+        except Exception as e:
+            return []
+
         return self.lista[1 : ]
 
 
@@ -148,7 +151,7 @@ class Excell:
     def insertar_rangofila(self, rango, fila, columna):
         for i, value in enumerate(rango):
             self.ws.cell(column=columna + i, row=fila, value=value)
-            print('Fila: '+ str(fila) + '  Columna: '+ str(columna) + '  Value: '+ str(value))
+            #print('Fila: '+ str(fila) + '  Columna: '+ str(columna) + '  Value: '+ str(value))
 
     def insertar_rangocolumna(self, rango, fila, columna):
         for i, value in enumerate(rango):
@@ -239,11 +242,12 @@ class comprobarExcel:
     codigo = ''
 
     def __init__(self, lista ):
+        #print(lista)
         self.ListaUb.clear()
         self.Lista = lista
         for i in lista:
-            ubicacion = str(i[0])+'-'+str(i[1])+'-'+str(i[2])+'-'+str(i[3])
-            codigo = str(i[4]) + ' ' + str(i[8])  # codigo + DC
+            ubicacion = str(i.modulo)+'-'+str(i.estanteria)+'-'+str(i.ubicacion)+'-'+str(i.division)
+            codigo = str(i.codigo) + ' ' + i.dc  # codigo + DC
             self.ListaUb.append( ubicacion )
             self.ListaCo.append( codigo )
             ubicacion = None
@@ -270,12 +274,12 @@ class comprobarExcel:
         x = 2; y = 1
         vacios = []
         for i in self.Lista:
-            for j in i:
-                if j == None or j == '':
-                    vacios.append( ( x , y) )
-                y += 1
-            y = 1
-            x += 1
+            #for j in enumerate(i):
+            if i == None or i == '':
+                print('Vacio: ' + str(i)) #vacios.append( ( x , y) )
+        y += 1
+        y = 1
+        x += 1
         return vacios
 
     def comprobarGfhDisp(self):

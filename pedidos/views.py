@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import os, random
-from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos
+from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos, excel
 import datetime
 from pedidos.models import pedidos, pedidos_ident, pedidos_temp, usuarios, pedidos_dc, pedidos_ident_dc
 from django.db import connection
@@ -93,7 +93,7 @@ def pedido( request ):
             #print('User: ' + user + '\t'+ 'disp: ' + disp + '\t'+ 'gfh: ' + gfh + '\t'+ 'hosp: ' + hospital )
 
             gfh_id, disp_id, user_id, hospital_id = funciones.GetDatos( disp, user)
-            datos = configurations.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
+            datos = excel.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
             #print('Type: '+ str(type(datos)))
             #print(str( datos ))
             
@@ -116,16 +116,19 @@ def pedido( request ):
 
         return render( request, 'pedidos.html')
 
-def imprimirEtiquetas( request, gfh):
-    gfh_id = getIdDB(gfhs.objects.filter(gfh=gfh),'id')
-    #print('GFH_ID: ', gfh_id)
-    if gfh_id == None:
-        return HttpResponse('El gfh '+ gfh + ' no existe.')
+def imprimirEtiquetas( request, disp):
+    try:
+        objGfh = gfhs.objects.get(nombre=disp)
+        #print('GFH_ID: ', objGfh)
+    except Exception as e:
+        return HttpResponse('El dispositivo '+ disp + ' no existe o no tiene cargada la configuracion.')
+    
     mtx = None
     try:
-        mtx = configurations.objects.filter(gfh=gfh_id) #, hosp_id=1) #poner bien id hospital
+        mtx = excel.objects.filter(gfh=objGfh.pk) #, hosp_id=1) #poner bien id hospital
     except Exception as e:
         print('Fallo en seleccion de ids.', e)
+
     csv = ''
     for i in mtx:
 
@@ -155,56 +158,6 @@ def imprimirEtiquetas( request, gfh):
     return response
     #return HttpResponse( 'Final' )
 
-def pedidodcBack( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
-    mtx = data.split('|')
-    revisar = mtx[-1]
-    print('data: ', str(data))
-    print('revisar: ', str(revisar))
-    listaM = []
-    for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
-
-        try:
-            listaT = []
-            m = getIdDB( configurations.objects.filter(id=i),'modulo')
-            e = getIdDB( configurations.objects.filter(id=i),'estanteria')
-            u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
-            d = getIdDB( configurations.objects.filter(id=i),'division')
-            
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#0
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#1
-            gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
-            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#2
-            codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#3
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#4
-
-            print('Hospital_id: ',  getIdDB( configurations.objects.filter(id=i),'hosp_id') )
-            print('rfid: ', str(i))
-            print('codigo: ', codigo)
-            print('gfh: ', gfh)
-            print('disp: ', getIdDB(configurations.objects.filter(id=i),'disp'))
-            print('articulo_id: ', getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )
-            print('pacto: ', getIdDB( configurations.objects.filter(id=i),'pacto') )
-            print('__________________')
-
-            idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
-            nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
-            
-            dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
-            listaT.append( i ) #6  idconf
-            listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
-            listaM.append( listaT )
-        except Exception as e:
-            print('Articulo inexistente ',str(i) + '  '+ str(e) )
-    if revisar == 'ReViSiOn':
-        funciones.InsertarPedido_dc(listaM)
-    else:
-        npedido = funciones.GenNumPedido()
-        funciones.InsertarPedido_dc(listaM,npedido)
-        funciones.InsertarAlbaranPedido_dc( npedido )
-
-    return HttpResponse('ok')
-
 def pedidodc( request, data ):
     mtx = data.split('|')
     revisar = mtx[-1]
@@ -231,58 +184,13 @@ def pedidodc( request, data ):
         funciones.InsertarAlbaranPedido_dc( npedido )
     except Exception as e:
         print('Exception Insertar pedido DC', str(e))
-        return HttpResponse('ko')
+        HttpResponse.status_code = 400
+        print('HttpResponseFail: ', HttpResponse.status_code )
 
-    return HttpResponse('ok')
+    print('HttpResponse: ', HttpResponse.status_code )
+    return HttpResponse(HttpResponse.status_code)
             
-
-def pedidodcBak( request , data ):  # Insertar en base de datos el pedido, crear excel pedido , mandar correo.
-    mtx = data.split('|')
-    revisar = mtx[-1]
-    listaM = []
-    for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
-        try:
-            listaT = []
-            m = getIdDB( configurations.objects.filter(id=i),'modulo')
-            e = getIdDB( configurations.objects.filter(id=i),'estanteria')
-            u = getIdDB( configurations.objects.filter(id=i),'ubicacion')
-            d = getIdDB( configurations.objects.filter(id=i),'division')
             
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'hosp_id') )#0
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'gfh') )#1
-            gfh = getIdDB(gfhs.objects.filter(id=listaT[1]), 'gfh')
-            listaT.append( getIdDB(configurations.objects.filter(id=i),'disp') )#2
-            codigo = getIdDB( configurations.objects.filter(id=i),'codigo')
-            listaT.append( getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )#3
-            listaT.append( getIdDB( configurations.objects.filter(id=i),'pacto') )#4
-
-            print('Hospital_id: ',  getIdDB( configurations.objects.filter(id=i),'hosp_id') )
-            print('rfid: ', str(i))
-            print('codigo: ', codigo)
-            print('gfh: ', gfh)
-            print('disp: ', getIdDB(configurations.objects.filter(id=i),'disp'))
-            print('articulo_id: ', getIdDB( articulos.objects.filter(codigo=codigo),'idsel') )
-            print('pacto: ', getIdDB( configurations.objects.filter(id=i),'pacto') )
-            print('__________________')
-
-            idnombre = getIdDB( configurations.objects.filter(id=i),'nombre_id')
-            nombre = getIdDB(articulos.objects.filter(idsel=idnombre , hospital_id=listaT[0] ), 'nombre')
-            
-            dispo = getIdDB(dispositivos.objects.filter(id=listaT[2]), 'nombre')
-            listaT.append( i ) #6  idconf
-            listaT.append( m + '.' + e + '.' + u + '.' + d ) #0
-            listaM.append( listaT )
-        except Exception as e:
-            print('Articulo inexistente ',str(i) + '  '+ str(e) )
-    if revisar == 'ReViSiOn':
-        funciones.InsertarPedido_dc(listaM)
-    else:
-        npedido = funciones.GenNumPedido()
-        funciones.InsertarPedido_dc(listaM,npedido)
-        funciones.InsertarAlbaranPedido_dc( npedido )
-
-    return HttpResponse('ok')
-
 def imprimirGfh( request):
     gfh = 'expgfh/'
     if request.method == 'POST':

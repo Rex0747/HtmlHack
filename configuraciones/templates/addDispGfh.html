@@ -16,21 +16,31 @@
         <form id="formulario"  method="post" enctype="multipart/form-data" >
             {% csrf_token %}
             <h2>AÑADIR DISPOSITIVO & GFH</h2>
-            <div id="contGfhCod" name="contGfhCod">
+            <div id="contGfhCod" name="contGfhCod" class="container">
                 <input type="text" name="addgfhC" id="addgfhC" placeholder="GFH" class="form-control">
             </div>
             <!-- <div id="contGfhNom" name="contDisp">
                 <label>GFH nombre<input type="text" name="addgfhN" id="addgfhN" class="form-control"></label>
             </div> -->
-            <div id="contDisp" name="contDisp">
+            <div id="contDisp" name="contDisp" class="container">
                 <input type="text" name="addisp" id="addisp" placeholder="DISPOSITIVO" class="form-control">
             </div>
-            <div id="contHosp" name="contHosp">
+            <div id="contHosp" name="contHosp" class="container">
                 <input type="text" name="hosp" id="hosp" placeholder="HOSPITAL" class="form-control">
             </div>
+            <div id="contBt" name="contBt" class="container">
                 <button type="submit" id="addDisGfh" name="addDisGfh" class="form-check-input">Añadir</button>
                 <label>{{mensaje}}</label>
+            </div>
         </form>
+
+        <audio autoplay >
+            {% if sound == 1 %}
+                <source src={% static 'sound/gfhdisp.mp3' %} type="audio/mpeg">
+                <p>Tu navegador no implementa el elemento audio</p>
+            {%endif%}
+        </audio>
+
     </div>
     
 </body>
