@@ -9,6 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" languaje="javascript" src={% static 'js/gfh.js' %} ></script>
     <title>Document</title>
 </head>
 <body>
@@ -16,6 +17,17 @@
         <form id="formulario"  method="post" enctype="multipart/form-data" >
             {% csrf_token %}
             <h2>AÑADIR DISPOSITIVO & GFH</h2>
+            <input type="hidden" id="hhosp"/>
+
+            <div id="contHospCod" name="contHospCod" class="container">
+                <select name="addHospC" id="addhospC" class="form-control">
+                    {% for i in hospital %}
+                    <option name="opHosp" value={{i.codigo}}>{{i.codigo}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+
             <div id="contGfhCod" name="contGfhCod" class="container">
                 <input type="text" name="addgfhC" id="addgfhC" placeholder="GFH" class="form-control">
             </div>
@@ -26,7 +38,7 @@
                 <input type="text" name="addisp" id="addisp" placeholder="DISPOSITIVO" class="form-control">
             </div>
             <div id="contHosp" name="contHosp" class="container">
-                <input type="text" name="hosp" id="hosp" placeholder="HOSPITAL" class="form-control">
+                <input type="text" name="hosp" id="hosp" value={{hospital}} class="form-control">
             </div>
             <div id="contBt" name="contBt" class="container">
                 <button type="submit" id="addDisGfh" name="addDisGfh" class="form-check-input">Añadir</button>
@@ -54,3 +66,4 @@
     
 </body>
 </html>
+

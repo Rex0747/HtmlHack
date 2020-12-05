@@ -381,11 +381,14 @@ def adDispGfh( request ):
     gfh = None
     disp = None     # tabla disp = gfh_id , nombre
     hosp_id = None  # tabla gfh  = gfh, nombre , hp_id_id
-    hosp_id = hospitales.objects.all().count()
-    print('Numero Hospitales: ', str(hosp_id))
-    if hosp_id == 0:
+    hosp_id = hospitales.objects.all()
+    #print('Numero Hospitales: ', str(hosp_id))
+    if hosp_id.count() == 0:
         msg = 'Antes de añadir dispositivos y gfhs es necesario crear un hospital.'
         return render(request, 'addDispGfh.html', {'mensaje': msg})
+    else:
+        return render(request, 'addDispGfh.html',{ 'hospital': hosp_id })
+
 
     if request.method == 'POST':
         if request.POST['addgfhC']:
@@ -406,7 +409,7 @@ def adDispGfh( request ):
 
     gfhss = gfhs.objects.all().order_by('gfh')
 
-    return render(request, 'addDispGfh.html',{'sound': sound, 'gfhs': gfhss})
+    return render(request, 'addDispGfh.html',{'sound': sound, 'gfhs': gfhss, 'hospital': hosp_id })
 
 def addHospital( request ):
     codigo = None
