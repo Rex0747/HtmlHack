@@ -33,6 +33,15 @@
                 <label>{{mensaje}}</label>
             </div>
         </form>
+        <div>
+            <label for="browser">GFHs:</label>
+            
+            <datalist id="dthosp" style="display: block"; >
+                {% for i in gfhs %}
+                    <option value={{i.gfh}} label={{i.gfh|add:"_______"|add:i.nombre}}>
+                {% endfor %}
+            </datalist>
+        </div>
 
         <audio autoplay >
             {% if sound == 1 %}

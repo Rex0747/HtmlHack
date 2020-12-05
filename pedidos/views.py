@@ -10,6 +10,7 @@ from configuraciones.views import getIdDB
 from HtmlHack.settings import MEDIA_ROOT
 from HtmlHack.settings import STATIC_ROOT
 from django.db import connection
+import json
 #__________________________________________________________
 from pedidos.func import funciones
 
@@ -159,6 +160,42 @@ def imprimirEtiquetas( request, disp):
     #return HttpResponse( 'Final' )
 
 def pedidodc( request, data ):
+    mtx = json.loads( data )
+    print('TYPE: ',type(mtx))
+    #print('MTX: ', mtx)
+    listaM = []
+
+    for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
+        try:
+            listaT = []
+            listaT.append(i['ubicacion'])
+            listaT.append(i['codigo'])
+            articulo = articulos.objects.get(codigo=listaT[1] , hospital_id=hospitales.objects.get(codigo=i['hospital']).id )
+            listaT.insert( 2 , articulo.nombre )
+            listaT.append(i['pacto'])
+            listaT.append(i['gfh'])
+            listaT.append(i['dispositivo'])
+            listaT.append(i['hospital'])
+            listaM.append(listaT)    
+            listaT = []
+            
+        except Exception as e:
+            print('Exception ', str(e))
+
+    #print('ListaM: ' + str(listaM))
+    try:
+        npedido = funciones.GenNumPedido()
+        funciones.InsertarPedido_dc(listaM,npedido)
+        funciones.InsertarAlbaranPedido_dc( npedido )
+    except Exception as e:
+        print('Exception Insertar pedido DC', str(e))
+        HttpResponse.status_code = 400
+        print('HttpResponseFail: ', HttpResponse.status_code )
+
+    print('HttpResponse: ', HttpResponse.status_code )
+    return HttpResponse(HttpResponse.status_code)
+
+def pedidodcCsv( request, data ):
     mtx = data.split('|')
     revisar = mtx[-1]
     #print('data: ', str(data))

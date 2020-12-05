@@ -5,6 +5,7 @@ from openpyxl.styles import Color, PatternFill, Font, Border
 from openpyxl.styles import colors
 from openpyxl.cell import Cell
 from HtmlHack.settings import MEDIA_ROOT
+from openpyxl.utils import get_column_letter
 
 class Excell:
     # openpyxl
@@ -45,6 +46,8 @@ class Excell:
         #hoja= self.wb.get_sheet_by_name(nombre)
         del self.wb[nombre]
 
+    def getNombreColumna( nCol): #consigue la letra
+        return get_column_letter(nCol)
 
     def cambiar_hoja(self, nombre):
         self.ws = self.wb[nombre]
@@ -247,7 +250,7 @@ class comprobarExcel:
         self.Lista = lista
         for i in lista:
             ubicacion = str(i.modulo)+'-'+str(i.estanteria)+'-'+str(i.ubicacion)+'-'+str(i.division)
-            codigo = str(i.codigo) + ' ' + i.dc  # codigo + DC
+            codigo = str(i.codigo) + ' ' + str(i.dc)  # codigo + DC
             self.ListaUb.append( ubicacion )
             self.ListaCo.append( codigo )
             ubicacion = None
@@ -258,7 +261,7 @@ class comprobarExcel:
         duplic = []
         ind = 0
         ind2 = 1
-        print('ListaUB: ' + str( len(self.ListaUb)))
+        #print('ListaUB: ' + str( len(self.ListaUb)))
         for i in self.ListaUb:
             ind2 = ind + 1
             for j in range(  len( self.ListaUb ) - ind2 ):
@@ -268,18 +271,55 @@ class comprobarExcel:
                     duplic.append( i )
                 ind2 +=1
             ind += 1
+        #if len(duplic) > 0:
         return duplic
 
     def comprobarVacios(self):  #x numero columna y posicion en fila
         x = 2; y = 1
         vacios = []
         for i in self.Lista:
-            #for j in enumerate(i):
-            if i == None or i == '':
-                print('Vacio: ' + str(i)) #vacios.append( ( x , y) )
-        y += 1
-        y = 1
-        x += 1
+            #for j in i:#enumerate(i):
+            if i.modulo == None or i.modulo == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.estanteria == None or i.estanteria == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.ubicacion == None or i.ubicacion == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.division == None or i.division == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.codigo == None or i.codigo == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.nombre == None or i.nombre == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.pacto == None or i.pacto == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.minimo == None or i.minimo == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.dc == None or i.dc == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.gfh == None or i.gfh == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.dispositivo == None or i.dispositivo == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+            y += 1
+            if i.hospital == None or i.hospital == '':
+                vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
+        if len(vacios) > 0:
+            vacios.append( ( str(0) , str(0)) )
+
+            y = 1
+            x += 1
+        print('Vacios:' , vacios)
         return vacios
 
     def comprobarGfhDisp(self):
@@ -288,27 +328,31 @@ class comprobarExcel:
         ind = 0
         try:
             for i in self.Lista:
-                l.append( ( i[9], i[10], i[11] ) )
+                l.append( ( i.gfh, i.dispositivo, i.hospital ) )
         except Exception as e:
             print('Exception en ' + str(e))
             return err
         for i in l:
             #print( 'Lista: ' + str( self.Lista[ind][9] ))
             #print( 'Tupla: ' + str( i[0] ))
-            if i[0] != self.Lista[0][9]:
+            if i[0] != self.Lista[0].gfh:
                 err.append( ( ind + 2 , i[0] ) )
                 #print( 'Indice: ' + str( i[0] + '  ' + str( self.Lista[9] ) ) )
 
-            if i[1] != self.Lista[0][10]:
+            if i[1] != self.Lista[0].dispositivo:
                 err.append( ( ind + 2 , i[1] ) )
                 #print( 'Indice: ' + str( i[1] + '  ' + str( self.Lista[ind][10] ) ) )
 
-            if i[2] != self.Lista[0][11]:
+            if i[2] != self.Lista[0].hospital:
                 err.append( ( ind + 2 , i[2] ) )
                 #print( 'Indice: ' + str( i[2] + '  ' + str( self.Lista[ind][12] ) ) )
             
             ind += 1
         return err
-
-
         
+    def comprobar_DC(self):
+        if self.Lista[0].dc == '1' or self.Lista[0].dc=='2':
+            print('Configuracion Doble Cajon.')
+
+        elif self.Lista[0].dc == 'n' or self.Lista[0].dc=='s':
+            print('Configuracion Cajon Simple.')

@@ -66,30 +66,33 @@ def upload_fileNew(request):
                 return HttpResponse('Numero incorrecto de columnas.')
             #print('ListaExcel: ' + str(listaExcel))
             #_______________________COMPROBAR EXCEL______________________________________
-            #region COMPROBAR EXCEL
-            # columnas = ''; vacios = [] ; duplicados = []; gfhdisp = []
-            # comprobar = comprobarExcel( listaExcel )
+            columnas = ''; vacios = [] ; duplicados = []; gfhdisp = []
+            comprobar = comprobarExcel( listaExcel )
 
-            # columnas = excel1.getnumerocolumnas()
-            # print('Ncolumnas: '+str(columnas))
+            columnas = excel1.getnumerocolumnas()
+            print('Ncolumnas: '+str(columnas))
 
-            # v = comprobar.comprobarVacios()
-            # if len( v ) > 1:
-            #     vacios = v
+            v = comprobar.comprobarVacios()
+            if len( v ) > 1:
+                vacios = v
 
-            # dup = comprobar.comprobarDuplicados( ) 
-            # if len( dup ) > 0:
-            #     duplicados = dup
+            dup = comprobar.comprobarDuplicados( ) 
+            if len( dup ) > 0:
+                duplicados = dup
 
-            # gfh = comprobar.comprobarGfhDisp()
-            # if len( gfh ) > 0:
-            #     gfhdisp = gfh
+            gfh = comprobar.comprobarGfhDisp()
+            if len( gfh ) > 0:
+                gfhdisp = gfh
 
-            # if (columnas != 11) and (len( vacios ) > 0) and (len( duplicados ) > 0) and (len( gfh ) > 0):
-            #     #print('Columnas: ' + str(columnas) + '  Vacios: '+ str( vacios) + '  Duplicados: '+str(duplicados) + '  GfhD: '+ str(gfhdisp))
-            #     remove( MEDIA_ROOT +'/' + fichero.name )
-            #     return render( request, 'error.html', {'columnas': columnas, 'vacios': vacios, 'duplicados': duplicados ,'gfh': gfhdisp,})
-            #endregion
+            # com = comprobar.comprobar_DC()
+
+            #return HttpResponse(com)
+            if (columnas < 12) or (len( vacios ) > 1) or (len( duplicados ) > 0) or (len( gfh ) > 0):
+                #print('Columnas: ' + str(columnas) + '  Vacios: '+ str( vacios) + '  Duplicados: '+str(duplicados) + '  GfhD: '+ str(gfhdisp))
+                remove( MEDIA_ROOT +'/' + fichero.name )
+                return render( request, 'error.html', {'columnas': columnas, 'vacios': vacios, 'duplicados': duplicados ,'gfh': gfhdisp,})
+                
+            #endregion 
             try:
                 dispo = dispositivos.objects.filter( nombre=listaExcel[0].dispositivo)[0] # objeto dispositivo
                 gfh = gfhs.objects.filter( nombre=dispo.nombre)[0] # objeto gfh
@@ -105,6 +108,7 @@ def upload_fileNew(request):
             borradas = excel.objects.filter( gfh=gfh.id, disp=dispo.id ).delete()[0]
             #borradas = configurations.objects.filter( gfh=gfh.id, disp=dispo.id ).delete()[0]
             #A la espera de implantar historico de configuraciones.
+            print('Filas Borradas: ', str(borradas))
             
             for itm in listaExcel:
                 try:
@@ -399,13 +403,16 @@ def adDispGfh( request ):
                     except Exception as e:
                         print('Error al crear gfh/disp.')
                         print(str(e))
-    
-    return render(request, 'addDispGfh.html',{'sound': sound})
+
+    gfhss = gfhs.objects.all().order_by('gfh')
+
+    return render(request, 'addDispGfh.html',{'sound': sound, 'gfhs': gfhss})
 
 def addHospital( request ):
     codigo = None
     hospital = None
     mensaje = None
+    hospi = None
     if request.method == 'POST':
         if request.POST['codhosp']:
             codigo = request.POST['codhosp']
@@ -421,10 +428,10 @@ def addHospital( request ):
                 except Exception as e:
                     print('Error al crear hospital.')
                     print(str(e))
+    
+    hospi = hospitales.objects.all()
 
-
-    return render(request, 'HospitalAdd.html', {'mensaje': mensaje})
-
+    return render(request, 'HospitalAdd.html', {'mensaje': mensaje,'hospitales': hospi} )
 
 def AñadirFotosArticulos( request ):
     ruta = MEDIA_ROOT+'/articulos/'
@@ -443,7 +450,7 @@ def AñadirFotosArticulos( request ):
             print('Codigo '+codigo+' añadido correctamente')
 
     return HttpResponse( res)
-    
+
 def verArticulo( request ):
     img = None
     if request.method == 'POST' and request.POST['verimg']:
@@ -482,7 +489,7 @@ def mostrarCodigoQR( request ):
         return HttpResponse( imagen, content_type="image/png")
 
     return render( request , 'galeria.html',{'imagen': img })
-    
+
 def mostrarCodigoGRpng( request ):
     if request.method == 'POST' and request.POST['verimg']:
         valor = request.POST['verimg']

@@ -20,5 +20,14 @@
                 <label>{{mensaje}}</label>
         </form>
     </div>
+    <div>
+        <label for="browser">Hospitales:</label>
+        
+        <datalist id="dthosp" style="display: block"; >
+            {% for i in hospitales %}
+                <option value={{i.codigo}} label={{i.codigo}}>
+            {% endfor %}
+        </datalist>
+    </div>
 </body>
 </html>
