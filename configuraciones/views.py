@@ -30,6 +30,7 @@ from configuraciones.func import funcConf
 # Create your views here.
 
 hosp_update = None
+gfh = None
 
 
 def config1( request ):
@@ -586,29 +587,39 @@ def selarticulo( request ):
 def ActualizarPactos( request ):
     disp = None
     conf = None
+    global gfh
     hosp_update = hospitales.objects.all()
-    if request.method == ["POST"]:
-        if request.POST['selDisp'] and request.POST['selHospC'] and request.POST['oculto']:
-            claves = request.POST.keys()
-            for i in claves:
-                print('Clave: ', str(i))
-        return HttpResponse(claves)
-    #a = request.POST['selDisp']
-    #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
+    if request.method == "POST" and request.POST['selDisp']=='' and request.POST['selHospC']=='':
+
+        clavesDescartar = ('csrfmiddlewaretoken', 'selHospC', 'selDisp', 'oculto' )
+        #claves = request.POST.values()
+        for key, value in request.POST.items():
+            if key not in clavesDescartar:
+                print('Clave: ',str(key), '  Valor: ', str(value))
+        print('GFH: ', gfh)        
+        return HttpResponse(request.POST.items())
+    else:
     
-    disp = gfhs.objects.all()
-    print(request.META['REMOTE_ADDR'])
-    print(request.META['HTTP_USER_AGENT'])
-    if request.method == 'POST':
-        a = request.POST['selDisp']
-        h = request.POST['selHospC']
-        print('CHANGE',str(a))
-        conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=a), hosp=hospitales.objects.get(codigo=h)).select_related()
-        #print(conf)
+        #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
+        
+        disp = gfhs.objects.all()
+        print(request.META['REMOTE_ADDR'])
+        print(request.META['HTTP_USER_AGENT'])
+
         for key, value in request.POST.items():
             print('Key: ',str(key), '  Value: ', str(value))
-        return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': conf})
 
-    return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': conf})
+        if request.method == 'POST' and  request.POST['selDisp'] and request.POST['selHospC']:
+            
+            a = request.POST['selDisp']
+            h = request.POST['selHospC']
+            print('CHANGE',str(a))
+            conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=a), hosp=hospitales.objects.get(codigo=h)).select_related()
+            print('Conf: ', conf)
+            gfh = conf[0].gfh
+            print('GFH_: ', gfh)
+            return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': conf, 'gfh': gfh})
+
+    return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp}) #, 'pacto': conf
 
 

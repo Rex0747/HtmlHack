@@ -45,14 +45,16 @@
 
             <div id="contPacto" name="contPacto" class="container">
                 <br>
-                <input type="hidden" name="oculto" >
+                
                 <table class="config">
                         <tr><th>ARTICULO</th><th>PACTO</th></tr>
+                        <input type="hidden" name="oculto" value="0">
                     {% for i in pacto %}
                         <tr><td><p></p>{{i.nombre|rjust:"4"}}</p></td><td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}" value="{{i.pacto}}" class="input-group-text" 
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td><td>PACTO:{{i.pacto}}</td></tr>
 
                     {% endfor %}
+                        <input type="hidden" name="oculto" value="1" >
                         <tr><td><input type="submit" id="boton" class="btn btn-success"></td></tr>
 
                 </table>
