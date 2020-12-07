@@ -51,6 +51,7 @@ urlpatterns = [
     path('pedidodc/<data>', v2.pedidodc),
     path('imprimirgfh/',v2.imprimirGfh ),
     path('selarticulo', v1.selarticulo ),
+    path('actPactos', v1.ActualizarPactos ),
 
 
 

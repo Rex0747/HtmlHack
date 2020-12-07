@@ -130,7 +130,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'hacked/static/' )
 
 STATIC_URL = '/static/'
 
-print( 'Ruta estatica: ' +  os.path.join(BASE_DIR, 'hacked' ),'static' )
+print( 'Ruta estatica: ' +  os.path.join(BASE_DIR, 'hacked' ),'/static' )
 print( STATIC_ROOT + 'qrcode.png')
 
 MEDIA_ROOT = os.path.join( BASE_DIR, 'media' )

@@ -9,9 +9,12 @@
         <title>BAJAR CONFIGURACION</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
         <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+        <script src={% static 'js/jquery.min.js' %}></script>
     </head>
     <body>
     {% block content %}
+        <div class="loader"></div>
         <div id="flota" class="input-group mb-3">
             <!-- <p id="portada">BAJANDO CONFIGURACION DEL SERVIDOR</p> --> 
             <form id="formulario"  method="post" enctype="multipart/form-data" >

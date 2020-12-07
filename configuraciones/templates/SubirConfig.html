@@ -10,8 +10,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
         <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+        <script src={% static 'js/jquery.min.js' %}></script>
     </head>
     <body>
+        <div class="loader"></div>
         <h2 id="portada">SUBIR CONFIGURACION</h2>
     {% block content %}
         <div id="formupload" class="container-fluid">

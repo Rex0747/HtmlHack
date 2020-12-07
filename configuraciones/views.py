@@ -29,6 +29,9 @@ from configuraciones.func import funcConf
 #from somewhere import handle_uploaded_file
 # Create your views here.
 
+hosp_update = None
+
+
 def config1( request ):
     contexto = { 'titulo': 'Configuraciones', 'dato': 'ESTA ES UNA NUEVA CONFIGURACION.'}
     return render( request ,'ini.html', contexto )
@@ -378,38 +381,43 @@ def dispositivosAdd(request):
 
 def adDispGfh( request ):
     sound = 0
+    gfhss = None
     gfh = None
     disp = None     # tabla disp = gfh_id , nombre
     hosp_id = None  # tabla gfh  = gfh, nombre , hp_id_id
-    hosp_id = hospitales.objects.all()
+    hosp = hospitales.objects.all()
     #print('Numero Hospitales: ', str(hosp_id))
-    if hosp_id.count() == 0:
+    if hosp.count() == 0:
         msg = 'Antes de añadir dispositivos y gfhs es necesario crear un hospital.'
         return render(request, 'addDispGfh.html', {'mensaje': msg})
     else:
-        return render(request, 'addDispGfh.html',{ 'hospital': hosp_id })
+        pass
+        #return render(request, 'addDispGfh.html',{ 'hospital': hosp_id })
 
+    
 
     if request.method == 'POST':
         if request.POST['addgfhC']:
             gfh = request.POST['addgfhC']
-            if request.POST['hosp']:
-                hosp_id = request.POST['hosp']
-                if request.POST['addisp']:
-                    disp = request.POST['addisp']
-                    try:
-                        dataGfh = gfhs(gfh=gfh, nombre=disp, hp_id_id=hospitales.objects.get(codigo=hosp_id).pk)
-                        dataGfh.save()
-                        dataDisp = dispositivos(gfh_id=dataGfh.id, nombre=disp)
-                        dataDisp.save()
-                        sound = 1
-                    except Exception as e:
-                        print('Error al crear gfh/disp.')
-                        print(str(e))
-
-    gfhss = gfhs.objects.all().order_by('gfh')
-
-    return render(request, 'addDispGfh.html',{'sound': sound, 'gfhs': gfhss, 'hospital': hosp_id })
+            if request.POST['addHospC']:
+                hosp_id = request.POST['addHospC']
+            if request.POST['addisp']:
+                disp = request.POST['addisp']
+                try:
+                    dataGfh = gfhs(gfh=gfh, nombre=disp, hp_id_id=hospitales.objects.get(codigo=hosp_id).pk)
+                    dataGfh.save()
+                    dataDisp = dispositivos(gfh_id=dataGfh.id, nombre=disp)
+                    dataDisp.save()
+                    sound = 1
+                except Exception as e:
+                    print('Error al crear gfh/disp.')
+                    print(str(e))
+    if hosp_id:
+        print(hosp_id)
+        print(str(hospitales.objects.get(codigo=hosp_id).id))
+        gfhss = gfhs.objects.filter(hp_id=hospitales.objects.get(codigo=hosp_id).id).order_by('gfh')
+            
+    return render(request, 'addDispGfh.html',{'sound': sound, 'gfhs': gfhss, 'hospital': hosp})
 
 def addHospital( request ):
     codigo = None
@@ -574,4 +582,33 @@ def selarticulo( request ):
 
 
     return render( request , 'selarticulo.html',{ 'articulos': art } )
+
+def ActualizarPactos( request ):
+    disp = None
+    conf = None
+    hosp_update = hospitales.objects.all()
+    if request.method == ["POST"]:
+        if request.POST['selDisp'] and request.POST['selHospC'] and request.POST['oculto']:
+            claves = request.POST.keys()
+            for i in claves:
+                print('Clave: ', str(i))
+        return HttpResponse(claves)
+    #a = request.POST['selDisp']
+    #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
+    
+    disp = gfhs.objects.all()
+    print(request.META['REMOTE_ADDR'])
+    print(request.META['HTTP_USER_AGENT'])
+    if request.method == 'POST':
+        a = request.POST['selDisp']
+        h = request.POST['selHospC']
+        print('CHANGE',str(a))
+        conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=a), hosp=hospitales.objects.get(codigo=h)).select_related()
+        #print(conf)
+        for key, value in request.POST.items():
+            print('Key: ',str(key), '  Value: ', str(value))
+        return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': conf})
+
+    return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': conf})
+
 
