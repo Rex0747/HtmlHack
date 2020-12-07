@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    <script type="text/javascript" languaje="javascript" src={% static 'js/ActualizaPactos.js' %} ></script>
     <title>ActualizarPactos</title>
 </head>
 <body>
@@ -38,7 +39,7 @@
 
 
             <div id="contBtDisp" name="contBtDisp" class="container">
-                <button type="submit" id="subDisGfh" name="subDisGfh" class="form-check-input">Añadir</button>
+                <!-- <button type="submit" id="subDisGfh" name="subDisGfh" class="btn btn-success">Añadir</button> -->
                 <label>{{mensaje}}</label>
             </div>
 
@@ -47,14 +48,13 @@
                 <br>
                 
                 <table class="config">
-                        <tr><th>ARTICULO</th><th>PACTO</th></tr>
-                        <input type="hidden" name="oculto" value="0">
+                        <tr><th>ARTICULO</th><th>NUEVO PACTO</th><th>PACTO</th></tr>
                     {% for i in pacto %}
-                        <tr><td><p></p>{{i.nombre|rjust:"4"}}</p></td><td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}" value="{{i.pacto}}" class="input-group-text" 
+                        <tr><td><p></p>{{i.nombre|rjust:"4"}}</p></td><td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}*{{i.division}}" value="" class="input-group-text" 
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td><td>PACTO:{{i.pacto}}</td></tr>
 
                     {% endfor %}
-                        <input type="hidden" name="oculto" value="1" >
+                        
                         <tr><td><input type="submit" id="boton" class="btn btn-success"></td></tr>
 
                 </table>

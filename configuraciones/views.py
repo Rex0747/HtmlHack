@@ -30,14 +30,15 @@ from configuraciones.func import funcConf
 # Create your views here.
 
 hosp_update = None
-gfh = None
+g_gfh = None
+g_conf = None
 
 
 def config1( request ):
     contexto = { 'titulo': 'Configuraciones', 'dato': 'ESTA ES UNA NUEVA CONFIGURACION.'}
     return render( request ,'ini.html', contexto )
 
-@transaction.non_atomic_requests
+@transaction.atomic
 def upload_fileNew(request):
 
     file_url =None
@@ -584,20 +585,41 @@ def selarticulo( request ):
 
     return render( request , 'selarticulo.html',{ 'articulos': art } )
 
+@transaction.atomic
 def ActualizarPactos( request ):
     disp = None
-    conf = None
-    global gfh
+    global g_gfh
+    global g_conf
     hosp_update = hospitales.objects.all()
     if request.method == "POST" and request.POST['selDisp']=='' and request.POST['selHospC']=='':
-
         clavesDescartar = ('csrfmiddlewaretoken', 'selHospC', 'selDisp', 'oculto' )
-        #claves = request.POST.values()
+        dic = {}
         for key, value in request.POST.items():
             if key not in clavesDescartar:
-                print('Clave: ',str(key), '  Valor: ', str(value))
-        print('GFH: ', gfh)        
-        return HttpResponse(request.POST.items())
+                if value != '':
+                    print('VALOR: ',str(value))
+                    dic[str(key)] = int(value)
+
+        #print(dic)
+        #print('GFH: ', g_gfh)
+        for key, value in dic.items():
+            try:
+                mtx = key.split('*')
+                t_excel = excel.objects.get(modulo=mtx[1],estanteria=mtx[2],ubicacion=mtx[3],division=mtx[4],codigo=mtx[0],gfh=g_gfh.id)
+                t_excel.pacto = value
+                t_excel.minimo = value
+                t_excel.save()
+                idconf = funcConf.SetMaxId_gfh(gfhs.objects.get(gfh=g_gfh.gfh,nombre=g_gfh.nombre,hp_id=g_gfh.hp_id).id, dispositivos.objects.get(nombre=g_gfh.nombre).id, g_gfh.hp_id)
+                print('IDCONFIG: ', str(idconf))
+                t_config = configurations.objects.get(modulo=mtx[1],estanteria=mtx[2],ubicacion=mtx[3],division=mtx[4],codigo=mtx[0],gfh=g_gfh.id,nconfig=idconf)
+                t_config.pacto = value
+                t_config.minimo = value
+                t_config.save()
+            except Exception as e:
+                return HttpResponse('Hubo en fallo al actualizar, ' + str(e))
+        g_conf = None
+        g_gfh = None
+        return HttpResponse('Actualizacion correcta ' + str(idconf))
     else:
     
         #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
@@ -614,11 +636,11 @@ def ActualizarPactos( request ):
             a = request.POST['selDisp']
             h = request.POST['selHospC']
             print('CHANGE',str(a))
-            conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=a), hosp=hospitales.objects.get(codigo=h)).select_related()
-            print('Conf: ', conf)
-            gfh = conf[0].gfh
-            print('GFH_: ', gfh)
-            return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': conf, 'gfh': gfh})
+            g_conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=a), hosp=hospitales.objects.get(codigo=h)).select_related()
+            #print('Conf: ', conf)
+            g_gfh = g_conf[0].gfh
+            print('GFH_: ', g_gfh)
+            return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': g_conf, 'gfh': g_gfh})
 
     return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp}) #, 'pacto': conf
 
