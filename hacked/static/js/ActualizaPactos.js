@@ -1,23 +1,31 @@
 window.onload = function(){
-    desplHospital = document.getElementById('selhospC');
-    desplDispositivo = document.getElementById('selDisp');
-    submBoton = document.getElementById('subDisGfh');
-    submBoton.addEventListener('click', ocultarDesplegables);
+    boton = document.getElementById('boton');
+    //boton.style.display = 'none';
+    tabla = document.getElementById('tabla')//.style.display = 'none';
+
+    despGfh = document.getElementById('selDisp');
+    despGfh.style.display = 'none';
+
+   // boton.addEventListener('click',mostraTabla);
+    despHospital = document.getElementById('selhospC');
+    despHospital.addEventListener('change', desplHospital);
 
 
+    despGfh.addEventListener('change', desplGfh);
 };
 
-function ocultarDesplegables(){
-    //document.write('CLICK');
-    //alert('Entro');
-    desplDispositivo.style.display = 'none';
-    desplHospital.style.display = 'none';
-    
-    };
+function desplHospital(){
+    despGfh.style.display = 'block';
+};
 
-    function mostrarDesplegables(){
-        //document.write('CLICK');
-        desplDispositivo.style.display = 'block';
-        desplHospital.style.display = 'block';
-        
-        };
+function desplGfh(){
+    boton.style.display = 'block';
+    tabla.style.display = 'block';
+};
+
+
+
+function mostrarTabla(){
+    document.getElementById('tabla').style.display = 'block';
+    
+}

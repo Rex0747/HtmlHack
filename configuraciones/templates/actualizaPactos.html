@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/actualizarPactos.css' %}>
     <script type="text/javascript" languaje="javascript" src={% static 'js/ActualizaPactos.js' %} ></script>
     <title>ActualizarPactos</title>
 </head>
@@ -17,7 +18,7 @@
     <div id="contd" name="contd">
         <form id="formdisp"  method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2>ACTUALIZAR PACTOS</h2>
+            <h2 id='titulo'>ACTUALIZAR PACTOS</h2>
             
             <div id="contHosp" name="contHosp" class="container">
                 <select name="selHospC" id="selhospC" class="form-control">
@@ -45,19 +46,19 @@
 
 
             <div id="contPacto" name="contPacto" class="container">
-                <br>
                 
-                <table class="config">
-                        <tr><th>ARTICULO</th><th>NUEVO PACTO</th><th>PACTO</th></tr>
+                <table id='tabla' class="config">
+                        <tr><th>REFERENCIA</th><th>DESCRIPCION</th><th>NUEVO PACTO</th><th>PACTO</th></tr>
                     {% for i in pacto %}
-                        <tr><td><p></p>{{i.nombre|rjust:"4"}}</p></td><td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}*{{i.division}}" value="" class="input-group-text" 
+                        <tr><td><p>{{i.codigo}}</p></td><td><p>{{i.nombre.nombre}}</p></td><td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}*{{i.division}}" value="" class="input-group-text" 
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td><td>PACTO:{{i.pacto}}</td></tr>
 
                     {% endfor %}
-                        
-                        <tr><td><input type="submit" id="boton" class="btn btn-success"></td></tr>
 
                 </table>
+
+                        <input type="submit" id="boton" class="btn btn-success">
+
             </div>
 
 

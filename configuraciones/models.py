@@ -55,6 +55,11 @@ class hospitales(models.Model):
     codigo=models.CharField(max_length=12, unique=True )  #unique=True
     nombre=models.CharField(max_length=30)
     rutaFotos=models.CharField(max_length=30, null=True, blank=True)
+    longitud=models.CharField(max_length=15, null=True, blank=True)
+    latitud=models.CharField(max_length=15, null=True, blank=True)
+    comentario=models.TextField(max_length=1024,null=True, blank=True)
+    link=models.CharField(max_length=255,null=True, blank=True)
+    foto=models.ImageField( upload_to = 'articulos/', null=True, blank=True )
     def __str__(self):
         return '%s %s %s' %( self.codigo, self.nombre, self.rutaFotos )
         

@@ -13,10 +13,11 @@ from django.db import connection
 import json
 #__________________________________________________________
 from pedidos.func import funciones
-
+from django.db import transaction
 global hospital, disp, user, gfh
 
 
+@transaction.atomic
 def pedido( request ):
     global gfh, hospital, disp, user
     lista=[] ; codes={}
@@ -30,9 +31,7 @@ def pedido( request ):
             #print(str(user_temp))
             user_temp = usuarios.objects.get(ident=user_temp).pk
             #print(str(user_temp))
-            #hospital=None;npedido=None;gfh=None;dispositivo=None;codigo=None;cantidad=None
-            #ndisp_tmp = -1
-            #ped_temp = pedidos_temp.objects.all().values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
+            
             with connection.cursor() as conn:
                 data = 'SELECT  DISTINCT disp_id FROM [pedidos_pedidos_temp] ORDER BY [id] ASC'
                 datos = conn.execute(data)
@@ -49,11 +48,7 @@ def pedido( request ):
                 #fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
                 pedi = pedidos_temp.objects.filter(disp_id=i[0], user_temp_id=user_temp).select_related('gfh','disp','codigo','user_temp')
 
-                with connection.cursor() as conn:
-                    #filas = conn.execute(fila)
-                    #res = filas.fetchall()
-
-                    funciones.InsertarPedido(pedi, npedido)
+                funciones.InsertarPedido(pedi, npedido)
                 #print('---------------------------------')
             funciones.InsertarAlbaranPedido(user_temp, npedido )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_temp).delete()
@@ -61,10 +56,8 @@ def pedido( request ):
             funciones.envcorreogmail( fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
                     mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
 
-            #ped_temp = pedidos_temp.objects.filter(disp_id=).values('hospital','gfh','disp','codigo','cantidad','user_temp').order_by('id')
-
-            #return HttpResponse("Pedido enviado")
             return render( request, 'pedidos.html' )
+
 
         clavesDescartar = ['csrfmiddlewaretoken', 'hospital', 'gfh', 'disp', 'pboton', 'tped', 'user']
         claves = request.POST.keys()
@@ -159,6 +152,7 @@ def imprimirEtiquetas( request, disp):
     return response
     #return HttpResponse( 'Final' )
 
+@transaction.atomic
 def pedidodc( request, data ):
     mtx = json.loads( data )
     print('TYPE: ',type(mtx))
@@ -195,6 +189,7 @@ def pedidodc( request, data ):
     print('HttpResponse: ', HttpResponse.status_code )
     return HttpResponse(HttpResponse.status_code)
 
+@transaction.atomic
 def pedidodcCsv( request, data ):
     mtx = data.split('|')
     revisar = mtx[-1]

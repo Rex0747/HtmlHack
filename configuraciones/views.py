@@ -186,19 +186,17 @@ def download_file(request):
             
             if dispositivo:
                 gfhNombre =  gfhs.objects.get(nombre=dispositivo).gfh
-                print('GFH_nombre: '+str(gfhNombre))
+                #print('GFH_nombre: '+str(gfhNombre))
                 gfhId = gfhs.objects.get( nombre=dispositivo, gfh=gfhNombre).pk
-                print('GFH_id: '+str(gfhId))
+                #print('GFH_id: '+str(gfhId))
                 dispId = dispositivos.objects.get(nombre=dispositivo).pk
-                print('IdDisp:'+str(dispId))
+                #print('IdDisp:'+str(dispId))
                 gfhNombre = None
 
             if gfhNombre:
                 
                 objGfh =  gfhs.objects.filter(gfh=gfhNombre)
-                print(objGfh)
-                for i in objGfh:
-                    i
+                gfhId = gfhs.objects.get( gfh=gfhNombre).pk
                 #gfhId = gfhs.objects.get(gfh=gfhNombre, nombre=dispositivo).pk
                 #print( 'gfh_id3: '+ str(gfhId))
                 #dtmp = dispositivos.objects.get(gfh=gfhId).nombre
@@ -426,14 +424,25 @@ def addHospital( request ):
     hospital = None
     mensaje = None
     hospi = None
+    log = None
+    lat = None
+    foto = 'img/'
+
     if request.method == 'POST':
         if request.POST['codhosp']:
             codigo = request.POST['codhosp']
             if request.POST['codisp']:
                 hospital = request.POST['codisp']
+                if request.POST['log']:
+                    log = request.POST['log']
+                if request.POST['lat']:
+                    lat = request.POST['lat']
+                if request.POST['foto']:
+                    foto += request.POST['foto']
+
                 try:
                     ruta = 'articulos/fotos-'+codigo
-                    hosp = hospitales(codigo=codigo, nombre=hospital, rutaFotos=ruta)
+                    hosp = hospitales(codigo=codigo, nombre=hospital, rutaFotos=ruta, longitud=log, latitud=lat, foto=foto)
                     hosp.save()
                     fila = MEDIA_ROOT +'/' + 'articulos/fotos-'+ ruta
                     mkdir(fila)
@@ -443,6 +452,7 @@ def addHospital( request ):
                     print(str(e))
     
     hospi = hospitales.objects.all()
+    print('Hospitales: ', hospi)
 
     return render(request, 'HospitalAdd.html', {'mensaje': mensaje,'hospitales': hospi} )
 
@@ -582,14 +592,15 @@ def selarticulo( request ):
     except Exception as e:
         print( 'Error: ', str(e) )
 
-
     return render( request , 'selarticulo.html',{ 'articulos': art } )
+
 
 @transaction.atomic
 def ActualizarPactos( request ):
     disp = None
     global g_gfh
     global g_conf
+    idconf = None
     hosp_update = hospitales.objects.all()
     if request.method == "POST" and request.POST['selDisp']=='' and request.POST['selHospC']=='':
         clavesDescartar = ('csrfmiddlewaretoken', 'selHospC', 'selDisp', 'oculto' )
@@ -619,7 +630,10 @@ def ActualizarPactos( request ):
                 return HttpResponse('Hubo en fallo al actualizar, ' + str(e))
         g_conf = None
         g_gfh = None
-        return HttpResponse('Actualizacion correcta ' + str(idconf))
+
+        disp = gfhs.objects.all()
+        return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp})
+        
     else:
     
         #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
