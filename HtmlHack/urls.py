@@ -32,6 +32,7 @@ urlpatterns = [
     path('video/', v0.video , { 'plantilla': 'video.html','id':'djangorjar' }, ),
     path('envfichero/', v0.envfichero, { 'plantilla': 'parrafos.html','id':'envfichero'}, ),
     path('config1/', v1.config1 ),
+    path('', v0.localhost ),
     path('df', v1.download_file),
     path('uf', v1.upload_fileNew),
     path('articulos',v1.articulosAdd),

@@ -426,6 +426,8 @@ def addHospital( request ):
     hospi = None
     log = None
     lat = None
+    comentario = None
+    link = None
     foto = 'img/'
 
     if request.method == 'POST':
@@ -439,10 +441,14 @@ def addHospital( request ):
                     lat = request.POST['lat']
                 if request.POST['foto']:
                     foto += request.POST['foto']
+                if request.POST['coment']:
+                    comentario = request.POST['coment']
+                if request.POST['link']:
+                    link = request.POST['link']
 
                 try:
                     ruta = 'articulos/fotos-'+codigo
-                    hosp = hospitales(codigo=codigo, nombre=hospital, rutaFotos=ruta, longitud=log, latitud=lat, foto=foto)
+                    hosp = hospitales(codigo=codigo, nombre=hospital, rutaFotos=ruta, longitud=log, latitud=lat, foto=foto, comentario=comentario, link=link)
                     hosp.save()
                     fila = MEDIA_ROOT +'/' + 'articulos/fotos-'+ ruta
                     mkdir(fila)
@@ -571,14 +577,16 @@ def addFotoArticulo( rutaNombreFichero , codigo ):
 def selarticulo( request ):
     nombre = ''
     hospital = ''
+    hospi = hospitales.objects.all()
+
     if request.method == 'POST':
         if request.POST['art']:
             nombre = request.POST['art']
             hospital = request.POST['hospi']
-            print('Hospital: ', hospital )
+            #print('Hospital: ', hospital )
 
     hosp_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
-    print( 'Hosp_id: ', hosp_id )
+    #print( 'Hosp_id: ', hosp_id )
     #cursor = connection.cursor()
     #articulos = cursor.execute('SELECT codigo, nombre, foto from configuraciones_articulos  WHERE nombre LIKE  %s  AND hospital_id = %s ',[ '%'+nombre+'%', hosp_id ])
     if nombre == "":
@@ -587,12 +595,12 @@ def selarticulo( request ):
     try:
         #art = articulos.fetchall()
         art = articulos.objects.filter(nombre__contains=nombre, hospital_id=hosp_id)
-        print(str(art))
+        #print(str(art))
 
     except Exception as e:
         print( 'Error: ', str(e) )
 
-    return render( request , 'selarticulo.html',{ 'articulos': art } )
+    return render( request , 'selarticulo.html',{ 'articulos': art ,'hospitales': hospi } )
 
 
 @transaction.atomic

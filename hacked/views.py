@@ -5,9 +5,6 @@ from hacked.models import datos, enlaces
 
 #"<br><iframe id='vid1' width='640' height='480' src='https://www.youtube.com/embed/t7zQhKXEdbI' ></iframe>",'titulocont':'EL TIGRE DE MALASIA' }
 
-
-
-
 def hack( request ):
 	c = contenido()
 	contexto = c.v2()
@@ -29,3 +26,6 @@ def vermeta( request ):
 	#valor.sort()
 	return render( request , 'request_items.html',{'context': valor ,'titulo_cont': 'Atributos de request.META'})
 
+def localhost( request ):
+
+	return HttpResponse('ESTAS EN LOCALHOST.')

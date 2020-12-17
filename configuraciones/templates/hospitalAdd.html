@@ -9,40 +9,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/hospitales.js' %}></script>
     <script defer src='https://maps.googleapis.com/maps/api/js?callback=initMap'></script>
-
+    <!-- <script defer type="text/javascript" languaje="javascript" src={% static 'js/api_maps.js' %}></script> -->
     <link  rel="STYLESHEET" type="text/css" href={% static 'css/hospitales.css' %}>
     <title>AÑADIR HOSPITAL</title>
 </head>
-<body>
+<body id="bg" style="background-image: url('{% static "img/hospital.jpg"%}')";>
     <div id="cont1" name="cont1">
         <form id="formulario"  method="post" enctype="multipart/form-data" >
             {% csrf_token %}
-            <h2 id="titulo" >AÑADIR HOSPITAL</h2>
+            <h2 id="titulo" class="titulo">HOSPITALES</h2>
             <div id="cont2">
-                    <input type="text" name="codhosp" id="codhosp" placeholder="CODIGO" class="form-control">
+                    <input type="text" name="codhosp" id="codhosp" placeholder="CODIGO" class="form-control ctexto">
                     <input type="text" name="codisp" id="codisp" placeholder="NOMBRE" class="form-control">
                     <input type="text" name="log" id="log" placeholder="Longitud" class="form-control"><br>
                     <input type="text" name="lat" id="lat" placeholder="Latitud" class="form-control"><br>
                     <input type="text" name="foto" id="foto" placeholder="Foto" class="form-control"><br>
-                    <button type="submit" id="addHospital" name="addHospital" class="form-check-input">Añadir</button>
+                    <input type="text" name="coment" id="coment" placeholder="comentario" class="form-control"><br>
+                    <input type="text" name="link" id="link" placeholder="Link" class="form-control"><br>
+                    <button type="submit" id="addHospital" name="addHospital" >Añadir Hospital</button>
             </div>
 
             <div id="lhosp">
-                <label for="dthosp">Hospitales:</label>
+                <label id="lbdthosp" for="dthosp">HOSPITALES:</label>
 
                 <select id="dthosp" name="dthosp">
-                    
+                    <option label="Seleccione hospital"></option>
                     {% for i in hospitales %}
                         <!-- <p>{{i}}</p> -->
                         <option  id={{i.codigo}} value="{{i.codigo}}*{{i.nombre}}*{{i.longitud}}*{{i.latitud}}*{{i.foto}}*{{i.comentario}}*{{i.link}}" label={{i.codigo}} >
                     {% endfor %}
                 </select>
                 <!-- <img id="fotohospital" src="#"> -->
-                <label>{{mensaje}}</label>
+                
             </div>
 
-            
-            <div id="mapa"></div>
+            <div id="mapa">
+
+            </div>
+
+            <!-- <div id="mensaje">
+                <label>{{mensaje}}</label>
+            </div> -->
             
         </form> 
             

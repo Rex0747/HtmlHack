@@ -9,13 +9,13 @@ var link = '';
 window.onload = function(){
 
     var mapa = document.getElementById('mapa');
-    //var hospital = document.getElementById('hospital');
+    // var hospital = document.getElementById('hospital');
     var lhosp = document.getElementById('dthosp');
     
     mapa.style.display = 'none';
     //hospital.style.display = 'none';
 
-    lhosp.addEventListener('click',(e)=>{
+    lhosp.addEventListener('change',(e)=>{
 
         prot = document.location.protocol;
         loc = document.location.host;
@@ -46,7 +46,12 @@ window.initMap = function( ){
     
 
     var v_posi = new google.maps.LatLng(lat , log);  //40.4414767,-3.7228253
-    let v_mapa = new google.maps.Map(mapa,  {center: v_posi, zoom: 16, } );
+    let v_mapa = new google.maps.Map(mapa,  {center: v_posi, zoom: 16, zoomControl: false ,
+        disableDoubleClickZoom: true, scrollwheel: false,
+        draggable: false, streetViewControl: true,
+        streetViewControlOptions: {
+        position: google.maps.ControlPosition.BOTTOM_TOP
+        }});
 
     v_marca = new google.maps.LatLng( lat, log);
     const punto = new google.maps.Marker({position: v_marca, map: v_mapa});
@@ -55,10 +60,11 @@ window.initMap = function( ){
         + '<img src='+foto+' />'
         + '<p>'+titulo+'<br /><br />'+coment+'</p>'
         + '<a  href='+link+'</a>';
+        
         var v_info = new google.maps.InfoWindow({content: v_contenidoInfo});
 
         google.maps.event.addListener( punto, 'click', function() {
-            // Llamamos el método open del InfoWindow
+        
             v_info.open(v_mapa, punto);
             });
 
