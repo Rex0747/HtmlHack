@@ -53,8 +53,8 @@ urlpatterns = [
     path('imprimirgfh/',v2.imprimirGfh ),
     path('selarticulo', v1.selarticulo ),
     path('actPactos', v1.ActualizarPactos ),
-
-
+    #path('prueba/<data>', v1.prueba ),
+    path('getHospital', v1.getHospital ),
 
 
 ]

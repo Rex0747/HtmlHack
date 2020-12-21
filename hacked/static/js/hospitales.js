@@ -1,6 +1,6 @@
 
-var lat = 0;
-var log = 0;
+var lat = 0.0;
+var log = 0.0;
 var foto = '';
 var titulo = '';
 var coment = '';
@@ -9,12 +9,9 @@ var link = '';
 window.onload = function(){
 
     var mapa = document.getElementById('mapa');
-    // var hospital = document.getElementById('hospital');
     var lhosp = document.getElementById('dthosp');
     
     mapa.style.display = 'none';
-    //hospital.style.display = 'none';
-
     lhosp.addEventListener('change',(e)=>{
 
         prot = document.location.protocol;
@@ -58,8 +55,8 @@ window.initMap = function( ){
 
 		var v_contenidoInfo = '<h4>'+titulo+'</h4>'
         + '<img src='+foto+' />'
-        + '<p>'+titulo+'<br /><br />'+coment+'</p>'
-        + '<a  href='+link+'</a>';
+        + '<p>'+titulo+'<br><br>'+coment+'</p><br><br>'
+        + '<a href='+link+'>'+link+'</a>';
         
         var v_info = new google.maps.InfoWindow({content: v_contenidoInfo});
 

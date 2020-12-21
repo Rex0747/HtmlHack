@@ -85,3 +85,44 @@ class funcConf:
         #print( str( idconfig))
         idconfig  = idconfig['nconfig__max']
         return idconfig
+
+#-----------------------------JSON----------------------------------------------------------------
+
+import json 
+
+class Json:
+    jeiso = "["
+
+    bloque = """
+            {"gfh":"",
+            "nombre":"",
+            """
+    def __init__(self):
+        pass
+
+    def crearJson(self,data):
+        j = 0
+        for i in range(len(data)):
+            if j < len(data) -1:
+                self.jeiso += self.bloque + "},"
+                j += 1
+            else:
+                self.jeiso += self.bloque + "}"
+                        
+        self.jeiso += "]"
+        #print('jeiso: ', self.jeiso)
+        v = json.loads(self.jeiso)
+        
+        print('V: ', str(v))
+        j = 0
+        print('filas: ', len(v))
+        print(data)
+        for i in v:
+            print('Vuelta: ', str(j))
+            i['gfh'] = data[j][0]
+            i['nombre'] = data[j][1]
+            j += 1
+        return json.dumps(v)
+            
+    #print(jeiso)
+    #print(type(jeiso))
