@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.template import Template 
 from django.shortcuts import render
-from django.http import HttpResponse , Http404
+from django.http import HttpResponse , Http404, JsonResponse
 from configuraciones.models import  articulos , configurations , gfhs , dispositivos, hospitales, excel
 from django.core.files.storage import FileSystemStorage
 from .forms import UploadFileForm
@@ -21,10 +21,8 @@ from django.db.models import Q
 import qrcode
 import glob
 import traceback
-from django.db import transaction
 
-from configuraciones.func import funcConf
-
+from configuraciones.func import funcConf, Json
 
 #from somewhere import handle_uploaded_file
 # Create your views here.
@@ -458,6 +456,7 @@ def addHospital( request ):
                     print(str(e))
     
     hospi = hospitales.objects.all()
+    #print('SQL: ', hospi.query)
     print('Hospitales: ', hospi)
 
     return render(request, 'HospitalAdd.html', {'mensaje': mensaje,'hospitales': hospi} )
@@ -602,7 +601,6 @@ def selarticulo( request ):
 
     return render( request , 'selarticulo.html',{ 'articulos': art ,'hospitales': hospi } )
 
-
 @transaction.atomic
 def ActualizarPactos( request ):
     disp = None
@@ -667,3 +665,30 @@ def ActualizarPactos( request ):
     return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp}) #, 'pacto': conf
 
 
+def getHospital(request):
+    #print(str(data))
+    hospi = ''
+    lista = []
+    mtx = []
+    a_json = {}
+    e_json = {}
+    if request.method == 'GET':
+        hospi = request.GET['hospital']   
+        hosp = hospitales.objects.get(codigo=hospi)
+        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related()
+    #    for i in gfh:
+    #        lista += '*'+ i.gfh + "    " + i.nombre
+    #return HttpResponse(lista[1:])
+        f_json = Json()
+        for i in gfh:
+            mtx.append(i.gfh)
+            mtx.append(i.nombre)
+            lista.append(mtx)
+            mtx = []
+        print('Lista: ', lista)
+        txtJson = f_json.crearJson(lista)
+
+    print('JSON: ' + txtJson)
+    
+    return JsonResponse(e_json)
+    #return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
