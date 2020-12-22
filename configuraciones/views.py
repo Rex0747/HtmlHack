@@ -670,25 +670,21 @@ def getHospital(request):
     hospi = ''
     lista = []
     mtx = []
-    a_json = {}
-    e_json = {}
+    bloque = """{"gfh": "","nombre": "" """
+
     if request.method == 'GET':
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
         gfh = gfhs.objects.filter(hp_id=hosp.id).select_related()
-    #    for i in gfh:
-    #        lista += '*'+ i.gfh + "    " + i.nombre
-    #return HttpResponse(lista[1:])
-        f_json = Json()
+  
+        f_json = Json(bloque)
         for i in gfh:
             mtx.append(i.gfh)
             mtx.append(i.nombre)
             lista.append(mtx)
             mtx = []
-        print('Lista: ', lista)
+        #print('Lista: ', lista)
         txtJson = f_json.crearJson(lista)
 
-    print('JSON: ' + txtJson)
-    
-    return JsonResponse(e_json)
-    #return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
+    #print('JSON: ' + txtJson)
+    return HttpResponse(txtJson)
