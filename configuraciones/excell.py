@@ -30,7 +30,7 @@ class Excell:
             self.ws = self.wb[ hoja[0] ]
             self.ws.title = hoja[0]
             
-            self.salvarexcell() #self.salvarexcell2()
+            self.salvarexcell2() #self.salvarexcell2()
             #print('se ha creado el fichero excell '+nombre+' correctamente.')
         # global ws
         self.ws = self.wb.active

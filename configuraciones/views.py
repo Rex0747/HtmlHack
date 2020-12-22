@@ -676,7 +676,7 @@ def getHospital(request):
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
         gfh = gfhs.objects.filter(hp_id=hosp.id).select_related()
-  
+
         f_json = Json(bloque)
         for i in gfh:
             mtx.append(i.gfh)
