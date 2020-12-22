@@ -1,7 +1,7 @@
 
 from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos
 from django.db.models import Max
-
+import json 
 
 class funcConf:
 
@@ -88,17 +88,14 @@ class funcConf:
 
 #-----------------------------JSON----------------------------------------------------------------
 
-import json 
+
 
 class Json:
     jeiso = "["
-
-    bloque = """
-            {"gfh":"",
-            "nombre":"",
-            """
-    def __init__(self):
-        pass
+    #bloque = """{"gfh": "","nombre": "" """  
+    bloque = None
+    def __init__(self, bloque ):
+        self.bloque = bloque
 
     def crearJson(self,data):
         j = 0
@@ -113,12 +110,12 @@ class Json:
         #print('jeiso: ', self.jeiso)
         v = json.loads(self.jeiso)
         
-        print('V: ', str(v))
+        #print('V: ', str(v))
         j = 0
-        print('filas: ', len(v))
-        print(data)
+        #print('filas: ', len(v))
+        #print(data)
         for i in v:
-            print('Vuelta: ', str(j))
+            #print('Vuelta: ', str(j))
             i['gfh'] = data[j][0]
             i['nombre'] = data[j][1]
             j += 1

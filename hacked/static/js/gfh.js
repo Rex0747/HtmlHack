@@ -17,11 +17,12 @@ $(document).ready(function(){
         loc = document.location.host;
         ruta = prot +'//'+ loc + '/getHospital';
 
-        $.get(ruta, datos, function(dataDev){
-            lista = dataDev.split('*');
-            for(let i = 0 ; i < lista.length ; i++){
-                $('#prb').append(`<p>${lista[i]}</p>`)
+        $.getJSON(ruta, datos, function(dataDev){
+
+            for(let i=0;i<dataDev.length;i++){
+                $('#prb').append(`<p>${dataDev[i].gfh}&nbsp&nbsp&nbsp&nbsp&nbsp${dataDev[i].nombre}</p>`)
             }
+            
             $('#contGfhCod').show();
             $('#contDisp').show();
             $('#contBt').show();
