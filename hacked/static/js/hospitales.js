@@ -58,7 +58,7 @@ window.initMap = function( ){
 
 		var v_contenidoInfo = '<h4>'+titulo+'</h4>'
         + '<img src='+foto+' />'
-        + '<p>'+titulo+'<br /><br />'+coment+'</p>'
+        + '<p>'+titulo+'<br ><br >'+coment+'</p>'
         + '<a  href='+link+'</a>';
         
         var v_info = new google.maps.InfoWindow({content: v_contenidoInfo});
