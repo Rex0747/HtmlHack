@@ -36,8 +36,6 @@ window.onload = function(){
 };
     
 
-
-
 window.initMap = function( ){
     //40.4414767, -3.7228253
     
