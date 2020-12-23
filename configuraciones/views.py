@@ -157,6 +157,7 @@ def download_file(request):
     code = ''
     cqr = ''
     nombre = ''
+    dispdown = ''
     #global gfhdispdown
 
     cqrlist = {}
@@ -228,7 +229,8 @@ def download_file(request):
         except Exception as e:
             print('Excepcion en fase 1.' + str( e ))
             print('TraceBack: ', traceback.format_exc())
-            
+        
+        
         nlineas = 'NUMERO DE LINEAS: ' + str( len(res))
         print('NUMERO DE LINEAS: ' + str( len(res)))
         #print('RES: '+str(res))
