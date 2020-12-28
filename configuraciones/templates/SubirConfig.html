@@ -2,34 +2,35 @@
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-{% include 'menu.html' %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>SUBIR CONFIGURACION</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
-        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/upfile.css' %}>
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
         <script src={% static 'js/jquery.min.js' %}></script>
     </head>
     <body>
-        <div class="loader"></div>
-        <h2 id="portada">SUBIR CONFIGURACION</h2>
-    {% block content %}
-        <div id="formupload" class="container-fluid">
+        <div id="portada" class="portada">
+            <h2 >SUBIR CONFIGURACION</h2> 
             
+            <a href="/df">Descargar Datos</a>
+            <a href="/uf">Subir Datos</a>
+            <a href="/selarticulo">Articulos</a>
+            <a href="/pedido/">Pedidos</a>
+                    
+        </div>
+        <div id="formupload" class="container-fluid">
+            {% block content %}
             <form id="formu" enctype="multipart/form-data" method="POST" >
                 {% csrf_token %}
-                <p id="fila"></p>
-                <table>
-                    <tr>
-                        <td><input type="file" name="upload" id="upload" class="btn btn-light" onchange="enableBoton()"></td>
-                    </tr>
-                    <tr>
-                        
-                        <td><button type="submit" id="boton2" class="form-check-input">SUBIR FILA</button></td>
-                    </tr>
-                </table> 
+                <div id="cont1">
+                    <input type="file" name="upload" id="upload" class="" onmouseout="enableBoton()">
+                    <button type="submit" id="boton" class="btn-outline-primary">SUBIR FILA</button>
+                </div>
+
                 {% if uploaded_file %}
                     <p id="enlace">Configuracion actualizada: {{ uploaded_file }}</p>
                     <p id="nfilas">Numero de filas agregadas: {{ nfilas }}</p>

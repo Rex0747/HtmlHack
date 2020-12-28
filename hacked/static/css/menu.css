@@ -7,8 +7,9 @@ body{
     width: 15%;
     float: right;
     margin-top: 2%;
-    position: relative;
+    position: sticky;
     visibility: visible;
+    
    }
 
  

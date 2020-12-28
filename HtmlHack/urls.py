@@ -55,7 +55,7 @@ urlpatterns = [
     path('actPactos', v1.ActualizarPactos ),
     #path('prueba/<data>', v1.prueba ),
     path('getHospital', v1.getHospital ),
-
+    path('getUgs', v1.getUgs ),
 
 ]
 

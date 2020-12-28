@@ -3,11 +3,19 @@
 <html>
     <head>
         <title>GESTION DE ARTICULOS</title>
-        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/articulos.css' %}>
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
     </head>
     <body>
-        <p>GESTION DE ARTICULOS</p>
+        <div id="portada" class="portada">
+            <h2 id="portada">GESTION DE ARTICULOS</h2> 
+            
+            <a href="/df">Descargar Datos</a>
+            <a href="/uf">Subir Datos</a>
+            <a href="/selarticulo">Articulos</a>
+            <a href="/pedido/">Pedidos</a>
+
+        </div>
         <div>
             <form>
                 <p>CODIGO<input type="text" name="codigo" id="codigo"></p>

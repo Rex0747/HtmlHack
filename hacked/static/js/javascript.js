@@ -1,5 +1,5 @@
 window.onload = function() {
-$(".loader").fadeOut("slow");
+$(".loader").hide().fadeIn("slow");
 boton = document.getElementById('boton2');
 boton.disabled = true;
 

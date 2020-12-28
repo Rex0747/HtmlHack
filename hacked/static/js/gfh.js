@@ -20,7 +20,7 @@ $(document).ready(function(){
         $.getJSON(ruta, datos, function(dataDev){
 
             for(let i=0;i<dataDev.length;i++){
-                $('#prb').append(`<p>${dataDev[i].gfh}&nbsp&nbsp&nbsp&nbsp&nbsp${dataDev[i].nombre}</p>`)
+                $('#prb').append(`<p>${dataDev[i].gfh}&nbsp&nbsp&nbsp&nbsp&nbsp${dataDev[i].nombre}</p>`);
             }
             
             $('#contGfhCod').show();

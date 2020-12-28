@@ -194,8 +194,8 @@ def download_file(request):
 
             if gfhNombre:
                 
-                objGfh =  gfhs.objects.filter(gfh=gfhNombre)
-                gfhId = gfhs.objects.get( gfh=gfhNombre).pk
+                gfhId =  gfhs.objects.filter(gfh=gfhNombre)[0].pk
+                #gfhId = gfhs.objects.get( gfh=gfhNombre).pk
                 #gfhId = gfhs.objects.get(gfh=gfhNombre, nombre=dispositivo).pk
                 #print( 'gfh_id3: '+ str(gfhId))
                 #dtmp = dispositivos.objects.get(gfh=gfhId).nombre
@@ -206,22 +206,20 @@ def download_file(request):
                 
                 #__________________________________________________________________________________
             
-            if code and not dispositivo: #and not gfhNombre:
-                #print('Entro en code  ' + str(code) )
+            if code and not dispositivo: # and not gfhNombre:
+                print('Entro en code')
                 res = excel.objects.filter(  codigo=code ,hosp=hospital_id ).order_by('gfh','modulo','estanteria','ubicacion')
-                #print('codigo: '+ str(code))
-                #print('hospital: '+ str(hospital_id))
             elif dispositivo and code:
-                #print('Entro en dispositivo and code  ' + str(dispId) + ' '+code )
+                print('Entro en dispositivo and code  ' + str(dispId) + ' '+code )
                 res = excel.objects.filter( disp=dispId, codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre and code:
-                #print('Entro en gfhNombre and code  ' + gfhNombre + ' ' + code )
+                print('Entro en gfhNombre and code  ' + gfhNombre + ' ' + code )
                 res = excel.objects.filter( gfh=gfhId , codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif dispositivo:
-                #print('Entro en dispositivo  ' + str(dispId) )
+                print('Entro en dispositivo  ' + str(dispId) )
                 res = excel.objects.filter( disp=dispId ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre:
-                #print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
+                print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
                 res = excel.objects.filter( gfh=gfhId ,hosp=hospital_id).order_by('disp','modulo','estanteria','ubicacion')  
             
             
@@ -311,8 +309,9 @@ def download_file(request):
         except Exception as e:
             print('No existe fichero '+ str(e) )
 # ____________END FASE DOWNLOAD FILA____________________
+    hospitalAll = hospitales.objects.all()
     return render(request, 'BajarConfig.html', {'configuraciones': retorno,
-    'nombre': gfhNombre, 'lineas': nlineas , 'cqr': cqrlist })
+    'nombre': gfhNombre, 'lineas': nlineas , 'cqr': cqrlist, 'hospitales': hospitalAll  })
     
 
 def articulosAdd(request):
@@ -689,3 +688,26 @@ def getHospital(request):
 
     #print('JSON: ' + txtJson)
     return HttpResponse(txtJson)
+
+def getUgs( request ):
+    ugs = ''
+    lista = []
+    mtx = []
+    bloque = """{"ugs": "","gfh": "" """
+    if request.method == 'GET':
+        ugs = request.GET['ugs']
+        hospi = request.GET['hospital']
+        #print('Hospital: ', hospi, '  UGS: ', ugs)
+        hosp = hospitales.objects.get(codigo=hospi)
+        ugs = gfhs.objects.filter(hp_id=hosp.id,gfh=ugs).select_related()
+        #print(ugs)
+        f_json = Json(bloque)
+        for i in ugs:
+            mtx.append(i.gfh)
+            mtx.append(i.nombre)
+            lista.append(mtx)
+            mtx = []
+
+        txtJson = f_json.crearJson(lista)
+        return HttpResponse(txtJson)
+    

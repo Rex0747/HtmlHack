@@ -2,54 +2,68 @@
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-{% include 'menu.html' %}
+
 <html>
     <head>
         <title>ARTICULOS</title>
-        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+        <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}> -->
         <link rel="STYLESHEET" type="text/css" href={% static 'css/selarticulo.css' %}>
         <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
     </head>
     <body>
-        <div id="cont1">
-            <h2>Consulta de articulos</h2>
-            <table id="tmenu2" class="config">
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <form id="fart"  method="post" enctype="multipart/form-data" >
-                        {% csrf_token %} 
-                    <td id="td1">&nbsp<p>ARTICULO A BUSCAR: &nbsp &nbsp &nbsp <input type="text" name="art" id="art" class="label label-primary"></p></td>
-                    <!-- <td id="td2"><p>HOSPITAL:<select name="hospi" class="label label-primary"><option value="HCSC">HCSC</option><option value="HUPA">HUPA</option></p></select</td> -->
-                        <td id="td2"><p>HOSPITAL:<select name="hospi" class="label label-primary">
-                            {% for i in hospitales %}
-                                <option value={{i.codigo}}>{{i.codigo}}</option>
-                            {% endfor %}
-                        </select</td>
-                    <td id="td3"><button type="submit" id="boton1" class="btn-outline-primary">MOSTRAR</button></td>
-                    </form>
-                </tr>
-            </table>
-            <table id="art1" class="config">
-                <tr>
-                    <th>INDICE</th>
-                    <th>CODIGO</th>
-                    <th>NOMBRE</th>
-                    <th>FOTO</th>
-                </tr>
+        
+            <div id="portada" class="portada">
+                <h2 >GESTION DE ARTICULOS</h2> 
+                
+                <a href="/df">Descargar Datos</a>
+                <a href="/uf">Subir Datos</a>
+                <a href="/selarticulo">Articulos</a>
+                <a href="/pedido/">Pedidos</a>
+    
+            </div>
 
-                {% for i in articulos %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{i.codigo}}</td>
-                    <td>{{i.nombre}}</td>
-                    <td><a title="fotoart" href="mfoto?data={{i.foto}}"><img src={{i.foto.url}} alt={{i.foto}}  width="150" ></a></td>
-                </tr>
-                {% endfor %}
-            </table>
+            <div id="cont1">
+            
+                <form id="fart"  method="post" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        <div id="Dhosp">
+                            <select name="hospi" class="form-control">
+                                    <option value="">SELECCIONE HOSPITAL</option>
+                                {% for i in hospitales %}
+                                    <option value={{i.codigo}}>{{i.codigo}}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="text" name="art" id="art" placeholder="INGRESE TEXTO A BUSCAR" class="form-control">
+                        </div>
+                        <!-- <div id="Dtext">
+                            <input type="text" name="art" id="art" placeholder="INGRESE TEXTO A BUSCAR" class="label label-primary">
+                        </div> -->
+                        
+                        <div id="Dboton">
+                            <button type="submit" id="boton" class="btn-outline-primary">MOSTRAR</button>
+                        </div>
+                </form>
+            </div>
+            <div id="Ddatos>">
+                <table id="art1" class="config">
+                    <tr>
+                        <th>INDICE</th>
+                        <th>CODIGO</th>
+                        <th>NOMBRE</th>
+                        <th>FOTO</th>
+                    </tr>
 
-        </div>
+                    {% for i in articulos %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{i.codigo}}</td>
+                        <td>{{i.nombre}}</td>
+                        <td><a title="fotoart" href="mfoto?data={{i.foto}}"><img src={{i.foto.url}} alt={{i.foto}}  width="150" ></a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
 
 
     </body>
