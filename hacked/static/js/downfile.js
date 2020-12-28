@@ -1,6 +1,7 @@
 
 
 $(document).ready(function(){
+    $('#Htitulo').text('CONTROL DE PACTOS');
     $('#Dgfh').hide();
     $('#Dugs').hide();
     $('#Dbajarfila').hide();

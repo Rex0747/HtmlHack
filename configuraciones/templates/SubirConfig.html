@@ -9,11 +9,11 @@
         <title>SUBIR CONFIGURACION</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
         <link rel="STYLESHEET" type="text/css" href={% static 'css/upfile.css' %}>
-        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
         <script src={% static 'js/jquery.min.js' %}></script>
+        <script type="text/javascript" languaje="javascript" src={% static 'js/upfile.js' %} ></script>
     </head>
     <body>
-        <div id="portada" class="portada">
+        <!-- <div id="portada" class="portada">
             <h2 >SUBIR CONFIGURACION</h2> 
             
             <a href="/df">Descargar Datos</a>
@@ -21,13 +21,16 @@
             <a href="/selarticulo">Articulos</a>
             <a href="/pedido/">Pedidos</a>
                     
-        </div>
+        </div> -->
+
+        {% include 'head.html' %}
+
         <div id="formupload" class="container-fluid">
             {% block content %}
             <form id="formu" enctype="multipart/form-data" method="POST" >
                 {% csrf_token %}
                 <div id="cont1">
-                    <input type="file" name="upload" id="upload" class="" onmouseout="enableBoton()">
+                    <input type="file" name="upload" id="upload" >
                     <button type="submit" id="boton" class="btn-outline-primary">SUBIR FILA</button>
                 </div>
 
