@@ -1,16 +1,16 @@
 
 
 $(document).ready(function(){
+    
+    $(".loader").fadeOut("slow");
     $('#Htitulo').text('CONTROL DE PACTOS');
     $('#Dgfh').hide();
     $('#Dugs').hide();
     $('#Dbajarfila').hide();
     $('#Dboton').hide();
     $('#Dcode').hide();
-
-
     $('#Shospital').change( Chospital );
-    $('#Sgfh').change( Cugs); 
+    $('#Sgfh').change( Cugs ); 
 });
 
 

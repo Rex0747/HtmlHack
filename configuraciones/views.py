@@ -98,13 +98,14 @@ def upload_fileNew(request):
             #endregion 
             try:
                 dispo = dispositivos.objects.filter( nombre=listaExcel[0].dispositivo)[0] # objeto dispositivo
-                gfh = gfhs.objects.filter( nombre=dispo.nombre)[0] # objeto gfh
+                #gfh = gfhs.objects.filter( nombre=dispo.nombre)[0] # objeto gfh
+                
                 hosp_id = getIdDB( hospitales.objects.filter(codigo=listaExcel[0].hospital),'id')
-                # listaDb = configurations.objects.filter( gfh=disp.gfh_id , disp=disp.id , hosp_id=hosp_id ).select_related('nombre','hosp','gfh','disp')\
-                # .only('modulo','estanteria','ubicacion','division','codigo','nombre','pacto','minimo','dc','gfh','disp','hosp')
+                gfh = gfhs.objects.get(nombre=dispo.nombre,hp_id=hosp_id)
                     
             except Exception as e:
-                return HttpResponse('No esta configurado el gfh '+str(listaExcel[0].gfh))
+                #return HttpResponse('No esta configurado el gfh '+str(listaExcel[0].gfh))
+                return render( request, 'SubirConfig.html', {'error':'GFH '+str(listaExcel[0].gfh)+' no configurado'})
 
 #            idconfig = GetAleatorio() #mejorar para evitar colision.
             idconfig = funcConf.SetMaxId()
@@ -221,7 +222,6 @@ def download_file(request):
             elif gfhNombre:
                 print('Entro en gfhNombre  ' + gfhNombre + '  '+str(gfhId) )
                 res = excel.objects.filter( gfh=gfhId ,hosp=hospital_id).order_by('disp','modulo','estanteria','ubicacion')  
-            
             
 
         except Exception as e:

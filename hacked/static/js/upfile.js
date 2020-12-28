@@ -1,18 +1,17 @@
 
 $(document).ready(function(){
-
+    $(".loader").fadeOut("slow");
     $('#Htitulo').text('SUBIR CAMBIOS EXCEL');
-    $('#boton').click(enableBoton);
+    $('#upload').mouseout(enableBoton);
     $('#boton').attr("disabled", true);
+    Cfile = $('#upload');
     
     
-    
-
-
     });
 
 
-    function enableBoton(){
+function enableBoton(e){
+    if(e.target.value != '')
         $('#boton').attr("disabled", false);
-        alert("Has pinchao");
-        }
+    
+    }

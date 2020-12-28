@@ -9,39 +9,34 @@
         <title>SUBIR CONFIGURACION</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
         <link rel="STYLESHEET" type="text/css" href={% static 'css/upfile.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
         <script src={% static 'js/jquery.min.js' %}></script>
         <script type="text/javascript" languaje="javascript" src={% static 'js/upfile.js' %} ></script>
     </head>
     <body>
-        <!-- <div id="portada" class="portada">
-            <h2 >SUBIR CONFIGURACION</h2> 
-            
-            <a href="/df">Descargar Datos</a>
-            <a href="/uf">Subir Datos</a>
-            <a href="/selarticulo">Articulos</a>
-            <a href="/pedido/">Pedidos</a>
-                    
-        </div> -->
 
         {% include 'head.html' %}
-
+        <div class="loader"></div>
         <div id="formupload" class="container-fluid">
             {% block content %}
             <form id="formu" enctype="multipart/form-data" method="POST" >
                 {% csrf_token %}
                 <div id="cont1">
-                    <input type="file" name="upload" id="upload" >
+                    <input type="file" name="upload" id="upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" >
                     <button type="submit" id="boton" class="btn-outline-primary">SUBIR FILA</button>
                 </div>
-
-                {% if uploaded_file %}
-                    <p id="enlace">Configuracion actualizada: {{ uploaded_file }}</p>
-                    <p id="nfilas">Numero de filas agregadas: {{ nfilas }}</p>
-                    <p id="bfilas">Numero de filas borradas: {{ borradas }}</p><br>
-                {% endif %}
+                <div id="mensajes">
+                    {% if uploaded_file %}
+                        <p id="enlace">Configuracion actualizada: {{ uploaded_file }}</p>
+                        <p id="nfilas">Numero de filas agregadas: {{ nfilas }}</p>
+                        <p id="bfilas">Numero de filas borradas: {{ borradas }}</p>
+                    {% endif %}
+                    {% if error %}
+                        <p id="error">{{ error }}</p>
+                    {% endif %}
+                </div>
             </form>
 
-            
     {% endblock %}
         </div>
     </body>

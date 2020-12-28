@@ -2,7 +2,7 @@
 .portada{margin: 25px 16px;background-color: rgb(100, 150, 255); color: rgb(255, 251, 251); padding: 4px 10px; border-radius: 10px; text-shadow: 5px 5px 10px black; display: inline-flexbox}
 #Denlaces{display: -ms-inline-flexbox}
 #portada>div>a{color: rgb(255, 255, 255);margin: 5px 8px; padding: 15px 10px; text-decoration: none; }
-#portada>a:hover { color: rgb(163, 255, 186)}
+#portada>div>a:hover { color: rgb(163, 255, 186)}
 
 #flota{width: 60%; margin: 10px auto;  color: #FFF;}
 #Dhospital, #Dgfh, #Dugs, #Dbajarfila, #Dcode{margin: 20px 5%; display: block; width: 50%}
@@ -11,6 +11,8 @@
 #mensajes{margin-top: 10px;}
 #mensajes p{ color: #000;}
 #boton{ width: 150px; margin-top: 20px; margin-left: 5%; margin-bottom: 10px; box-shadow: 10px 10px 20px black;}
+
+.glyphicon glyphicon-cloud{margin-left: 15px; padding: 10px;}
 
 .config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
 .config th{ border: 1px solid; background-color: lightgreen(15, 104, 82); color: black; font-size: 1.1em; height: 1.1em; text-align: center;}

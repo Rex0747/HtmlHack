@@ -1,12 +1,12 @@
 .portada{margin: 25px 16px;background-color: rgb(100, 150, 255); color: rgb(255, 251, 251); padding: 4px 10px; border-radius: 10px; text-shadow: 5px 5px 10px black; }
 #portada>div>a{color: rgb(255, 255, 255);margin: 5px 8px; padding: 15px 10px; text-decoration: none; }
-#portada>a:hover { color: rgb(163, 255, 186)}
+#portada>div>a:hover { color: rgb(163, 255, 186)}
 
 #formupload{width: 60%}
-
-
 #cont1{width: 50%; margin: 50px auto; }
-
 
 #boton{width: 150px; margin-top: 60px; margin-left: 5%; margin-bottom: 10px; box-shadow: 10px 10px 20px black; display: block;}
 #upload{ padding: 10px; background-color:rgb(100, 150, 255); border-radius: 10px; color: #FFF;  }
+
+#mensajes{ width: 60% ; height: 300px; margin: auto;}
+#mensajes p{font-size:1.2em; font-weight: bold;}

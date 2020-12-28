@@ -2,17 +2,17 @@
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-
 <html>
     <head>
         <title>ARTICULOS</title>
         <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}> -->
         <link rel="STYLESHEET" type="text/css" href={% static 'css/selarticulo.css' %}>
-        <script type="text/javascript" languaje="javascript" src={% static 'js/javascript.js' %} ></script>
+        <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+        <script defer type="text/javascript" languaje="javascript" src={% static 'js/selarticulo.js' %} ></script>
     </head>
     <body>
         
-            <div id="portada" class="portada">
+            <!-- <div id="portada" class="portada">
                 <h2 >GESTION DE ARTICULOS</h2> 
                 
                 <a href="/df">Descargar Datos</a>
@@ -20,14 +20,16 @@
                 <a href="/selarticulo">Articulos</a>
                 <a href="/pedido/">Pedidos</a>
     
-            </div>
+            </div> -->
+
+            {% include 'head.html' %}
 
             <div id="cont1">
             
                 <form id="fart"  method="post" enctype="multipart/form-data" >
                         {% csrf_token %}
                         <div id="Dhosp">
-                            <select name="hospi" class="form-control">
+                            <select name="hospi" id="Shospi" class="form-control">
                                     <option value="">SELECCIONE HOSPITAL</option>
                                 {% for i in hospitales %}
                                     <option value={{i.codigo}}>{{i.codigo}}</option>
