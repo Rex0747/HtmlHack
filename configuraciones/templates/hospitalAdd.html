@@ -1,31 +1,37 @@
 {% load  static %}
-<!-- {% load bootstrap4 %}
-{% bootstrap_css %} -->
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/hospitales.js' %}></script>
     <script defer src='https://maps.googleapis.com/maps/api/js?callback=initMap'></script>
     <!-- <script defer type="text/javascript" languaje="javascript" src={% static 'js/api_maps.js' %}></script> -->
     <link  rel="STYLESHEET" type="text/css" href={% static 'css/hospitales.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
     <title>AÑADIR HOSPITAL</title>
 </head>
 <body id="bg" style="background-image: url('{% static "img/hospital.jpg"%}')";>
+    <div class="loader"></div>
+    {% include 'head.html' %}
     <div id="cont1" name="cont1">
         <form id="formulario"  method="post" enctype="multipart/form-data" >
             {% csrf_token %}
-            <h2 id="titulo" class="titulo">HOSPITALES</h2>
+            <!-- <h2 id="titulo" class="titulo">HOSPITALES</h2> -->
+            
             <div id="cont2">
                     <input type="text" name="codhosp" id="codhosp" placeholder="CODIGO" class="form-control ctexto">
                     <input type="text" name="codisp" id="codisp" placeholder="NOMBRE" class="form-control">
-                    <input type="text" name="log" id="log" placeholder="Longitud" class="form-control"><br>
-                    <input type="text" name="lat" id="lat" placeholder="Latitud" class="form-control"><br>
-                    <input type="text" name="foto" id="foto" placeholder="Foto" class="form-control"><br>
-                    <input type="text" name="coment" id="coment" placeholder="comentario" class="form-control"><br>
-                    <input type="text" name="link" id="link" placeholder="Link" class="form-control"><br>
+                    <input type="text" name="log" id="log" placeholder="Longitud" class="form-control">
+                    <input type="text" name="lat" id="lat" placeholder="Latitud" class="form-control">
+                    <input type="text" name="foto" id="foto" placeholder="Foto" class="form-control">
+                    <input type="text" name="coment" id="coment" placeholder="comentario" class="form-control">
+                    <input type="text" name="link" id="link" placeholder="Link" class="form-control">
                     <button type="submit" id="addHospital" name="addHospital" >Añadir Hospital</button>
             </div>
 

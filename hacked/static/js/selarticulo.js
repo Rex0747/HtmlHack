@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+    $(".loader").fadeOut("slow");
     $('#Htitulo').text('BUSQUEDA REFERENCIAS');
     $('#Shospi').change( enableBoton );
     $('#boton').hide();

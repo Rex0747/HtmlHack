@@ -7,7 +7,8 @@ var coment = '';
 var link = '';
 
 window.onload = function(){
-
+    $(".loader").fadeOut("slow");
+    $('#Htitulo').text('GESTION DE HOSPITALES');
     var mapa = document.getElementById('mapa');
     var lhosp = document.getElementById('dthosp');
     

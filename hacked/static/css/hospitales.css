@@ -1,10 +1,12 @@
 body{margin: 0 ;padding: 0; background-repeat: no-repeat; background-position: center; background-size: 60%;}
-#mapa{ height: 450px; width: 600px; background-color: #7b75c7; border-radius: 15px; }
+#mapa{ height: 450px; width: 600px; background-color: #7b75c7; border-radius: 15px; float: left; }
 
-.titulo{width:97%; padding:10px 6px; margin: 10px auto; background-color: rgb(100, 150, 255); color: #FFF; text-align: center; border-radius: 10px;}
-#cont2{width: 220px; background-color: rgb(100, 150, 255); margin: 20px 18% 60px 1%; float: left;border-radius: 15px;}
-#cont2>input{ margin: 13px 10%;  }
-/* .ctexto{width: 220px; background-color: rgb(100, 150, 255); margin: 20px 18% 60px 1%; float: left;border-radius: 15px;} */
+
+
+#cont2{width: 250px; background-color: rgb(100, 150, 255); margin: 20px;  float: right ;border-radius: 5px;}
+#cont2>input{ margin: 20px auto; width: 90%; }
+
+/* 
 #cont2>button{ margin: 20px 10%;}
 #lhosp{margin: 20px auto}
 .option{width: 200px; background-color: #9ee7e4; border: 2px solid #000; clear: both }
@@ -18,4 +20,4 @@ body{margin: 0 ;padding: 0; background-repeat: no-repeat; background-position: c
 #dthosp:hover{background-color: rgb(255, 255, 255);}
 
 #cont2>input{ background-color: rgb(141, 255, 194); border-radius: 4px;}
-#cont2>input:hover{ background-color: rgb(255, 255, 255);}
+#cont2>input:hover{ background-color: rgb(255, 255, 255);} */
