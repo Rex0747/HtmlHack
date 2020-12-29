@@ -1,4 +1,9 @@
-window.onload = function(){
+
+
+$(document).ready(function(){
+
+    $(".loader").fadeOut("slow");
+    $('#Htitulo').text('Modificar pactos');
     boton = document.getElementById('boton');
     //boton.style.display = 'none';
     tabla = document.getElementById('tabla')//.style.display = 'none';
@@ -12,7 +17,7 @@ window.onload = function(){
 
 
     despGfh.addEventListener('change', desplGfh);
-};
+});
 
 function desplHospital(){
     despGfh.style.display = 'block';

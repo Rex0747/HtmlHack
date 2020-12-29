@@ -1,24 +1,27 @@
+<!DOCTYPE html>
 {% load  static %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-{% include 'menu.html' %}
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
+    <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}> -->
     <link rel="STYLESHEET" type="text/css" href={% static 'css/actualizarPactos.css' %}>
-    <script type="text/javascript" languaje="javascript" src={% static 'js/ActualizaPactos.js' %} ></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/ActualizaPactos.js' %} ></script>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
     <title>ActualizarPactos</title>
 </head>
 <body>
+    <div class="loader"></div>
+    {% include 'head.html' %}
     <div id="contd" name="contd">
         <form id="formdisp"  method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2 id='titulo'>ACTUALIZAR PACTOS</h2>
+            <!-- <h2 id='titulo'>ACTUALIZAR PACTOS</h2> -->
             
             <div id="contHosp" name="contHosp" class="container">
                 <select name="selHospC" id="selhospC" class="form-control">

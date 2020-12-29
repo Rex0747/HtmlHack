@@ -1,28 +1,30 @@
+<!DOCTYPE html>
 {% load  static %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/hospitales.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}> -->
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/hospitales.js' %}></script>
     <script defer src='https://maps.googleapis.com/maps/api/js?callback=initMap'></script>
     <!-- <script defer type="text/javascript" languaje="javascript" src={% static 'js/api_maps.js' %}></script> -->
-    <link  rel="STYLESHEET" type="text/css" href={% static 'css/hospitales.css' %}>
-    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    
+
     <title>AÑADIR HOSPITAL</title>
 </head>
-<body id="bg" style="background-image: url('{% static "img/hospital.jpg"%}')";>
+<body id="bg" style="background-image: url('{% static "img/hospital.jpg"%}')">
+    {% block content %}
     <div class="loader"></div>
     {% include 'head.html' %}
     <div id="cont1" name="cont1">
         <form id="formulario"  method="post" enctype="multipart/form-data" >
             {% csrf_token %}
-            <!-- <h2 id="titulo" class="titulo">HOSPITALES</h2> -->
             
             <div id="cont2">
                     <input type="text" name="codhosp" id="codhosp" placeholder="CODIGO" class="form-control ctexto">
@@ -32,30 +34,32 @@
                     <input type="text" name="foto" id="foto" placeholder="Foto" class="form-control">
                     <input type="text" name="coment" id="coment" placeholder="comentario" class="form-control">
                     <input type="text" name="link" id="link" placeholder="Link" class="form-control">
-                    <button type="submit" id="addHospital" name="addHospital" >Añadir Hospital</button>
-            </div>
-
-            <div id="lhosp">
-                <label id="lbdthosp" for="dthosp">HOSPITALES:</label>
-
-                <select id="dthosp" name="dthosp">
-                    <option label="Seleccione hospital"></option>
-                    {% for i in hospitales %}
-                        <!-- <p>{{i}}</p> -->
-                        <option  id={{i.codigo}} value="{{i.codigo}}*{{i.nombre}}*{{i.longitud}}*{{i.latitud}}*{{i.foto}}*{{i.comentario}}*{{i.link}}" label={{i.codigo}} >
-                    {% endfor %}
-                </select>
-
-                
+                    <button type="submit" id="addHospital" name="addHospital" class="btn-outline-primary" >Añadir Hospital</button>
             </div>
 
             <div id="mapa">
 
             </div>
 
+            <div id="Dlhosp">
+                
+                    <!-- <label id="lbdthosp" for="dthosp">HOSPITALES:</label> -->
+                    <select id="dthosp" name="dthosp" class="form-control">
+                        <option label="Seleccione hospital"></option>
+                        {% for i in hospitales %}
+                            <!-- <p>{{i}}</p> -->
+                            <option  id={{i.codigo}} value="{{i.codigo}}*{{i.nombre}}*{{i.longitud}}*{{i.latitud}}*{{i.foto}}*{{i.comentario}}*{{i.link}}" label={{i.codigo}} >
+                        {% endfor %}
+                    </select>
+                
+            </div>
+
+            
+
         </form> 
             
     </div>
+    {% endblock %}
 </body>
 </html>
 

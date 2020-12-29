@@ -2,6 +2,8 @@
 
 $(document).ready(function(){
 
+    $(".loader").fadeOut("slow");
+    $('#Htitulo').text('CONTROL DE GFHs');
     $('#contGfhCod').hide();  
     $('#contDisp').hide();
     $('#contBt').hide();
