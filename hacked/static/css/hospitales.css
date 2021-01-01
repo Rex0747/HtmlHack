@@ -1,13 +1,15 @@
-body{margin: 0 ;padding: 0; background-repeat: no-repeat; background-position: center; background-size: 60%;}
-#mapa{ height: 450px; width: 600px; background-color: #7b75c7; border-radius: 15px; float: right; }
+body{margin: 0 ;padding: 0; background-repeat: no-repeat; background-position: center; background-size: 60%; background-color: rgba(159, 182, 223, 0.9);}
+
+#mapa{ height: 450px; width: 600px; background-color: #7b75c7; border-radius: 15px; float: right; margin: 25px 5% }
 
 
 #cont2{width: 250px; background-color: rgb(100, 150, 255); margin: 5px 14px;  float: right ;border-radius: 5px;}
 #cont2>input{ margin: 20px auto; width: 90%; }
 #addHospital{margin: 10px 25%; width: 50%}
-#Dlhosp{float: left; margin: 5px 14px; background-color:rgb(100, 150, 255); width: 250px; height: 400px; border-radius: 5px}
+#Dlhosp{float: left; margin: 5px 14px;  width: 250px; height: 400px; border-radius: 5px}
+#Dlhosp select{width: 75%; margin: 80% auto;}
 /* #dthosp{width: 150px; height: 30px; background-color:  rgb(228, 255, 240); border: 2px solid #000; border-radius: 8px} */
-#dthosp { margin-top: 150%;}
+/* #dthosp { margin-top: 150%;} */
 
 /* 
 #cont2>button{ margin: 20px 10%;}

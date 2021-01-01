@@ -4,33 +4,60 @@ $(document).ready(function(){
 
     $(".loader").fadeOut("slow");
     $('#Htitulo').text('Modificar pactos');
-    boton = document.getElementById('boton');
-    //boton.style.display = 'none';
-    tabla = document.getElementById('tabla')//.style.display = 'none';
+    boton = $('#boton');
+    tabla = $('#tabla');
+    despHospital = $('#selHospC');
+    despGfh = $('#selGfh');
+    despDisp = $('#selDisp');
 
-    despGfh = document.getElementById('selDisp');
-    despGfh.style.display = 'none';
-
-   // boton.addEventListener('click',mostraTabla);
-    despHospital = document.getElementById('selhospC');
-    despHospital.addEventListener('change', desplHospital);
-
-
-    despGfh.addEventListener('change', desplGfh);
+    despGfh.hide();
+    despDisp.hide();
+    boton.hide();
+    
+    despHospital.change(CHospital); 
+    despGfh.change( Cgfh);
+    despDisp.change( Cdisp);
 });
 
-function desplHospital(){
-    despGfh.style.display = 'block';
-};
+function CHospital(e){
 
-function desplGfh(){
+    alert(e.target.value);
+    console.log(e.target.value);
+    prot = document.location.protocol;
+    loc = document.location.host;
+    ruta = prot +'//'+ loc + '/getHospital';
+    datos = { hospital: e.target.value };
+    despGfh.show();
+
+    $.getJSON( ruta, datos, function(dataDev){
+        //despGfh.html("");
+        despGfh.html("<option value=''>SELECCIONE GFH</option>");
+        for(let i=0; i<dataDev.length;i++){
+            //alert('DISP: '+dataDev[i].nombre +  '  GFH: '+ dataDev[i].gfh  );
+            // Sugs.append(`<option value="${dataDev[i].nombre}">${dataDev[i].nombre}</option>`);
+            despGfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].gfh}</option>`);
+        }
+
+
+    despGfh.style.display = 'block';
+
+
+    });
+}
+
+function Cgfh(e){
+
+
     boton.style.display = 'block';
     tabla.style.display = 'block';
 };
 
+function Cdisp(){
+    alert('ENTRO');
 
+}
 
 function mostrarTabla(){
-    document.getElementById('tabla').style.display = 'block';
+    $('#tabla').style.display = 'block';
     
 }

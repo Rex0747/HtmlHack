@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 {% load  static %}
-{% load bootstrap4 %}
-{% bootstrap_css %}
+{% comment %} {% load bootstrap4 %}
+{% bootstrap_css %} {% endcomment %}
 
-
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}> -->
     <link rel="STYLESHEET" type="text/css" href={% static 'css/actualizarPactos.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/ActualizaPactos.js' %} ></script>
-    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    
     <title>ActualizarPactos</title>
 </head>
 <body>
@@ -33,11 +33,14 @@
             </div>
 
             <div id="contGfhC" name="contGfhC" class="container">
+                <select name="selGfh" id="selGfh" class="form-control">
+
+                </select>
+            </div>
+
+            <div id="contDisP" name="contDisP" class="container">
                 <select name="selDisp" id="selDisp" class="form-control">
-                    <option name="opHosp" value="">SELECCIONE DISPOSITIVO:</option>
-                    {% for i in dispositivo %}
-                        <option name="opDisp" value={{i.nombre}}>{{i.nombre}}</option>
-                    {% endfor %}
+
                 </select>
             </div>
 
@@ -60,7 +63,7 @@
 
                 </table>
 
-                        <input type="submit" id="boton" class="btn btn-success">
+                        <input type="submit" id="boton" value="Modificar" class="btn-outline-primary">
 
             </div>
 

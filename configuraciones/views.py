@@ -604,21 +604,21 @@ def selarticulo( request ):
 
 @transaction.atomic
 def ActualizarPactos( request ):
-    disp = None
+    #disp = None
     global g_gfh
     global g_conf
     idconf = None
     hosp_update = hospitales.objects.all()
-    if request.method == "POST" and request.POST['selDisp']=='' and request.POST['selHospC']=='':
-        clavesDescartar = ('csrfmiddlewaretoken', 'selHospC', 'selDisp', 'oculto' )
+    if request.method == "POST" and request.POST['selDisp']=='' and request.POST['selHospC']=='' and request.POST['selGfh']=='':
+        clavesDescartar = ('csrfmiddlewaretoken', 'selHospC', 'selDisp', 'selDisp' ) #'oculto'
         dic = {}
         for key, value in request.POST.items():
             if key not in clavesDescartar:
                 if value != '':
-                    print('VALOR: ',str(value))
+                    # print('VALOR : ' str(key) + '  ',str(value))
                     dic[str(key)] = int(value)
 
-        #print(dic)
+        print(dic)
         #print('GFH: ', g_gfh)
         for key, value in dic.items():
             try:
@@ -638,32 +638,33 @@ def ActualizarPactos( request ):
         g_conf = None
         g_gfh = None
 
-        disp = gfhs.objects.all()
-        return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp})
+        #disp = gfhs.objects.all()
+        return render( request, 'actualizaPactos.html',{'hospital': hosp_update, }) #'dispositivo': disp
         
     else:
     
         #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
         
-        disp = gfhs.objects.all()
+        #disp = gfhs.objects.all()
         print(request.META['REMOTE_ADDR'])
         print(request.META['HTTP_USER_AGENT'])
 
         for key, value in request.POST.items():
             print('Key: ',str(key), '  Value: ', str(value))
 
-        if request.method == 'POST' and  request.POST['selDisp'] and request.POST['selHospC']:
+        if request.method == 'POST' and request.POST['selGfh'] and  request.POST['selDisp'] and request.POST['selHospC']:
             
-            a = request.POST['selDisp']
+
+            a = request.POST['selGfh']
             h = request.POST['selHospC']
             print('CHANGE',str(a))
             g_conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=a), hosp=hospitales.objects.get(codigo=h)).select_related()
             #print('Conf: ', conf)
             g_gfh = g_conf[0].gfh
             print('GFH_: ', g_gfh)
-            return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp, 'pacto': g_conf, 'gfh': g_gfh})
+            return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'pacto': g_conf, 'gfh': g_gfh}) #'dispositivo': disp,
 
-    return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'dispositivo': disp}) #, 'pacto': conf
+    return render( request, 'actualizaPactos.html',{'hospital': hosp_update, }) #'dispositivo': disp
 
 
 def getHospital(request):

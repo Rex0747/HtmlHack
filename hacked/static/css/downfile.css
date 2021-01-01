@@ -4,6 +4,7 @@
 #portada>div>a{color: rgb(255, 255, 255);margin: 5px 8px; padding: 15px 10px; text-decoration: none; }
 #portada>div>a:hover { color: rgb(163, 255, 186)} */
 
+body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 #flota{width: 60%; margin: 10px auto;  color: #FFF;}
 #Dhospital, #Dgfh, #Dugs, #Dbajarfila, #Dcode{margin: 20px 5%; display: block; width: 50%}
 #Shospital, #Sgfh, #Sugs, #code{ width: 60%}
