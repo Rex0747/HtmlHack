@@ -22,7 +22,7 @@ $(document).ready(function(){
         datos = { hospital: e.target.value };
         
         $.getJSON( ruta, datos, function(dataDev){
-            Sgfh.html("");
+            Sgfh.html("<option value=''>SELECCIONE GFH</option>");
             for(let i=0; i<dataDev.length;i++){
                 Sgfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].gfh}</option>`);
             }
@@ -40,9 +40,9 @@ $(document).ready(function(){
         datos = { ugs: e.target.value, hospital: Shospital };
 
         $.getJSON( ruta, datos, function(dataDev){
-            Sdisp.html("");
+            Sdisp.html("<option value=''>SELECCIONE DSP</option>");
             for(let i=0; i<dataDev.length;i++){
-                Sdisp.append(`<option value="${dataDev[i].nombre}">${dataDev[i].nombre}</option>`);
+                Sdisp.append(`<option value="${dataDev[i].ugs}">${dataDev[i].ugs}</option>`);
             }
 
             Sdisp.show();

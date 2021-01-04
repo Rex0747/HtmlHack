@@ -56,7 +56,7 @@ urlpatterns = [
     #path('prueba/<data>', v1.prueba ),
     path('getHospital', v1.getHospital ), #ajax
     path('getUgs', v1.getUgs ),           #ajax
-
+    path('getConf', v1.getConf ),           #ajax
 ]
 
 if settings.DEBUG:

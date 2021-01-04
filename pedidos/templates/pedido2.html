@@ -1,16 +1,21 @@
+<!DOCTYPE html>
 {% load  static %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-<!DOCTYPE html>
-<html lang="en">
+
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
     <link rel="STYLESHEET" type="text/css" href={% static 'css/pedidos.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery351u.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/envpedido.js' %} ></script>
     <title>Pedido2</title>
 </head>
     <body>
+    {% include 'head.html' %}
     <div id="cont" class="container-fluid" >
         <div class="row	justify-content-md-center">
         <form id="fenviar" name="fenviar" enctype="multipart/form-data" method="POST">
@@ -38,8 +43,14 @@
                 <td><button type="submit" id="tenviar" class="btn btn-success"  >Enviar pedido</td>
             </tr>
         </table>
+        <div id="cont2" >
+            <table id="tabla" class="config">
+                
+            </table>
         </div>
         </form>
+        </div>
+        
         
     </div>
     </body>

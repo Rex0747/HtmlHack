@@ -91,7 +91,7 @@ def pedido( request ):
             gfh_id, disp_id, user_id, hospital_id = funciones.GetDatos( disp, user)
             datos = excel.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
             #print('Type: '+ str(type(datos)))
-            #print(str( datos ))
+            #print('Datos: ', str( datos ))
             
             for i in datos:
                 tmp = i.nombre
@@ -100,8 +100,8 @@ def pedido( request ):
             return render( request, 'pedidos.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user, 'datos': datos })
 
 
-        if request.method == 'POST':
-            print(str(codes.keys()) + '\t' + str(codes.values()))
+        #if request.method == 'POST':
+            #print(str(codes.keys()) + '\t' + str(codes.values()))
 
         funciones.Insert_temp( codes, hospital, disp , user )
 

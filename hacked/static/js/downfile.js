@@ -20,10 +20,9 @@ function Chospital(e)
     ruta = prot +'//'+ loc + '/getHospital';
     datos = { hospital: e.target.value };
 
-    $('#Sugs').html("<option value=''>SELECCIONE UGS</option>");
     Sgfh = $('#Sgfh');
     $.getJSON( ruta, datos, function(dataDev){
-        Sgfh.html("");
+        Sgfh.html("<option value=''>SELECCIONE GFH</option>");
         for(let i=0; i<dataDev.length;i++){
             //alert('DISP: '+dataDev[i].nombre +  '  GFH: '+ dataDev[i].gfh  );
             // Sugs.append(`<option value="${dataDev[i].nombre}">${dataDev[i].nombre}</option>`);
@@ -42,14 +41,14 @@ function Cugs(e)
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getUgs';
     Shospital = $('#Shospital option:selected').text();
-    datos = { ugs: e.target.value, hospital: Shospital };
+    datos = {  hospital: Shospital, ugs: e.target.value };
     //alert( e.target.value);
 
     Sugs = $('#Sugs');
     $.getJSON( ruta, datos, function(dataDev){
-        Sugs.html("");
+        Sugs.html("<option value=''>SELECCIONE UGS</option>");
         for(let i=0;i<dataDev.length;i++){
-            Sugs.append(`<option value="${dataDev[i].nombre}">${dataDev[i].nombre}</option>`);
+            Sugs.append(`<option value="${dataDev[i].ugs}">${dataDev[i].ugs}</option>`);
         }
     $('#Dugs').show();
     $('#Dbajarfila').show();
