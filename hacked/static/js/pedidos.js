@@ -8,10 +8,12 @@ $(document).ready(function(){
     Sdisp = $('#disp');
     pboton2 = $('#pboton2');
     user = $('#user');
+    passwd =$('#passwd')
     Sgfh.hide();
     Sdisp.hide();
     pboton2.hide();
     user.hide();
+    passwd.hide();
 
     Shospital = $('#hospital');
     Shospital.change(function(e){
@@ -48,6 +50,7 @@ $(document).ready(function(){
             Sdisp.show();
             pboton2.show();
             user.show();
+            passwd.show();
         });
         
         //$('#cont1').hide();

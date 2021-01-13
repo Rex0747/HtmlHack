@@ -20,38 +20,30 @@
         <div class="row	justify-content-md-center">
         <form id="fenviar" name="fenviar" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-        <h2>ENVIAR PEDIDO COMPLETO</h2>
-        <table class="table table-responsive">
-            <tr>
-                <th>USUARIO</th>
-                <th>HOSPITAL</th>
-                <th>GFH</th>
-                <th>DISPOSITIVO</th>
-            </tr>
-            <tr>
-                <td>{{user}}</td>
-                <td>{{hospital}}</td>
-                <td>{{gfh}}</td>
-                <td>{{disp}}</td>
-            </tr>
-            <tr>
-                <td></td>
-            </tr>
-            <tr>
-                <td><a href="" id="envpedidos" class="btn btn-success" >Volver a Pedidos</a></td>
-                <td><input id="txenviar" name="txenviar" type="hidden" value="{{user}}"></td>
-                <td><button type="submit" id="tenviar" class="btn btn-success"  >Enviar pedido</td>
-            </tr>
-        </table>
+        <input type="hidden" id="u" name="usuario" value={{user}}>
+        <input type="hidden" id="h" name="hosp" value={{hospital}}>
+        <input type="hidden" id="h" name="passwd" value={{passwd}}>
+        <div id="cont0">
+        
+            <a href="" id="envpedidos" class="btn-outline-primary" >Volver a Pedidos</a>
+            <!-- <input id="txenviar" name="txenviar" type="hidden" value="{{user}}"> -->
+            <button type="submit" id="tenviar" class="btn-outline-primary" >Enviar Pedido</button>
+        
+        </div>
         <div id="cont2" >
             <table id="tabla" class="config">
-                
+                <!-- <tr><th>CODIGO</th><th>NOMBRE</th><th>CANTIDAD</th><th>GFH</th><th>DISPOSITIVO</th><th>HOSPITAL</th></tr>
+                <tr>
+                    <td id="u">{{user}}</td>
+                    <td id="h">{{hospital}}</td>
+                    <td>{{gfh}}</td>
+                    <td>{{disp}}</td>
+                </tr>  -->
             </table>
-        </div>
+        
+            </div>
         </form>
-        </div>
-        
-        
+    </div>
     </div>
     </body>
 </html>

@@ -1,20 +1,37 @@
+<!DOCTYPE html>
 {% load  static %}
-{% include 'menu.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
 <html>
     <head>
         <title>QR CODE</title>
-        <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}>
-         
+        <div class="loader"></div>
+        <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}> -->
+        <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+        <script defer type="text/javascript" languaje="javascript" src={% static 'js/crearEtiqueta.js' %} ></script>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/addetiqueta.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
     </head>
     <body>
+        {% include 'head.html' %}
         <div id="conqr">
             <h1 id="qrh">CODIGO QR UBICACION COMPLETA</h1>
             <p id="tqr">{{cqr|safe}}</p>
-            <img id="imgcqr" src={% static 'qrcode.png'  %}  width="100">
-            {% for i in img %}
-                <img id="foto" src={{i.foto.url}}  width="250">
-            {% endfor%}
+            <div id="contcqr">
+                {% for i in img %}
+                    <img id="foto" src={{i.foto.url}} >
+                {% endfor%}
+                <img id="imgcqr" src={% static 'qrcode.png'  %} >
+            </div>
+            <div id="Dimprimir">
+                <button id="imprimir" class="btn btn-primary">Imprinir etiqueta</button>
+            </div>
         </div>
+        <div id="mensaje">
+
+        </div>
+
     </body>
 
 </html>

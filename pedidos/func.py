@@ -27,7 +27,7 @@ class funciones:
         datos = []
         listaM = []
         for i in mtx:
-            datos = i.split('~')
+            datos = i.split('*')
             print(datos)
             listaT = []
             listaT.append( datos[0])
@@ -155,7 +155,7 @@ class funciones:
 
     @staticmethod
     def CrearExcel_2( lista, filexcel=None ): #0 ubic  1 cod  2 nombre 3 pacto  4 gfh  5 disp  6 hosp
-        print( 'CrearExcel_2_Array: ', str(lista))
+        #print( 'CrearExcel_2_Array: ', str(lista))
         tiempo = datetime.datetime.now()
         tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
         if filexcel is None:
@@ -164,7 +164,7 @@ class funciones:
             print('GFH: ', lista[1])
             filexcel = MEDIA_ROOT + '/pedidos/'+ lista[0][4] + tiempo + '.xlsx'
         
-        print('FileExcel: ', filexcel)
+        #print('FileExcel: ', filexcel)
         excel = Excell( filexcel )
         #print('Datos Hospital : ', str(lista))
         for i in lista:

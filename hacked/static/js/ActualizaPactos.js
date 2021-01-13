@@ -76,7 +76,7 @@ function Cdisp(e){
         
         for(let i=0;i<dataDev.length;i++){
             tabla.append(`<tr><td><p>${dataDev[i].codigo}</p></td><td><p>${dataDev[i].nombre}</p></td><td><input type='text' name='${dataDev[i].codigo}*${dataDev[i].modulo}*${dataDev[i].estanteria}*${dataDev[i].ubicacion}*${dataDev[i].division}' value='' class='input-group-text' onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td><td>${dataDev[i].pacto}</td></tr>`); 
-            console.log(`<tr><td><p>${dataDev[i].codigo}</p></td><td><p>${dataDev[i].nombre}</p></td><td><input type='text' name='${dataDev[i].codigo}*${dataDev[i].modulo}*${dataDev[i].estanteria}*${dataDev[i].ubicacion}*${dataDev[i].division}' value='' class='input-group-text'></td><td>PACTO:${dataDev[i].pacto}</td></tr>`);
+            //console.log(`<tr><td><p>${dataDev[i].codigo}</p></td><td><p>${dataDev[i].nombre}</p></td><td><input type='text' name='${dataDev[i].codigo}*${dataDev[i].modulo}*${dataDev[i].estanteria}*${dataDev[i].ubicacion}*${dataDev[i].division}' value='' class='input-group-text'></td><td>PACTO:${dataDev[i].pacto}</td></tr>`);
         }
         
         tabla.show();

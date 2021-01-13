@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}> -->
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/gestPedidos.js' %} ></script>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/gestPedidos.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    <title>Destion de pedidos</title>
+</head>
+<body>
+    {% include 'head.html' %}
+    <div class="loader"></div>
+    <div id="cont1" >
+        <!-- {% if formulario.errors %}
+            <p style="color: red">Revisa formulario</p>
+        {% endif %} -->
+
+        <form id="fgestped" name="fgestped" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <!-- <div id="info">
+                {% for i in npedido %}
+                    <p>Fecha emision del pedido:&nbsp{{i.fecha}}</p>
+                    <p>Usuario emision del pedido:&nbsp{{i.user.ident}}</p>
+                    <p>Codigo pedido:&nbsp{{i.pedido}}</p>
+                {% endfor %}
+            </div> -->
+
+            <div id="cont-form">
+                <!-- <table id="tform"> -->
+                        <!-- {{formulario.as_table}} -->
+                        <div id="dini">
+                            <label for="dat_ini">Fecha ini:
+                            <input type="date" id="dat_ini" data-date-format="DD/MM/YYYY"></label>
+                        </div>
+                        <div id="dfin">
+                            <label for="dat_fin">Fecha fin:
+                            <input type="date" id="dat_fin" data-date-format="DD/MM/YYYY"></label>
+                        </div>
+                        <div id="dboton">
+                            <button type="button" id="fenviar" class="btn-outline-primary" >Recoger Albaranes</button>
+                        </div>
+                <!-- </table> -->
+            </div>
+
+            <!-- <table id="Tpedido" name="Tpedido" class="tabla">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Dispositivo</th>
+                        <th>Gfh</th>
+                        <th>Hospital</th>
+                    </tr>
+                {% for i in datos %}
+                    <tr>
+                        <td>{{i.codigo.codigo}}</td>
+                        <td>{{i.codigo.nombre}}</td>
+                        <td>{{i.cantidad}}</td>
+                        <td>{{i.disp.nombre}}</td>
+                        <td>{{i.gfh.gfh}}</td>
+                        <td>{{i.hospital.codigo}}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </table> 
+
+            <button type="submit" id="tenviar" class="btn-outline-primary" >Subir Datos</button>-->
+            <table id="tabla" class="tabla">
+
+            </table>
+    </div>
+
+
+
+
+</body>
+</html>
+
+<!-- <script>
+    $(function () {
+      $("#datetimepicker_ini").datetimepicker({
+        format: 'DD/MM/YYYY HH:mm',
+      });
+    });
+  </script> -->

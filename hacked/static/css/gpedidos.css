@@ -1,0 +1,24 @@
+body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
+
+
+#tenviar{ display: block; margin: auto; margin-top: 20px;}
+/* #info>p{ background-color: rgba(224, 235, 255, 0.9); width: 50%; margin: 15px auto;} */
+/* #tform{margin: auto;}
+#tform text{margin-top: 15px } */
+/* #cont-form{  width: 50%;  margin: 10px auto;} */
+/* #dat_ini, #dat_fin{ float: left; display: block; margin: 10px 10%; } */
+/* #dini, #dfin{ width: 40%; margin: 10px auto}
+#dboton{width: 50%; margin: 30px 41%; }
+#fenviar{display: block; margin: 20px   auto} */
+
+/* .link{ background-color: rgb(190, 255, 190); color: white; border: 2px; padding: 3px ;} */
+.tabla{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 15px  }
+.tabla th{ border: 1px solid; background-color: lightgreen(15, 104, 82); color: black; font-size: 1.1em; height: 1.1em; text-align: center;}
+.tabla tr{ border: 1px solid; background-color: rgb(164, 190, 90); }
+.tabla td{ border: 1px solid; }
+.tabla tr:nth-child(odd){ background-color:rgb(183, 213, 251); }
+.tabla tr:nth-child(even){ background-color: rgb(249, 249, 255); }
+.tabla tr td{font-size: 1em; height: 1em;}
+
+#info{width: 50% ; margin: 15px auto; }
+#info p{ font-size: 1.2em; font-weight: bold;}
