@@ -297,17 +297,14 @@ def getLineas(request):
         return HttpResponse(txtJson)    
 
     return HttpResponse('null')
-
-
             
-def imprimirGfh( request):
-    gfh = 'expgfh/'
-    if request.method == 'POST':
-        if request.POST['tbenlace']:
-            gfh += request.POST['tbenlace']
-    print('LINK: ', gfh)
-    return render( request, 'imprimirGfh.html', {'gfh': gfh})
-
+# def imprimirGfh( request):  #borrar .....
+#     gfh = 'expgfh/'
+#     if request.method == 'POST':
+#         if request.POST['tbenlace']:
+#             gfh += request.POST['tbenlace']
+#     print('LINK: ', gfh)
+#     return render( request, 'imprimirGfh.html', {'gfh': gfh})
 
 def getPedTemp( request ):
     lista = []
@@ -350,33 +347,34 @@ def getPedTemp( request ):
         return HttpResponse(txtJson)
 
 def gestPedidos( request ):
+    hospi = hospitales.objects.all()
 
     if request.method == 'POST':
-        formGest = formGpedidos(request.POST)
-        if formGest.is_valid():
-            info = formGest.cleaned_data
-            albaran = info['albaran']
-            usuario = info['usuario']
-            fecha = info['fecha']
+        pass
+        # formGest = formGpedidos(request.POST)
+        # if formGest.is_valid():
+        #     info = formGest.cleaned_data
+        #     albaran = info['albaran']
+        #     usuario = info['usuario']
+        #     fecha = info['fecha']
             
-            Thospital = None; Tusuarios = None; Tgfhs = None; Tarticulos = None; Tusuarios = None
+        #     Thospital = None; Tusuarios = None; Tgfhs = None; Tarticulos = None; Tusuarios = None
 
-            if usuario:
-                Tusuarios = usuarios.objects.get(ident=usuario)
+        #     if usuario:
+        #         Tusuarios = usuarios.objects.get(ident=usuario)
             
-            pedidoFilas = pedidos.objects.filter(npedido=albaran).select_related()
-            pedidoIdent = pedidos_ident.objects.filter(pedido=albaran)
+        #     pedidoFilas = pedidos.objects.filter(npedido=albaran).select_related()
+        #     pedidoIdent = pedidos_ident.objects.filter(pedido=albaran)
             
-            print(str(info))
-            print('Cuantos: ', len(pedidoFilas))
+        #     print(str(info))
+        #     print('Cuantos: ', len(pedidoFilas))
             
-            return render( request, 'gestPedidos.html',{'datos': pedidoFilas, 'npedido': pedidoIdent})
+        #     return render( request, 'gestPedidos.html',{'datos': pedidoFilas, 'npedido': pedidoIdent})
     else:
 
         formGest = formGpedidos()
 
-
-    return render( request, 'gestPedidos.html', {'formulario': formGest})
+    return render( request, 'gestPedidos.html', {'formulario': formGest, 'hospitales': hospi})
 
 def getAlbaranes( request ):
     lista = []
@@ -384,6 +382,7 @@ def getAlbaranes( request ):
     if request.method == 'GET':
         cal_ini = request.GET['cal_ini']
         cal_fin = request.GET['cal_fin']
+
         bloque = """{"albaran": "","fecha": ""  """
         res = pedidos_ident.objects.filter(fecha__range=[ cal_ini, cal_fin])
         #print('QueriSet: ', str(res))
@@ -400,7 +399,7 @@ def getAlbaranes( request ):
         return HttpResponse(txtJson)
 
 def gpedidos( request ):
-    
+    albaran = ''
     if request.method == 'GET':
         albaran = request.GET['albaran']
         print('Res: ', albaran)
@@ -409,4 +408,48 @@ def gpedidos( request ):
 
         return render( request, 'gpedidos.html',{'datos': pedidoFilas, 'npedido': pedidoIdent})
 
-    return HttpResponse( albaran )
+    return HttpResponse(None)
+
+def impresion( request):
+
+    filas = addRefPedido.objects.all()
+    nfilas = None
+    if request.method == 'POST':
+        if 'remove' in request.POST:
+            pass
+            nfilas = addRefPedido.objects.all().delete()[0]
+
+        if 'upload' in request.POST:
+            excel = Excell( 'data-xlsx' )
+            ret = ['ubicacion','codigo','nombre','pacto','gfh']
+            excel.insertar_rangofila( ret , 1 , 1 )
+            excel.salvarexcell2()
+            lista = []
+            ultimaFila = 2
+            for i in filas:
+                lista.append(i.ubicacion)
+                lista.append(i.codigo)
+                lista.append(i.nombre)
+                lista.append(i.pacto)
+                lista.append(i.gfh)
+                excel.insertar_rangofila( lista , ultimaFila , 1 )
+                lista.clear()
+                ultimaFila += 1
+            excel.salvarexcell2()
+
+            import os
+            fila = MEDIA_ROOT +'/data-xlsx.xlsx' 
+            with open( fila , 'rb') as fh:
+                #print('ENTRO')
+                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+                response['Content-Disposition'] = 'inline; filename=' + os.path.basename( fila )
+                return response
+            
+    return render(request,'impresion.html',{ 'filas': filas, 'nfilas': nfilas })
+
+def gestPedidosDC(request):
+    hospi = hospitales.objects.all()
+
+    return render(request,'gestPedidosdc.html', {'hospitales': hospi})
+
+

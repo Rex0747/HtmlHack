@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/gestPedidosdc.js' %}></script>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/gestPedidosdc.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    <title>PedidosDC</title>
+
+</head>
+<body>
+    {% include 'head.html' %}
+    <div class="loader"></div>
+    <div id="cont-form">
+            <div id="dhosp" >
+                <label for="Shospital">Hospital:
+                <select id="Shospital" name="Shospital" class="">
+                    {% for i in hospitales %}
+                        <option  value={{i.codigo}}>{{i.nombre}}</option>
+                    {% endfor %}
+                </select></label>
+            </div>
+            <div id="dini">
+                <label for="dat_ini">Fecha ini:
+                <input type="date" id="dat_ini" data-date-format="DD/MM/YYYY"></label>
+            </div>
+            <div id="dfin">
+                <label for="dat_fin">Fecha fin:
+                <input type="date" id="dat_fin" data-date-format="DD/MM/YYYY"></label>
+            </div>
+            <div id="dboton">
+                <button type="button" id="fenviar" class="btn-outline-primary" >Recoger Albaranes</button>
+            </div>
+    </div>
+
+
+</body>
+</html>

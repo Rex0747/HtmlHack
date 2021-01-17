@@ -49,20 +49,20 @@ urlpatterns = [
     path('pedido/', v2.pedido),
     path('stocks/<modo>' , v3.Stocks),
     path('expdisp/<disp>', v2.imprimirEtiquetas),
-    path('addEtiqueta', v2.addLineaEtiqueta),
+    #path('addEtiqueta', v2.addLineaEtiqueta),
     path('pedidodc/<data>', v2.pedidodc ),
-    #path('imprimirgfh/',v2.imprimirGfh ),
+    path('impresion/',v2.impresion ),
     path('selarticulo', v1.selarticulo ),
     path('actPactos', v1.ActualizarPactos ),
     path('gestPedidos', v2.gestPedidos),
+    path('gestPedidosDC', v2.gestPedidosDC ),
     path('gpedidos', v2.gpedidos),
     path('getHospital', v1.getHospital ),  #ajax 
     path('getUgs', v1.getUgs ),            #ajax
     path('getConf', v1.getConf ),          #ajax
     path('getPedTemp', v2.getPedTemp ),    #ajax
     path('getAlbaranes', v2.getAlbaranes ),#ajax
-    path('getLineas', v2.getLineas ),      #ajax 
-
+    path('getLineas', v2.getLineas ),      #ajax     
 ]
 
 if settings.DEBUG:

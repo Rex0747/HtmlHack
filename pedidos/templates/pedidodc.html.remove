@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 {% load  static %}
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
@@ -15,7 +15,7 @@
             {% csrf_token %}
             <label>GFH a pedir</label>
             <a name="dir" href={{direccion}}>enlace</a>
-           
+
             <input type="submit" name="sboton" id="sboton">
 
         </form>

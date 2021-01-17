@@ -140,7 +140,7 @@ def upload_fileNew(request):
 
                 except Exception as e:
                     print('Hubo un fallo.', str(e))
-                    transaction.rollback()
+                    #transaction.rollback()
 
     return render(request, 'SubirConfig.html', {'uploaded_file': file_url , 'borradas': borradas, 'nfilas': nfilas })
 
