@@ -14,12 +14,12 @@ $(document).ready(function(){
     despDisp.hide();
     boton.hide();
     
-    despHospital.change(CHospital); 
+    despHospital.change( CHospi() ); 
     despGfh.change( Cgfh);
     despDisp.change( Cdisp);
 });
 
-function CHospital(e){
+function CHospi(e){
 
     alert(e.target.value);
     console.log(e.target.value);
@@ -39,17 +39,17 @@ function CHospital(e){
         }
 
 
-    despGfh.style.display = 'block';
+    despGfh.show();
 
 
     });
-}
+};
 
 function Cgfh(e){
 
 
-    boton.style.display = 'block';
-    tabla.style.display = 'block';
+    boton.show();
+    tabla.show();
 };
 
 function Cdisp(){
@@ -58,6 +58,6 @@ function Cdisp(){
 }
 
 function mostrarTabla(){
-    $('#tabla').style.display = 'block';
+    tabla.show();
     
 }
