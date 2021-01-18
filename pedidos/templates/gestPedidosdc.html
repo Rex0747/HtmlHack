@@ -19,24 +19,28 @@
     <div class="loader"></div>
     <div id="cont-form">
             <div id="dhosp" >
-                <label for="Shospital">Hospital:
-                <select id="Shospital" name="Shospital" class="">
+                <label for="Shospital"><strong>Hospital:</strong>
+                <select id="Shospital" name="Shospital" class="form-control">
+                    <option >SELECCIONE HOSPITAL</option>
                     {% for i in hospitales %}
                         <option  value={{i.codigo}}>{{i.nombre}}</option>
                     {% endfor %}
                 </select></label>
             </div>
             <div id="dini">
-                <label for="dat_ini">Fecha ini:
-                <input type="date" id="dat_ini" data-date-format="DD/MM/YYYY"></label>
+                <label for="dat_ini"><strong>Fecha inicio:</strong>
+                <input type="date" id="dat_ini" data-date-format="DD/MM/YYYY" class="form-control"></label>
             </div>
             <div id="dfin">
-                <label for="dat_fin">Fecha fin:
-                <input type="date" id="dat_fin" data-date-format="DD/MM/YYYY"></label>
+                <label for="dat_fin"><strong>Fecha fin:</strong>
+                <input type="date" id="dat_fin" data-date-format="DD/MM/YYYY" class="form-control"></label>
             </div>
             <div id="dboton">
                 <button type="button" id="fenviar" class="btn-outline-primary" >Recoger Albaranes</button>
             </div>
+            <table id="tabla" class="tabla">
+
+            </table>
     </div>
 
 

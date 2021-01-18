@@ -57,11 +57,13 @@ urlpatterns = [
     path('gestPedidos', v2.gestPedidos),
     path('gestPedidosDC', v2.gestPedidosDC ),
     path('gpedidos', v2.gpedidos),
+    path('gpedidosdc', v2.gpedidosdc),
     path('getHospital', v1.getHospital ),  #ajax 
     path('getUgs', v1.getUgs ),            #ajax
     path('getConf', v1.getConf ),          #ajax
     path('getPedTemp', v2.getPedTemp ),    #ajax
     path('getAlbaranes', v2.getAlbaranes ),#ajax
+    path('getAlbaranesdc', v2.getAlbaranesdc),#ajax
     path('getLineas', v2.getLineas ),      #ajax     
 ]
 

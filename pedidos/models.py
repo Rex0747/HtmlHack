@@ -31,10 +31,10 @@ class pedidos(models.Model):
 
 class pedidos_dc(models.Model):
     npedido=models.CharField(max_length=12)
-    hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
-    gfh=models.ForeignKey( gfhs ,on_delete=models.CASCADE )
     codigo=models.ForeignKey( articulos  ,on_delete=models.CASCADE )
     cantidad=models.FloatField()
+    disp=models.ForeignKey(dispositivos, on_delete=models.CASCADE )
+    gfh=models.ForeignKey( gfhs ,on_delete=models.CASCADE )
 
     def __str__(self):
         return '%s %s %s %s %s' %( self.npedido, self.hospital, self.gfh, self.codigo, self.cantidad )
@@ -59,7 +59,8 @@ class pedidos_ident(models.Model):
 class pedidos_ident_dc(models.Model):
     pedido=models.CharField(max_length=12)
     fecha=models.DateTimeField(auto_now=True)
-
+    hospital=models.ForeignKey( hospitales ,on_delete=models.CASCADE )
+    
     def __str__(self):
         return '%s %s' %( self.pedido, self.fecha)
 

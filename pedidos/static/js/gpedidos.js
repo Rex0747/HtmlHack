@@ -11,8 +11,6 @@ $(document).ready(function(){
 
 function Eboton(){
 
-    // cal_ini = new Date(calIni.val());
-    // cal_fin = new Date(calFin.val());
     cal_ini = calIni.val();
     cal_fin = calFin.val();
     console.log(cal_ini);

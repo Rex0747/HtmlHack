@@ -187,9 +187,9 @@ def imprimirEtiquetas( request, disp):
 def pedidodc( request, data ):
     mtx = json.loads( data )
     print('TYPE: ',type(mtx))
-    #print('MTX: ', mtx)
+    print('Lista: ', mtx)
     listaM = []
-
+    hospital = ''
     for i in mtx:         #va a hacer falta el codigo ubicacion dispositivo gfh hospital
         try:
             listaT = []
@@ -201,9 +201,10 @@ def pedidodc( request, data ):
             listaT.append(i['gfh'])
             listaT.append(i['dispositivo'])
             listaT.append(i['hospital'])
-            listaM.append(listaT)    
+            listaM.append(listaT)
+            hospital = i['hospital']
             listaT = []
-            
+            print('PASOOO.')
         except Exception as e:
             print('Exception ', str(e))
 
@@ -211,7 +212,7 @@ def pedidodc( request, data ):
     try:
         npedido = funciones.GenNumPedido()
         funciones.InsertarPedido_dc(listaM,npedido)
-        funciones.InsertarAlbaranPedido_dc( npedido )
+        funciones.InsertarAlbaranPedido_dc( npedido, hospital )
     except Exception as e:
         print('Exception Insertar pedido DC', str(e))
         HttpResponse.status_code = 400
@@ -398,6 +399,30 @@ def getAlbaranes( request ):
         print('Resultado: ', str(txtJson))
         return HttpResponse(txtJson)
 
+def getAlbaranesdc( request ):
+    lista = []
+    mtx = []
+    if request.method == 'GET':
+        cal_ini = request.GET['cal_ini']
+        cal_fin = request.GET['cal_fin']
+        hospital = request.GET['hospital']
+
+        bloque = """{"albaran": "","fecha": "","hospital": ""  """
+        res = pedidos_ident_dc.objects.filter(fecha__range=[ cal_ini, cal_fin],hospital=hospitales.objects.get(codigo=hospital))
+        #print('QueriSet: ', str(res))
+        f_json = Json(bloque)
+        for i in res:
+            mtx.append(i.pedido)
+            mtx.append(str(i.fecha.date()))
+            mtx.append(hospital)
+            #print('typo: ',type(i.fecha))
+            lista.append(mtx)
+            mtx = []
+
+        txtJson = f_json.crearJson(lista)
+        print('ResultadoDC: ', str(txtJson))
+        return HttpResponse(txtJson)
+
 def gpedidos( request ):
     albaran = ''
     if request.method == 'GET':
@@ -407,6 +432,18 @@ def gpedidos( request ):
         pedidoIdent = pedidos_ident.objects.filter(pedido=albaran)
 
         return render( request, 'gpedidos.html',{'datos': pedidoFilas, 'npedido': pedidoIdent})
+
+    return HttpResponse(None)
+
+def gpedidosdc( request ):
+    albaran = ''
+    if request.method == 'GET':
+        albaran = request.GET['albaran']
+        print('Res: ', albaran)
+        pedidoFilas = pedidos_dc.objects.filter(npedido=albaran).select_related()
+        pedidoIdent = pedidos_ident_dc.objects.filter(pedido=albaran)
+
+        return render( request, 'gpedidosdc.html',{'datos': pedidoFilas, 'npedido': pedidoIdent})
 
     return HttpResponse(None)
 
