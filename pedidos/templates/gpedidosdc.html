@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de pedidos</title>
+    <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}> -->
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/gpedidosdc.js' %} ></script>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/gpedidos.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+</head>
+<body>
+    {% include 'head.html' %}
+    <div id="cont1">
+        <div id="info">
+                {% for i in npedido %}
+                    <p>Fecha emision del pedido:&nbsp{{i.fecha}}</p>
+                    <p>Hospital:&nbsp{{i.hospital.nombre}}</p>
+                    <p>Codigo pedido:&nbsp{{i.pedido}}</p>
+                {% endfor %}
+        </div>
+
+        <table id="Tpedido" name="Tpedido" class="tabla">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Dispositivo</th>
+                        <th>Gfh</th>
+                    </tr>
+                {% for i in datos %}
+                    <tr>
+                        <td>{{i.codigo.codigo}}</td>
+                        <td>{{i.codigo.nombre}}</td>
+                        <td>{{i.cantidad}}</td>
+                        <td>{{i.disp.nombre}}</td>
+                        <td>{{i.gfh.gfh}}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </table> 
+
+            <button type="submit" id="tenviar" class="btn-outline-primary" >Subir Datos</button>
+            
+            <table id="tabla" class="tabla">
+
+            </table>
+    </div>
+    
+</body>
+</html>

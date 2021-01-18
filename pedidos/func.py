@@ -27,7 +27,7 @@ class funciones:
         datos = []
         listaM = []
         for i in mtx:
-            datos = i.split('~')
+            datos = i.split('*')
             print(datos)
             listaT = []
             listaT.append( datos[0])
@@ -155,7 +155,7 @@ class funciones:
 
     @staticmethod
     def CrearExcel_2( lista, filexcel=None ): #0 ubic  1 cod  2 nombre 3 pacto  4 gfh  5 disp  6 hosp
-        print( 'CrearExcel_2_Array: ', str(lista))
+        #print( 'CrearExcel_2_Array: ', str(lista))
         tiempo = datetime.datetime.now()
         tiempo = str(tiempo.day)+str(tiempo.month)+str(tiempo.year)
         if filexcel is None:
@@ -164,7 +164,7 @@ class funciones:
             print('GFH: ', lista[1])
             filexcel = MEDIA_ROOT + '/pedidos/'+ lista[0][4] + tiempo + '.xlsx'
         
-        print('FileExcel: ', filexcel)
+        #print('FileExcel: ', filexcel)
         excel = Excell( filexcel )
         #print('Datos Hospital : ', str(lista))
         for i in lista:
@@ -176,9 +176,11 @@ class funciones:
         return filexcel
 
     @staticmethod
-    def InsertarAlbaranPedido_dc( npedido ):
+    def InsertarAlbaranPedido_dc( npedido, hospital ):
+        #print('HOSPITAL: ', hospital)
         dbped_ident=pedidos_ident_dc()
         dbped_ident.pedido=npedido
+        dbped_ident.hospital=hospitales.objects.get(codigo=hospital)
         dbped_ident.save()
 
     @staticmethod
@@ -194,6 +196,7 @@ class funciones:
         print('InsertarPedido DC: ', str(datos))
         nomExcel = 'data'
         listaM = []
+        hospital = datos[0][6]
         for i in datos:
             #print(str(i))
             listaT = []
@@ -205,17 +208,17 @@ class funciones:
             listaT.append( i[5] ) #dispositivo      5
             listaT.append( i[6] ) #hospital         6
             listaM.append(listaT)
-            #user_temp = i[6] 
+            
             if npedido != None:
                 ped = pedidos_dc()
-                ped.hospital= hospitales.objects.get(codigo=i[6]) #hospitales.objects.get(id=i[0])
+            #    ped.hospital= hospitales.objects.get(codigo=i[6])
                 ped.npedido=npedido
-                ped.gfh = gfhs.objects.get(gfh=i[4], nombre=i[5])  #gfhs.objects.get(id=i[1])
-                #ped.disp=dispositivos.objects.get(id=listaT[2])
-                ped.codigo= articulos.objects.get(codigo=i[1], hospital_id=ped.hospital.id ) #articulos.objects.get(idsel=i[3])
+                ped.gfh = gfhs.objects.get(gfh=i[4], nombre=i[5])
+                ped.disp=dispositivos.objects.get(nombre=i[5])
+                ped.codigo= articulos.objects.get(codigo=i[1], hospital_id=hospitales.objects.get(codigo=hospital) ) #articulos.objects.get(idsel=i[3])
                 ped.cantidad= i[3] #i[4]
                 ped.save()
-                #CrearExcel( codigo, cantidad, gfh, dispositivo, hospital )
+                
         filexcel = funciones.CrearFicheroExcel(nomExcel)
         print('Fichero Excel: ', filexcel)
         funciones.CrearExcel_2( listaM )

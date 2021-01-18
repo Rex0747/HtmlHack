@@ -10,7 +10,7 @@
     <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/upload.css' %}> -->
     <link rel="STYLESHEET" type="text/css" href={% static 'css/actualizarPactos.css' %}>
     <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
-    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery351u.js' %}></script>
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/ActualizaPactos.js' %} ></script>
     
     <title>ActualizarPactos</title>
@@ -24,7 +24,7 @@
             <!-- <h2 id='titulo'>ACTUALIZAR PACTOS</h2> -->
             
             <div id="contHosp" name="contHosp" class="container">
-                <select name="selHospC" id="selhospC" class="form-control">
+                <select name="selHosp" id="selHosp" class="form-control">
                     <option name="opHosp" value="">SELECCIONE HOSPITAL:</option>
                     {% for i in hospital %}
                         <option name="opHosp" value={{i.codigo}}>{{i.codigo}}</option>
@@ -54,14 +54,14 @@
             <div id="contPacto" name="contPacto" class="container">
                 
                 <table id='tabla' class="config">
-                        <tr><th>REFERENCIA</th><th>DESCRIPCION</th><th>NUEVO PACTO</th><th>PACTO</th></tr>
+            <!--    <tr><th>REFERENCIA</th><th>DESCRIPCION</th><th>NUEVO</th><th>PACTO</th></tr>
                     {% for i in pacto %}
                         <tr><td><p>{{i.codigo}}</p></td><td><p>{{i.nombre.nombre}}</p></td><td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}*{{i.division}}" value="" class="input-group-text" 
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td><td>PACTO:{{i.pacto}}</td></tr>
 
-                    {% endfor %}
-
-                </table>
+                    {% endfor %} 
+            -->
+                </table>  
 
                         <input type="submit" id="boton" value="Modificar" class="btn-outline-primary">
 

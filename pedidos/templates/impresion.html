@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impresion</title>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/impresion.js' %} ></script>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/impresion.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+</head>
+<body>
+    {% include 'head.html' %}
+    <div class="loader"></div>
+    <div id="cont1">
+        <div id="tabla">
+            <table id="tabla" class="config">
+                <tr>
+                    <th>Ubicacion</th>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Pacto</th>
+                    <th>Gfh</th>
+                </tr>
+                {% for i in filas %}
+                    <tr>
+                        <td>{{i.ubicacion}}</td>
+                        <td>{{i.codigo}}</td>
+                        <td>{{i.nombre}}</td>
+                        <td>{{i.pacto}}</td>
+                        <td>{{i.gfh}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </tabla>
+    </div>
+    <div id="cont2">
+        <form id="form1" enctype="multipart/form-data" method="POST" >
+            {% csrf_token %}
+            <button type="submit" name="upload" id="upload" class="btn btn-primary">Descargar excell</button>
+            <button type="submit" name="remove" id="remove" class="btn btn-primary">Borrar lineas</button>
+        </form>
+    </div>
+    
+
+</body>
+</html>

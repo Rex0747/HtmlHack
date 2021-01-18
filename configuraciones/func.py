@@ -107,19 +107,20 @@ class Json:
                 self.jeiso += self.bloque + "}"
                         
         self.jeiso += "]"
-        #print('jeiso: ', self.jeiso)
         v = json.loads(self.jeiso)
-        
-        #print('V: ', str(v))
         j = 0
-        #print('filas: ', len(v))
-        #print(data)
+        k = 0
+        claves = []
         for i in v:
-            #print('Vuelta: ', str(j))
-            i['gfh'] = data[j][0]
-            i['nombre'] = data[j][1]
+            for s in i.keys():
+                claves.append(str(s))
+            break
+        for i in v:
+            k = 0
+            for x in i:
+                cl = claves[k]
+                i[cl] = data[j][k]
+                k += 1
             j += 1
+        #print('Res: ',str(v))
         return json.dumps(v)
-            
-    #print(jeiso)
-    #print(type(jeiso))
