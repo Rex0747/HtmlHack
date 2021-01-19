@@ -31,10 +31,12 @@ def pedido( request ):
         
         if request.POST.get('usuario', False):         #request.POST.get('is_private', False)
             print('Paso por 1º')
+            print(request.POST)
             datos = None
             filas = None
             npedido = None
-            user_temp = request.POST['usuario']  #usuarios.objects.get(ident=user).pk
+            user_temp = request.POST['usuario']        #usuarios.objects.get(ident=user).pk
+            hospi_ = request.POST['hosp']
             #user_passwd = request.POST['passwd']
             try:
                 #print(str(user_temp))
@@ -65,11 +67,11 @@ def pedido( request ):
             filexcel = funciones.CrearFicheroExcel()
             for i in datos:
                 #fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
-                pedi = pedidos_temp.objects.filter(disp_id=i[0], user_temp_id=user_pk).select_related('gfh','disp','codigo','user_temp')
+                pedido = pedidos_temp.objects.filter(disp_id=i[0], user_temp_id=user_pk).select_related('gfh','disp','codigo','user_temp')
 
-                funciones.InsertarPedido(pedi, npedido)
+                funciones.InsertarPedido(pedido, npedido)
                 #print('---------------------------------')
-            funciones.InsertarAlbaranPedido(user_pk, npedido )
+            funciones.InsertarAlbaranPedido(user_pk, npedido, hospi_ )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_pk).delete()
             print('Fichero Excel2: ', filexcel)
             #Activar en produccion
