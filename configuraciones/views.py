@@ -790,6 +790,7 @@ def getHospital(request):
     hospi = ''
     lista = []
     mtx = []
+    txtJson = None
     bloque = """{"gfh": "","nombre": "" """
 
     if request.method == 'GET':
@@ -802,10 +803,10 @@ def getHospital(request):
             mtx.append(i.nombre)
             lista.append(mtx)
             mtx = []
-        #print('Lista: ', lista)
+        print('Lista to Json: ', lista)
         txtJson = f_json.crearJson(lista)
 
-    #print('JSON: ' + txtJson)
+    print('JSON devuelto: ' + txtJson)
     return HttpResponse(txtJson)
 
 

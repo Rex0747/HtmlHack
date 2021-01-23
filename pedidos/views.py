@@ -71,7 +71,7 @@ def pedido( request ):
 
                 funciones.InsertarPedido(pedido, npedido)
                 #print('---------------------------------')
-            funciones.InsertarAlbaranPedido(user_pk, npedido, hospi_ )
+            funciones.InsertarAlbaranPedido(user_pk, npedido )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_pk).delete()
             print('Fichero Excel2: ', filexcel)
             #Activar en produccion

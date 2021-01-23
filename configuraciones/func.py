@@ -96,7 +96,7 @@ class Json:
     bloque = None
     def __init__(self, bloque ):
         self.bloque = bloque
-
+        print('Bloque: ', self.bloque)
     def crearJson(self,data):
         j = 0
         for i in range(len(data)):
@@ -111,10 +111,12 @@ class Json:
         j = 0
         k = 0
         claves = []
+        print('V0: ', v )
         for i in v:
             for s in i.keys():
                 claves.append(str(s))
             break
+        print('Claves: ', claves)
         for i in v:
             k = 0
             for x in i:
