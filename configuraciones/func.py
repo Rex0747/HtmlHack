@@ -2,6 +2,7 @@
 from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos
 from django.db.models import Max
 import json 
+from HtmlHack.settings import MEDIA_ROOT
 
 class funcConf:
 
@@ -75,6 +76,7 @@ class funcConf:
     @staticmethod
     def SetMaxId_gfh(gfh, disp, hosp):
         c1 = None
+        idconfig = ''
         try:
             c1 = configurations.objects.filter(gfh=gfh,disp=disp,hosp=hosp)#.count()
             idconfig = c1.aggregate(Max('nconfig'))
@@ -86,43 +88,49 @@ class funcConf:
         idconfig  = idconfig['nconfig__max']
         return idconfig
 
+    @staticmethod
+    def log( txt ):
+        fila = open(MEDIA_ROOT +'/debug.log', 'w+')
+        fila.write(txt)
+        fila.close()
+
 #-----------------------------JSON----------------------------------------------------------------
 
 
 
-class Json:
-    jeiso = "["
-    #bloque = """{"gfh": "","nombre": "" """  
-    bloque = None
-    def __init__(self, bloque ):
-        self.bloque = bloque
-        print('Bloque: ', self.bloque)
-    def crearJson(self,data):
-        j = 0
-        for i in range(len(data)):
-            if j < len(data) -1:
-                self.jeiso += self.bloque + "},"
-                j += 1
-            else:
-                self.jeiso += self.bloque + "}"
+# class Json:
+#     jeiso = "["
+#     #bloque = """{"gfh": "","nombre": "" """  
+#     bloque = None
+#     def __init__(self, bloque ):
+#         self.bloque = bloque
+#         print('Bloque: ', self.bloque)
+#     def crearJson(self,data):
+#         j = 0
+#         for i in range(len(data)):
+#             if j < len(data) -1:
+#                 self.jeiso += self.bloque + "},"
+#                 j += 1
+#             else:
+#                 self.jeiso += self.bloque + "}"
                         
-        self.jeiso += "]"
-        v = json.loads(self.jeiso)
-        j = 0
-        k = 0
-        claves = []
-        print('V0: ', v )
-        for i in v:
-            for s in i.keys():
-                claves.append(str(s))
-            break
-        print('Claves: ', claves)
-        for i in v:
-            k = 0
-            for x in i:
-                cl = claves[k]
-                i[cl] = data[j][k]
-                k += 1
-            j += 1
-        #print('Res: ',str(v))
-        return json.dumps(v)
+#         self.jeiso += "]"
+#         v = json.loads(self.jeiso)
+#         j = 0
+#         k = 0
+#         claves = []
+#         print('V0: ', v )
+#         for i in v:
+#             for s in i.keys():
+#                 claves.append(str(s))
+#             break
+#         print('Claves: ', claves)
+#         for i in v:
+#             k = 0
+#             for x in i:
+#                 cl = claves[k]
+#                 i[cl] = data[j][k]
+#                 k += 1
+#             j += 1
+#         #print('Res: ',str(v))
+#         return json.dumps(v)
