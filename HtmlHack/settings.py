@@ -131,6 +131,9 @@ STATIC_ROOT = os.path.join(BASE_DIR,'hacked/static/' )
 #__________________________________
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [ os.path.join(BASE_DIR,'configuraciones/static/' ),
+    os.path.join(BASE_DIR,'/static/pedidos' ),
+]
 
 print( 'Ruta estatica: ' +  os.path.join(BASE_DIR, 'hacked' ),'/static' )
 print( STATIC_ROOT + 'qrcode.png')

@@ -21,8 +21,9 @@ from django.db.models import Q
 import qrcode
 import glob
 import traceback
+import json
 
-from configuraciones.func import funcConf, Json
+from configuraciones.func import funcConf
 
 #from somewhere import handle_uploaded_file
 # Create your views here.
@@ -460,7 +461,7 @@ def addHospital( request ):
     #print('SQL: ', hospi.query)
     print('Hospitales: ', hospi)
 
-    return render(request, 'HospitalAdd.html', {'mensaje': mensaje,'hospitales': hospi} )
+    return render(request, 'hospitalAdd.html', {'mensaje': mensaje,'hospitales': hospi} )
 
 def AñadirFotosArticulos( request ):
     ruta = MEDIA_ROOT+'/articulos/'
@@ -752,82 +753,60 @@ def ActualizarPactos( request ):
     return render( request, 'actualizaPactos.html',{'hospital': hosp_update, }) #'dispositivo': disp
 
 def getConf(request):
-    lista = []
-    mtx = []
-    bloque = """{"modulo": "","estanteria": "","ubicacion": "","division": "","codigo": "","nombre": "","pacto": ""  """
+    txtJson = None
+    bloque = "["
+    #bloque = """{"modulo": "","estanteria": "","ubicacion": "","division": "","codigo": "","nombre": "","pacto": ""  """
     
     if request.method == 'GET':
-        #if request.POST['hospital'] and request.POST['ugs'] and request.POST['gfh']:
         hospital = request.GET['hospital']
-        #gfh = request.GET['gfh']
         ugs = request.GET['ugs']
         h = hospitales.objects.get(codigo=hospital).pk
         d = dispositivos.objects.get(nombre=ugs).pk
         g = dispositivos.objects.get(nombre=ugs).gfh
         conf = excel.objects.filter(gfh=g,disp=d,hosp=h)
-        #print('Cuantos: ', len(conf))
-        f_json = Json(bloque)
+        
         for i in conf:
-            #print(str(i))
-            mtx.append(i.modulo)
-            mtx.append(i.estanteria)
-            mtx.append(i.ubicacion)
-            mtx.append(i.division)
-            mtx.append(i.codigo)
-            mtx.append(i.nombre.nombre)
-            mtx.append(i.pacto)
+            bloque += '{"modulo": "%s","estanteria": "%s","ubicacion": "%s","division": "%s","codigo": "%s","nombre": "%s","pacto": "%s"},' %( i.modulo, i.estanteria, i.ubicacion, i.division, i.codigo, i.nombre, i.pacto)
+        res = bloque[ :-1] + "]"
+        j = json.loads(res)
+        txtJson = json.dumps(j)
 
-            lista.append(mtx)
-            mtx = []
-        #print('Lista: ', str(lista))
-        txtJson = f_json.crearJson(lista)
-        #print(str(txtJson))
     return HttpResponse(txtJson)
-
 
 def getHospital(request):
     #print(str(data))
     hospi = ''
-    lista = []
-    mtx = []
-    bloque = """{"gfh": "","nombre": "" """
+    txtJson = None
+    bloque = "["
 
     if request.method == 'GET':
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
         gfh = gfhs.objects.filter(hp_id=hosp.id).select_related()
-        f_json = Json(bloque)
+
         for i in gfh:
-            mtx.append(i.gfh)
-            mtx.append(i.nombre)
-            lista.append(mtx)
-            mtx = []
-        #print('Lista: ', lista)
-        txtJson = f_json.crearJson(lista)
-
-    #print('JSON: ' + txtJson)
+            bloque += '{"gfh": "%s","nombre": "%s"},' %( i.gfh, i.nombre)
+        res = bloque[ :-1] + "]"
+        j = json.loads(res)
+        txtJson = json.dumps(j)
+    
     return HttpResponse(txtJson)
-
 
 def getUgs( request ):
     ugs = ''
-    lista = []
-    mtx = []
-    bloque = """{"gfh": "","ugs": "" """
+    txtJson = None
+    bloque = "["
     if request.method == 'GET':
         ugs = request.GET['ugs']
         hospi = request.GET['hospital']
-        #print('Hospital: ', hospi, '  UGS: ', ugs)
         hosp = hospitales.objects.get(codigo=hospi)
-        ugs = gfhs.objects.filter(hp_id=hosp.id,gfh=ugs).select_related()
-        #print(ugs)
-        f_json = Json(bloque)
-        for i in ugs:
-            mtx.append(i.gfh)
-            mtx.append(i.nombre)
-            lista.append(mtx)
-            mtx = []
+        gfh = gfhs.objects.filter(hp_id=hosp.id,gfh=ugs).select_related()
+        for i in gfh:
+            bloque += '{"gfh": "%s","ugs": "%s"},' %( i.gfh, i.nombre)
+        res = bloque[ :-1] + "]"
+        j = json.loads(res)
+        txtJson = json.dumps(j)
+        print('txtJson: ', txtJson)
 
-        txtJson = f_json.crearJson(lista)
         return HttpResponse(txtJson)
-    
+

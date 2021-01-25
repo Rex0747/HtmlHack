@@ -184,11 +184,11 @@ class funciones:
         dbped_ident.save()
 
     @staticmethod
-    def InsertarAlbaranPedido( user_temp , npedido, hospital ):
+    def InsertarAlbaranPedido( user_temp , npedido ):
         dbped_ident=pedidos_ident()
         dbped_ident.pedido=npedido
         dbped_ident.user=usuarios.objects.get(id=user_temp)
-        dbped_ident.hospital=hospitales.objects.get(codigo=hospital)
+        #dbped_ident.hospital=hospitales.objects.get(codigo=hospital)
         dbped_ident.save()
         #deltem = pedidos_temp.objects.filter(disp_id=disp_id).delete()
 
@@ -245,12 +245,12 @@ class funciones:
             listaT.append( i.cantidad ) #cantidad  
             listaT.append( i.gfh.gfh ) #gfh           
             listaT.append( i.disp.nombre ) #dispositivo   
-            #listaT.append( i.hospital.codigo ) #hospital      
+            listaT.append( i.hospital.codigo ) #hospital      
             listaM.append(listaT)
 
             user_temp = i.user_temp 
             ped = pedidos()
-            #ped.hospital= i.hospital
+            ped.hospital= i.hospital
             ped.npedido=npedido
             ped.gfh= i.gfh
             ped.disp= i.disp

@@ -11,7 +11,7 @@ from HtmlHack.settings import MEDIA_ROOT
 from HtmlHack.settings import STATIC_ROOT
 from django.db import connection
 import json
-from configuraciones.func import funcConf, Json
+from configuraciones.func import funcConf
 from hashlib import blake2b
 from pedidos.forms import formGpedidos
 #__________________________________________________________
@@ -71,7 +71,7 @@ def pedido( request ):
 
                 funciones.InsertarPedido(pedido, npedido)
                 #print('---------------------------------')
-            funciones.InsertarAlbaranPedido(user_pk, npedido, hospi_ )
+            funciones.InsertarAlbaranPedido(user_pk, npedido )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_pk).delete()
             print('Fichero Excel2: ', filexcel)
             #Activar en produccion
@@ -269,6 +269,8 @@ def getLineas(request):
     lista = []
     mtx = []
     txtJson = None
+    bloque = "["
+    txtJson = None
     if request.method == 'GET':
         ubicacion = request.GET.get('ubicacion', False)
         codigo = request.GET.get('codigo', False)
@@ -279,23 +281,27 @@ def getLineas(request):
         disp = request.GET.get('disp', False)
         hospital = request.GET.get('hospital', False)
 
-        bloque = """{"mensaje": ""  """
-        f_json = Json(bloque)
+        #bloque = """{"mensaje": ""  """
+        #f_json = Json(bloque)
         try:
             res = addRefPedido(ubicacion=ubicacion,codigo=codigo,nombre=nombre,pacto=pacto,dc=dc,gfh=gfh,disp=disp,hospital=hospital)
             res.save()
             mtx.append('Linea insertada correctamente.')
             lista.append(mtx)
-            print('Resultado OK: ', str(txtJson))
+            #print('Resultado OK: ', str(txtJson))
             
         except Exception as e:
             mtx.append('Hubo un error al insertar datos. ' + str(e) )
             lista.append(mtx)
             print('Error: ', str(e))
-            print('Resultado KO: ', str(txtJson))
+            #print('Resultado KO: ', str(txtJson))
 
         finally:    
-            txtJson = f_json.crearJson(lista)
+            #txtJson = f_json.crearJson(lista)
+            bloque += '{"mensaje": "%s"  ' %( lista[0] )
+            res = bloque[ :-1] + "]"
+            j = json.loads(res)
+            txtJson = json.dumps(j)
             
         return HttpResponse(txtJson)    
 
@@ -310,42 +316,22 @@ def getLineas(request):
 #     return render( request, 'imprimirGfh.html', {'gfh': gfh})
 
 def getPedTemp( request ):
-    lista = []
-    mtx = []
-    bloque = """{"hospital": "","gfh": "","disp": "","codigo": "","nombre": "","cantidad": ""  """
+    txtJson = None
+    bloque = "["
+    #bloque = """{"hospital": "","gfh": "","disp": "","codigo": "","nombre": "","cantidad": ""  """
 
     if request.method == 'GET':
         hosp = request.GET['hospital']
-        #gfh = request.GET['gfh']
-        #disp = request.GET['dispositivo']
         user = request.GET['user']
-
         hospi = hospitales.objects.get(codigo=hosp)
-        #gfh = gfhs.objects.get(gfh=gfh,nombre=disp,hp_id=hospital.pk)
-        #dispo = dispositivos.objects.get(nombre=disp,gfh=gfh.pk)
         usuario = usuarios.objects.get(ident=user)
-
         res = pedidos_temp.objects.filter(hospital=hospi.id,user_temp=usuario.id).select_related()
-        #print('Resultado: ', str(res))
-        f_json = Json(bloque)
+        
         for i in res:
-            mtx.append(i.hospital.codigo)
-            mtx.append(i.gfh.gfh)
-            mtx.append(i.disp.nombre)
-            mtx.append(i.codigo.codigo)
-            mtx.append(i.codigo.nombre)
-            mtx.append(i.cantidad)
-            lista.append(mtx)
-            print(i.hospital.codigo)
-            print(i.gfh.gfh)
-            print(i.disp.nombre)
-            print(i.codigo.nombre)
-            print(i.codigo.codigo)
-
-            mtx = []
-        #print('LISTA: ', str(lista))
-        txtJson = f_json.crearJson(lista)
-
+            bloque += '{"hospital": "%s","gfh": "%s","disp": "%s","codigo": "%s","nombre": "%s","cantidad": "%s"},' %( i.hospital.codigo, i.gfh.gfh, i.disp.nombre, i.codigo.codigo, i.codigo.nombre, i.cantidad )
+        res = bloque[ :-1] + "]"
+        j = json.loads(res)
+        txtJson = json.dumps(j)
 
         return HttpResponse(txtJson)
 
@@ -380,49 +366,39 @@ def gestPedidos( request ):
     return render( request, 'gestPedidos.html', {'formulario': formGest, 'hospitales': hospi})
 
 def getAlbaranes( request ):
-    lista = []
-    mtx = []
+    txtJson = None
+    bloque = "["
     if request.method == 'GET':
         cal_ini = request.GET['cal_ini']
         cal_fin = request.GET['cal_fin']
 
-        bloque = """{"albaran": "","fecha": ""  """
+        #bloque = """{"albaran": "","fecha": ""  """
         res = pedidos_ident.objects.filter(fecha__range=[ cal_ini, cal_fin])
-        #print('QueriSet: ', str(res))
-        f_json = Json(bloque)
         for i in res:
-            mtx.append(i.pedido)
-            mtx.append(str(i.fecha.date()))
-            #print('typo: ',type(i.fecha))
-            lista.append(mtx)
-            mtx = []
-
-        txtJson = f_json.crearJson(lista)
-        print('Resultado: ', str(txtJson))
+            bloque += '{"albaran": "%s","fecha": "%s"},' %( i.pedido, i.fecha.date )
+        res = bloque[ :-1] + "]"
+        j = json.loads(res)
+        txtJson = json.dumps(j)
+        
         return HttpResponse(txtJson)
 
 def getAlbaranesdc( request ):
-    lista = []
-    mtx = []
+    txtJson = None
+    bloque = "["
     if request.method == 'GET':
         cal_ini = request.GET['cal_ini']
         cal_fin = request.GET['cal_fin']
         hospital = request.GET['hospital']
 
-        bloque = """{"albaran": "","fecha": "","hospital": ""  """
+        #bloque = """{"albaran": "","fecha": "","hospital": ""  """
         res = pedidos_ident_dc.objects.filter(fecha__range=[ cal_ini, cal_fin],hospital=hospitales.objects.get(codigo=hospital))
-        #print('QueriSet: ', str(res))
-        f_json = Json(bloque)
         for i in res:
-            mtx.append(i.pedido)
-            mtx.append(str(i.fecha.date()))
-            mtx.append(hospital)
-            #print('typo: ',type(i.fecha))
-            lista.append(mtx)
-            mtx = []
-
-        txtJson = f_json.crearJson(lista)
-        print('ResultadoDC: ', str(txtJson))
+            bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.date, i.hospital)
+        res = bloque[ :-1] + "]"
+        j = json.loads(res)
+        txtJson = json.dumps(j)
+        
+        
         return HttpResponse(txtJson)
 
 def gpedidos( request ):
