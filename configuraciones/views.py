@@ -38,7 +38,7 @@ def config1( request ):
     return render( request ,'ini.html', contexto )
 
 @transaction.atomic
-def upload_fileNew(request):
+def upload_file(request):
 
     file_url =None
     borradas=None
@@ -88,14 +88,14 @@ def upload_fileNew(request):
             if len( gfh ) > 0:
                 gfhdisp = gfh
 
-            # com = comprobar.comprobar_DC()
+            dc = comprobar.comprobar_DC()
 
-            #return HttpResponse(com)
-            if (columnas < 12) or (len( vacios ) > 1) or (len( duplicados ) > 0) or (len( gfh ) > 0):
+            print(str(columnas)+"  "+str(vacios)+"  "+str(duplicados)+"  "+str(gfh)+"  "+str(dc)   )
+            if (columnas < 12 or (len( vacios ) > 1) or (len( duplicados ) > 0) or (len( gfh ) > 0) or (len(dc ) > 0)):
                 #print('Columnas: ' + str(columnas) + '  Vacios: '+ str( vacios) + '  Duplicados: '+str(duplicados) + '  GfhD: '+ str(gfhdisp))
                 remove( MEDIA_ROOT +'/' + fichero.name )
-                return render( request, 'error.html', {'columnas': columnas, 'vacios': vacios, 'duplicados': duplicados ,'gfh': gfhdisp,})
-                
+                #return render( request, 'error.html', {'columnas': columnas, 'vacios': vacios, 'duplicados': duplicados ,'gfh': gfhdisp,})
+                return render( request, 'error.html', {'columnas': columnas ,'vacios': vacios, 'duplicados': duplicados, 'gfh': gfhdisp, 'dc': dc})
             #endregion 
             try:
                 dispo = dispositivos.objects.filter( nombre=listaExcel[0].dispositivo)[0] # objeto dispositivo
@@ -123,9 +123,11 @@ def upload_fileNew(request):
                     a = articulos.objects.get(codigo=itm.codigo, hospital=h)
                     
                 except Exception as e:
-                    a = articulos(codigo=itm.codigo, nombre=itm.nombre, hospital=h, foto='articulos/fotos-'+h.codigo+'/'+itm.codigo+'.png')
+                    nombreRep = itm.nombre.replace("\"","-")
+                    cod = str(itm.codigo)
+                    a = articulos(codigo=itm.codigo, nombre=nombreRep, hospital=h, foto='articulos/fotos-'+h.codigo+'/'+cod+'.png')
                     a.save()
-                    print('Se inserto articulo nuevo. ' )
+                    print('Se inserto articulo nuevo. ',cod+ ' ' + nombreRep  )
 
                 try:
                     a = articulos.objects.get(codigo=itm.codigo, hospital=h)
@@ -240,19 +242,22 @@ def download_file(request):
         for i in res:
             #print('objeto i: ' + str(i))
             #cod = articulos.objects.filter(idsel=i.nombre_id, hospital_id=hospital_id).values('codigo')[0].get('codigo')
-            cod = articulos.objects.filter(idsel=i.nombre_id).values('codigo')[0].get('codigo')
+            #cod = articulos.objects.filter(idsel=i.nombre_id).values('codigo')[0].get('codigo')
             #print('cod: '+ str(cod))
-            num = articulos.objects.filter( codigo=cod  ).count()
-            if num > 1:
+            hospital_id = hospitales.objects.get(codigo=hospital).pk #OJO-----
+            #num = articulos.objects.filter( codigo=cod , hospital=hospitales.objects.get(codigo=hospital).pk ).count()
+            
+            #if num > 1:
                 #print('Numero de ids de articulo: ' + str(num) + ' en id: '+ str(cod)) 
-                repes = articulos.objects.filter(codigo=cod, hospital_id=hospital_id)[0]
-                #print(str(repes.nombre))
+                #repes = articulos.objects.filter(codigo=cod, hospital_id=hospital_id)[0]
+                #print(str(repes.nombre))  #Codigo no funcion no debe llegar aqui nunca el codigo
                 
             try:
-                articulo = getIdDB(articulos.objects.filter(idsel=i.nombre_id , hospital_id=hospital_id), 'nombre')
+                #articulo = getIdDB(articulos.objects.filter(idsel=i.nombre_id , hospital_id=hospital_id), 'nombre')
+                articulo = articulos.objects.get(idsel=i.nombre_id , hospital_id=hospital_id).nombre
                 #print('objeto articulo: ' + str(articulo) + ' idsel: '+ str(i.nombre_id))
-                if num > 1:
-                    articulo = getIdDB(articulos.objects.filter(codigo=cod , hospital_id=hospital_id), 'nombre')
+                #if num > 1:
+                    #articulo = getIdDB(articulos.objects.filter(codigo=cod , hospital_id=hospital_id), 'nombre')
                     #articulo.nombre = repes.nombre
                     #print('Se cambio de nombre a codigo: ' +cod+ ' a: '+ repes.nombre )
             except Exception as e:
@@ -579,6 +584,7 @@ def selarticulo( request ):
     nombre = ''
     hospital = ''
     hospi = hospitales.objects.all()
+    art = ''
 
     if request.method == 'POST':
         if request.POST['art']:
@@ -783,12 +789,14 @@ def getHospital(request):
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
         gfh = gfhs.objects.filter(hp_id=hosp.id).select_related()
-
-        for i in gfh:
-            bloque += '{"gfh": "%s","nombre": "%s"},' %( i.gfh, i.nombre)
-        res = bloque[ :-1] + "]"
-        j = json.loads(res)
-        txtJson = json.dumps(j)
+        if len(gfh) > 0:
+            for i in gfh:
+                bloque += '{"gfh": "%s","nombre": "%s"},' %( i.gfh, i.nombre)
+            res = bloque[ :-1] + "]"
+            j = json.loads(res)
+            txtJson = json.dumps(j)
+        else:
+            return HttpResponse('0')
     
     return HttpResponse(txtJson)
 

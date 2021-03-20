@@ -5,7 +5,7 @@ from django.db import models
 class articulos(models.Model):
     idsel = models.AutoField( primary_key=True )
     codigo=models.CharField(max_length=6 ) #, unique=True
-    nombre=models.CharField(max_length=90)
+    nombre=models.CharField(max_length=150)
     cbarras=models.CharField(max_length=50, null=True)
     cbarras2=models.CharField(max_length=50 , null=True)
     hospital=models.ForeignKey( 'hospitales' ,on_delete=models.CASCADE )

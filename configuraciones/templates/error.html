@@ -32,6 +32,13 @@
                <br>
             {% endfor %}
 
+            <p class="perror">DC Y CODIGOS DEFECTUOSOS  : </p>
+            {% for i in dc %}
+               <label class="lberror">CODIGO: {{i}} &nbsp;&nbsp; REVISAR</label>
+               <br>
+            {% endfor %}
+
+
             <p class="perror">EXCEPCION : </p>
               <label class="lberror">{{ except }}</label>
               <br>
