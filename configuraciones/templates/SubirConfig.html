@@ -22,8 +22,11 @@
             <form id="formu" enctype="multipart/form-data" method="POST" >
                 {% csrf_token %}
                 <div id="cont1">
-                    <input type="file" name="upload" id="upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" >
-                    <button type="submit" id="boton" class="btn-outline-primary">SUBIR FILA</button>
+                    
+                        <legend>SUBIR EXCEL</legend>
+                        <input type="file" name="upload" id="upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" >
+                        <button type="submit" id="boton" class="btn-outline-primary">SUBIR FILA</button>
+                    
                 </div>
                 <div id="mensajes">
                     {% if uploaded_file %}

@@ -6,6 +6,7 @@ from openpyxl.styles import colors
 from openpyxl.cell import Cell
 from HtmlHack.settings import MEDIA_ROOT
 from openpyxl.utils import get_column_letter
+from collections import defaultdict
 
 class Excell:
     # openpyxl
@@ -314,11 +315,14 @@ class comprobarExcel:
             y += 1
             if i.hospital == None or i.hospital == '':
                 vacios.append( ( Excell.getNombreColumna(y) , str(x)) )
-        if len(vacios) > 0:
-            vacios.append( ( str(0) , str(0)) )
 
             y = 1
             x += 1
+
+        if len(vacios) > 0:
+            vacios.append( ( str(0) , str(0)) )
+
+        
         print('Vacios:' , vacios)
         return vacios
 
@@ -351,8 +355,20 @@ class comprobarExcel:
         return err
         
     def comprobar_DC(self):
-        if self.Lista[0].dc == '1' or self.Lista[0].dc=='2':
+        mtx = []
+        if self.Lista[1].dc == '1' or self.Lista[1].dc=='2':
             print('Configuracion Doble Cajon.')
+
+            for i in self.Lista:
+                mtx.append(i.codigo)
+            aux = defaultdict(list)
+            for index, item in enumerate(mtx):
+                aux[item].append(index)
+            result = {item: indexs for item, indexs in aux.items() if len(indexs) > 2 or len(indexs)==1}
+            return result
 
         elif self.Lista[0].dc == 'n' or self.Lista[0].dc=='s':
             print('Configuracion Cajon Simple.')
+            return mtx
+
+        return mtx

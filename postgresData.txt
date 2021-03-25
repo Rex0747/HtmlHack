@@ -1,0 +1,3 @@
+BD  conf2
+user conf
+passwd fnoc

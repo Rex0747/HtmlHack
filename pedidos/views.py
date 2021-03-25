@@ -52,12 +52,22 @@ def pedido( request ):
                 return HttpResponse("Error. "+str(e))
 
             #print(str(user_temp))
+            #___________________PRUEBAS DISTINCT__________________________
+            datos = pedidos_temp.objects.all().distinct('disp_id').order_by('disp_id')   #POSTGRESS
+            #print('DT: ', datos[0].disp_id )
+            #print('DT: ', datos[1].disp_id )
+            print("Consulta: ",datos.query)
+
+            #_______________________SQLITE_________________________________
             
-            with connection.cursor() as conn:
-                data = 'SELECT  DISTINCT disp_id FROM [pedidos_pedidos_temp] ORDER BY [id] ASC'
-                datos = conn.execute(data)
-                datos = datos.fetchall()
+            # with connection.cursor() as conn:
+            #     #data = 'SELECT  DISTINCT disp_id FROM [pedidos_pedidos_temp] ORDER BY [id] ASC' #SQLITE
+            #     data = 'SELECT  DISTINCT  disp_id FROM pedidos_pedidos_temp' #postgress
+            #     datos = conn.execute(data)
+            #     print("Datos: ", datos)
+            #     datos = datos.fetchall()
             #print(str(len(datos)))
+            
             tmpPed = True
             #npedido = GenNumPedido()
             while(tmpPed == True):
@@ -66,8 +76,8 @@ def pedido( request ):
                 
             filexcel = funciones.CrearFicheroExcel()
             for i in datos:
-                #fila = 'SELECT * FROM [pedidos_pedidos_temp]  WHERE disp_id='+ str(i[0]) +' and user_temp_id =' + str(user_temp) 
-                pedido = pedidos_temp.objects.filter(disp_id=i[0], user_temp_id=user_pk).select_related('gfh','disp','codigo','user_temp')
+                #pedido = pedidos_temp.objects.filter(disp_id=i[0], user_temp_id=user_pk).select_related('gfh','disp','codigo','user_temp') # SQLITE
+                pedido = pedidos_temp.objects.filter(disp_id=dispositivos.objects.get(id=i.disp_id), user_temp_id=user_pk).select_related('gfh','disp','codigo','user_temp') #POSTGRESS
 
                 funciones.InsertarPedido(pedido, npedido)
                 #print('---------------------------------')

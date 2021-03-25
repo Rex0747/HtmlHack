@@ -34,7 +34,7 @@ urlpatterns = [
     path('config1/', v1.config1 ),
     path('', v0.localhost ),
     path('df', v1.download_file),
-    path('uf', v1.upload_fileNew),
+    path('uf', v1.upload_file),
     path('articulos',v1.articulosAdd),
     path('addgfh',v1.gfhsAdd ),
     path('adddisp',v1.dispositivosAdd ),
