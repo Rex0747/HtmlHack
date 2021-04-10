@@ -48,10 +48,11 @@
                         <option label="Seleccione hospital"></option>
                         {% for i in hospitales %}
                             <!-- <p>{{i}}</p> -->
-                            <option  id={{i.codigo}} value="{{i.codigo}}*{{i.nombre}}*{{i.longitud}}*{{i.latitud}}*{{i.foto}}*{{i.comentario}}*{{i.link}}" label={{i.codigo}} >
+                            <option  id={{i.codigo}} value="{{i.codigo}}*{{i.nombre}}*{{i.longitud}}*{{i.latitud}}*{{i.foto}}*{{i.comentario}}*{{i.link}}" >{{i.nombre}}</option>
+                                
                         {% endfor %}
                     </select>
-                
+
             </div>
 
             

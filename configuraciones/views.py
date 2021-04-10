@@ -464,7 +464,7 @@ def addHospital( request ):
     
     hospi = hospitales.objects.all()
     #print('SQL: ', hospi.query)
-    print('Hospitales: ', hospi)
+    #print('Hospitales: ', hospi)
 
     return render(request, 'hospitalAdd.html', {'mensaje': mensaje,'hospitales': hospi} )
 
