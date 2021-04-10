@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from hacked import views as v0
@@ -24,15 +24,17 @@ from stocks import views as v3
 
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+#from HtmlHack import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #path('htmlhack/', include(urls)),
     path('vermeta/',v0.vermeta),
     path('index/' , v0.hack ),
     path('video/', v0.video , { 'plantilla': 'video.html','id':'djangorjar' }, ),
     path('envfichero/', v0.envfichero, { 'plantilla': 'parrafos.html','id':'envfichero'}, ),
     path('config1/', v1.config1 ),
-    path('', v0.localhost ),
+    path('', v0.localhost, name='indice'),
     path('df', v1.download_file),
     path('uf', v1.upload_file),
     path('articulos',v1.articulosAdd),
@@ -64,7 +66,8 @@ urlpatterns = [
     path('getPedTemp', v2.getPedTemp ),    #ajax
     path('getAlbaranes', v2.getAlbaranes ),#ajax
     path('getAlbaranesdc', v2.getAlbaranesdc),#ajax
-    path('getLineas', v2.getLineas ),      #ajax     
+    path('getLineas', v2.getLineas ),      #ajax  
+    
 ]
 
 if settings.DEBUG:

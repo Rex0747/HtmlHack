@@ -22,11 +22,13 @@
         <form id="formulario"  method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
+            <h2 id="titulo" class="subtitulo">CREAR GFH</h2>
+
             <div id="contHospCod" name="contHospCod" class="container">
                 <select name="addHospC" id="addhospC" class="form-control-sm elements">
                     <option name="opHosp" value="sel">SELECCIONE HOSPITAL:</option>
                     {% for i in hospital %}
-                        <option name="opHosp" value={{i.codigo}}>{{i.codigo}}</option>
+                        <option name="opHosp" value={{i.codigo}}>{{i.nombre}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -34,31 +36,25 @@
             <div id="contGfhCod" name="contGfhCod" class="container">
                 <input type="text" name="addgfhC" id="addgfhC" placeholder="GFH" class="form-control-sm elements">
             </div>
-            <!-- <div id="contGfhNom" name="contDisp">
-                <label>GFH nombre<input type="text" name="addgfhN" id="addgfhN" class="form-control"></label>
-            </div> -->
             <div id="contDisp" name="contDisp" class="container">
                 <input type="text" name="addisp" id="addisp" placeholder="DISPOSITIVO" class="form-control-sm elements">
             </div>
-            <!-- <div id="contHosp" name="contHosp" class="container">
-                <input type="text" name="hosp" id="hosp" value={{hospital}} class="form-control">
-            </div> -->
+            <div id="contDescripcion" name="contDescripcion" class="container">
+                <input type="text" name="descripcion" id="hosp" placeholder="DESCRIPCION DEL GFH" class="form-control-sm elements">
+            </div> 
             <div id="contBt" name="contBt" class="container">
                 <button type="submit" id="addDisGfh" name="addDisGfh" class="form-check-input elements">Añadir</button>
                 <label class="hvr-icon-forward">{{mensaje}}</label>
             </div>
         </form>
         </div>
-            <!--<label for="browser">GFHs:</label>
-            
-            <select id="dthosp" style="display: block"; >
-                {% for i in gfhs %}
-                    <option value={{i.gfh}} label={{i.gfh|add:"_______"|add:i.nombre}}>
-                {% endfor %} 
-            </select>-->
-            <h3 id="subtitulo" class="subtitulo">GFHs CONFIGURADOS</h3>
-            <div id="prb">
-                
+
+        <div id="gfhsConf">
+            <h2 id="subtitulo" class="subtitulo">GFHs ACTIVOS</h2>
+            <div id="gfhs">
+                <table id="tabla" class="config">
+
+                </table>
             </div>
         </div>
 

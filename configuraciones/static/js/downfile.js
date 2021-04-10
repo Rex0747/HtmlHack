@@ -26,7 +26,7 @@ function Chospital(e)
         for(let i=0; i<dataDev.length;i++){
             //alert('DISP: '+dataDev[i].nombre +  '  GFH: '+ dataDev[i].gfh  );
             // Sugs.append(`<option value="${dataDev[i].nombre}">${dataDev[i].nombre}</option>`);
-            Sgfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].gfh}</option>`);
+            Sgfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].descripcion}</option>`);
         }
     $('#Dgfh').show();
     $('#Dcode').show();

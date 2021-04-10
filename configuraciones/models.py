@@ -33,6 +33,7 @@ class gfhs(models.Model):
     gfh=models.CharField(max_length=4 ) #unique=True
     nombre=models.CharField(max_length=25, unique=True)
     hp_id=models.ForeignKey( 'hospitales' , models.SET_NULL,blank=True, null=True )
+    descripcion=models.CharField(max_length=128,null=True, blank=True)
     def __str__(self):
         return '%s %s' %(self.gfh, self.nombre)
 

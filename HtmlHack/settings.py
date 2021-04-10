@@ -84,14 +84,16 @@ WSGI_APPLICATION = 'HtmlHack.wsgi.application'
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db3.sqlite3'),
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'conf2',
-        'USER': 'conf',
-        'PASSWORD': 'fnoc',
-        'HOST': '192.168.1.14',
-        'PORT': '5432',
+        #_________SQLITE_____________
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db3.sqlite3'),
+        #_________POSTGRESS__________
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'conf2',
+        # 'USER': 'conf',
+        # 'PASSWORD': 'fnoc',
+        # 'HOST': '192.168.1.14',
+        # 'PORT': '5432',
     }
 }
 

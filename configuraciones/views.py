@@ -399,8 +399,6 @@ def adDispGfh( request ):
         pass
         #return render(request, 'addDispGfh.html',{ 'hospital': hosp_id })
 
-    
-
     if request.method == 'POST':
         if request.POST['addgfhC']:
             gfh = request.POST['addgfhC']
@@ -408,8 +406,10 @@ def adDispGfh( request ):
                 hosp_id = request.POST['addHospC']
             if request.POST['addisp']:
                 disp = request.POST['addisp']
+            if request.POST['descripcion']:
+                descripcion = request.POST['descripcion']
                 try:
-                    dataGfh = gfhs(gfh=gfh, nombre=disp, hp_id_id=hospitales.objects.get(codigo=hosp_id).pk)
+                    dataGfh = gfhs(gfh=gfh, nombre=disp,descripcion=descripcion, hp_id_id=hospitales.objects.get(codigo=hosp_id).pk)
                     dataGfh.save()
                     dataDisp = dispositivos(gfh_id=dataGfh.id, nombre=disp)
                     dataDisp.save()
@@ -788,10 +788,10 @@ def getHospital(request):
     if request.method == 'GET':
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
-        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related()
+        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh')
         if len(gfh) > 0:
             for i in gfh:
-                bloque += '{"gfh": "%s","nombre": "%s"},' %( i.gfh, i.nombre)
+                bloque += '{"gfh": "%s","nombre": "%s", "descripcion": "%s"},' %( i.gfh, i.nombre, i.descripcion)
             res = bloque[ :-1] + "]"
             j = json.loads(res)
             txtJson = json.dumps(j)
@@ -808,7 +808,7 @@ def getUgs( request ):
         ugs = request.GET['ugs']
         hospi = request.GET['hospital']
         hosp = hospitales.objects.get(codigo=hospi)
-        gfh = gfhs.objects.filter(hp_id=hosp.id,gfh=ugs).select_related()
+        gfh = gfhs.objects.filter(hp_id=hosp.id,gfh=ugs).select_related().order_by('gfh')
         for i in gfh:
             bloque += '{"gfh": "%s","ugs": "%s"},' %( i.gfh, i.nombre)
         res = bloque[ :-1] + "]"
