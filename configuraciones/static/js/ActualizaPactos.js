@@ -13,6 +13,7 @@ $(document).ready(function(){
     despGfh.hide();
     despDisp.hide();
     tabla.hide();
+    boton.hide();
     
     despHospital.change(CHospital);
     despGfh.change( Cgfh);
@@ -30,7 +31,7 @@ function CHospital(e){
     $.getJSON( ruta, datos, function(dataDev){
     despGfh.html("<option value=''>SELECCIONE GFH</option>");
     for(let i=0; i<dataDev.length;i++){
-        despGfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].gfh}</option>`);
+        despGfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].descripcion}</option>`);
     }
     despGfh.show();
 }); 
@@ -42,9 +43,11 @@ function Cgfh(e){
     prot = document.location.protocol;
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getUgs';
-    Shospital = $('#selHosp option:selected').text();
+    Shospital = $('#selHosp option:selected').val();//.text();
     datos = {  hospital: Shospital,  ugs: e.target.value };
     Sugs = $('#selDisp');
+    boton = $('#boton');
+    boton.hide();
     $.getJSON( ruta, datos, function(dataDev){
         console.log(JSON.stringify(dataDev));
         Sugs.html("<option value=''>SELECCIONE DSP</option>");
@@ -54,7 +57,7 @@ function Cgfh(e){
         }
 
         despDisp.show();
-        //boton.show();
+        
     });
     
 };
@@ -64,7 +67,7 @@ function Cdisp(e){
     prot = document.location.protocol;
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getConf';
-    Shospital = $('#selHosp option:selected').text();
+    Shospital = $('#selHosp option:selected').val();//.text();
     Sgfh = $('#selGfh option:selected').text();
     datos = { ugs: e.target.value, hospital: Shospital, gfh: Sgfh  };
     //console.log(Shospital + ' ' + Sgfh + ' ' + e.target.value )
@@ -80,6 +83,7 @@ function Cdisp(e){
         }
         
         tabla.show();
+        boton.show();
         //DcontPacto = $('#contPacto');
         //DcontPacto.append("<input type='submit' id='boton' value='Modificar' class='btn-outline-primary'>");
     

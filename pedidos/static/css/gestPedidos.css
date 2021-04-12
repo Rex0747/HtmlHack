@@ -5,7 +5,7 @@ body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 /* #info>p{ background-color: rgba(224, 235, 255, 0.9); width: 50%; margin: 15px auto;} */
 /* #tform{margin: auto;}
 #tform text{margin-top: 15px } */
-#cont-form{  width: 50%;  margin: 10px auto;}
+#cont-form{  width: 50%;  margin: 40px auto;}
 /* #dat_ini, #dat_fin{ float: left; display: block; margin: 10px 10%; } */
 
 #dini, #dfin{ width: 40%; margin: 10px auto}
@@ -21,3 +21,4 @@ body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 .tabla tr:nth-child(even){ background-color: rgb(249, 249, 255); }
 .tabla tr td{font-size: 1em; height: 1em;}
 
+.lbcal{ font-size: 1.5em; margin-left: 10px;}

@@ -385,7 +385,7 @@ def getAlbaranes( request ):
         #bloque = """{"albaran": "","fecha": ""  """
         res = pedidos_ident.objects.filter(fecha__range=[ cal_ini, cal_fin])
         for i in res:
-            bloque += '{"albaran": "%s","fecha": "%s"},' %( i.pedido, i.fecha.date )
+            bloque += '{"albaran": "%s","fecha": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S") )
         res = bloque[ :-1] + "]"
         j = json.loads(res)
         txtJson = json.dumps(j)
@@ -393,6 +393,7 @@ def getAlbaranes( request ):
         return HttpResponse(txtJson)
 
 def getAlbaranesdc( request ):
+    res = None
     txtJson = None
     bloque = "["
     if request.method == 'GET':
@@ -400,14 +401,17 @@ def getAlbaranesdc( request ):
         cal_fin = request.GET['cal_fin']
         hospital = request.GET['hospital']
 
-        #bloque = """{"albaran": "","fecha": "","hospital": ""  """
         res = pedidos_ident_dc.objects.filter(fecha__range=[ cal_ini, cal_fin],hospital=hospitales.objects.get(codigo=hospital))
-        for i in res:
-            bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.date, i.hospital)
-        res = bloque[ :-1] + "]"
-        j = json.loads(res)
-        txtJson = json.dumps(j)
         
+        if len(res) > 0:
+            for i in res:
+                bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S"), i.hospital)
+                #print('Fecha: ', str(i.fecha.strftime("%d/%m/%Y %H:%M:%S")), ' Tipo: ', type(i.fecha.strftime("%d/%m/%Y %H:%M:%S")))
+            res = bloque[ :-1] + "]"
+            j = json.loads(res)
+            txtJson = json.dumps(j)
+        else:
+            txtJson = "-1"
         
         return HttpResponse(txtJson)
 

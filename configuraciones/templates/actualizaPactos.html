@@ -25,12 +25,12 @@
             
             <div id="contHosp" name="contHosp" class="container">
                 <select name="selHosp" id="selHosp" class="form-control">
-                    <option name="opHosp" value="">SELECCIONE HOSPITAL:</option>
+                    <option name="opHosp" value="" >SELECCIONE HOSPITAL:</option>
                     {% for i in hospital %}
-                        <option name="opHosp" value={{i.codigo}}>{{i.codigo}}</option>
+                        <option name="opHosp" value={{i.codigo}}>{{i.nombre}}</option>
                     {% endfor %}
                 </select>
-            </div>
+            </div> 
 
             <div id="contGfhC" name="contGfhC" class="container">
                 <select name="selGfh" id="selGfh" class="form-control">
