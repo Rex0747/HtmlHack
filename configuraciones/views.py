@@ -788,7 +788,7 @@ def getHospital(request):
     if request.method == 'GET':
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
-        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh')
+        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh') # Cuando se migre a POSTGRESS insertar el filtro DISTINCT
         if len(gfh) > 0:
             for i in gfh:
                 bloque += '{"gfh": "%s","nombre": "%s", "descripcion": "%s"},' %( i.gfh, i.nombre, i.descripcion)

@@ -26,7 +26,8 @@ $(document).ready(function(){
         $.getJSON( ruta, datos, function(dataDev){
             Sgfh.html("<option value=''>SELECCIONE GFH</option>");
             for(let i=0; i<dataDev.length;i++){
-                Sgfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].gfh}</option>`);
+                Sgfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].descripcion}</option>`);
+                console.log('Descripcion: '+dataDev[i].descripcion)
             }
             
             Sgfh.show();
@@ -38,7 +39,7 @@ $(document).ready(function(){
         prot = document.location.protocol;
         loc = document.location.host;
         ruta = prot +'//'+ loc + '/getUgs';
-        Shospital = $('#hospital option:selected').text();
+        Shospital = $('#hospital option:selected').val();//.text();
         datos = { ugs: e.target.value, hospital: Shospital };
 
         $.getJSON( ruta, datos, function(dataDev){
