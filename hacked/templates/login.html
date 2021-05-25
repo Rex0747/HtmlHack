@@ -1,0 +1,51 @@
+
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN</title>
+</head>
+<body>
+    <div id="container">
+        <form id="formlogin"  method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <h1 id="titulo">INICIAR SESION</h1>
+            {{form.as_p}}
+            <!-- <input type="text" name="user" id="user" placeholder="USUARIO" class="form-control ctexto">
+            <input type="text" name="passwd" id="passwd" placeholder="CONTRASEÑA" class="form-control ctexto">-->
+            <button type="submit" id="btn-entrar" class="btn btn-success">Entrar</button>
+            
+
+            {% if user.is_authenticated %}
+                <p>{{user}}</p>
+                <p>{{user.username | upper}}</p>
+                <a id="btn-logout" class="nav-link btn btn-secondary" href={% url '_logout' %}>logout</a>
+            {% endif %}
+
+            {% if messages%}
+                {%for message in messages %}
+                    <div class="notification {{message.tags}}" ></div>
+                    {{message}}
+                {% endfor %}
+            {% endif %}
+            
+        </form>
+        
+    </div>
+    
+</body>
+</html>
+<style>
+    #titulo{text-align: center; margin-top: 20px; margin-bottom: 20px;color: white;}
+    #container{width: 50%; height:400px; border: 1px solid; margin: 30px auto; background-color: rgb(133, 96, 221)}
+    #id_username{width: 50%; margin: auto; display: block}
+    #id_password{width: 50%; margin: auto; display: block}
+    #btn-entrar{ margin: auto; display: block; margin-top: 50px;}
+    label{ display: inline-block; margin-left: 25%}
+</style>
