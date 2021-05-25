@@ -149,6 +149,9 @@ def upload_file(request):
 
 
 def download_file(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+
     retorno = []
     nlineas = ''
     res = ''
@@ -591,8 +594,10 @@ def selarticulo( request ):
             nombre = request.POST['art']
             hospital = request.POST['hospi']
             #print('Hospital: ', hospital )
-
-    hosp_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
+    
+    #hosp_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
+    if hospital:
+        hosp_id = hospitales.objects.get(codigo=hospital).id
     #print( 'Hosp_id: ', hosp_id )
     #cursor = connection.cursor()
     #articulos = cursor.execute('SELECT codigo, nombre, foto from configuraciones_articulos  WHERE nombre LIKE  %s  AND hospital_id = %s ',[ '%'+nombre+'%', hosp_id ])
@@ -601,13 +606,20 @@ def selarticulo( request ):
 
     try:
         #art = articulos.fetchall()
+        usuario = str(request.session.get('user'))
+        print("USER: " + usuario )
+        request.session.set_expiry (360)
+        print(request.session.get_expiry_age())
+
         art = articulos.objects.filter(nombre__contains=nombre, hospital_id=hosp_id)
+        if len(art) == 0:
+            art = articulos.objects.filter(codigo__contains=nombre, hospital_id=hosp_id)
         #print(str(art))
 
     except Exception as e:
         print( 'Error: ', str(e) )
 
-    return render( request , 'selarticulo.html',{ 'articulos': art ,'hospitales': hospi } )
+    return render( request , 'selarticulo.html',{ 'articulos': art ,'hospitales': hospi, 'user': usuario } )
 
 @transaction.atomic
 def ActualizarPactos_Back( request ):
