@@ -40,7 +40,7 @@ function Cugs(e)
     prot = document.location.protocol;
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getUgs';
-    Shospital = $('#Shospital option:selected').text();
+    Shospital = $('#Shospital option:selected').val();  //text();
     datos = {  hospital: Shospital, ugs: e.target.value };
     //alert( e.target.value);
 
