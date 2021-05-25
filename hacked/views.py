@@ -1,11 +1,19 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
 from hacked.contenido import contenido
 from hacked.models import datos, enlaces
 
 #"<br><iframe id='vid1' width='640' height='480' src='https://www.youtube.com/embed/t7zQhKXEdbI' ></iframe>",'titulocont':'EL TIGRE DE MALASIA' }
 
 def hack( request ):
+	request.session['hospital'] = "HCSC"
+	request.session['user'] = "Rex" 
+
 	c = contenido()
 	contexto = c.v2()
 	return render(request,'index.html',{'title': 'HACKED' ,'ticont':'INTROSERVER', 'context': contexto , 'titulocont': 'PARRAFO DE PRUEBA' })    #HACKEDMATTE{
@@ -29,3 +37,47 @@ def vermeta( request ):
 def localhost( request ):
 
 	return HttpResponse('ESTAS EN LOCALHOST.')
+
+def login_request( request ):
+	# if request.method == 'POST':
+	# 	usuario = request.POST['login']
+	# 	passwd = request.POST['passwd']
+	# 	if usuario == "rex" and passwd == "perikillo":
+	# 		request.session['user'] = usuario
+	# 		request.session.set_expiry (360)
+	# 		print(request.session.get_expiry_age())
+	# 		return render(request, 'index.html')
+	# 	else:
+	# 		return render( request, "login.html")
+	#return render( request, "login.html")
+	if request.method == 'POST':
+		form = AuthenticationForm(request, data=request.POST)
+		print(form)
+		if form.is_valid():
+			user = form.cleaned_data.get("username")
+			passwd = form.cleaned_data.get("password")
+			usuario = authenticate(username=user,password=passwd)
+			if user is not None:
+				login(request, usuario)
+				request.session.set_expiry (360)
+				messages.success(request, f"Logeado como {user}")
+				print(f"Logeado como {user}")
+				return HttpResponseRedirect("df")
+			else:
+				messages.error(request, "Login incorrecto")
+				print("Login incorrecto")
+		else:
+			messages.error(request, "Login incorrecto")
+			print("Login incorrecto2")
+	form = AuthenticationForm()
+	form.fields['username'].widget.attrs['placeholder'] = 'INTRODUCE USUARIO'
+	form.fields['password'].widget.attrs['placeholder'] = 'INTRODUCE CONTRASEÑA'
+	
+
+	return render(request, "login.html", {"form": form})
+
+def logout_request(request):
+	logout(request)
+	messages.info(request, "Sesion cerrada")
+	return HttpResponseRedirect("login")
+

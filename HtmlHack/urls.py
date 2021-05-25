@@ -24,19 +24,26 @@ from stocks import views as v3
 
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+#login
+from django.contrib.auth.views import LoginView, logout_then_login
 #from HtmlHack import urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name = 'admin'),
+    #path('accounts/login/',LoginView.as_view(template_name = 'login.html'),name='log'), #login
+    #path('accounts/logout/',logout_then_login, name = 'logout'),
     #path('htmlhack/', include(urls)),
+    path('logout',v0.logout_request, name='_logout'),
+    path('login',v0.login_request, name='_login'),
     path('vermeta/',v0.vermeta),
-    path('index/' , v0.hack ),
+    path('index/' , v0.hack , name = 'index'),
+    #path('login' , v0.login ),
     path('video/', v0.video , { 'plantilla': 'video.html','id':'djangorjar' }, ),
     path('envfichero/', v0.envfichero, { 'plantilla': 'parrafos.html','id':'envfichero'}, ),
     path('config1/', v1.config1 ),
-    path('', v0.localhost, name='indice'),
-    path('df', v1.download_file),
-    path('uf', v1.upload_file),
+    #path('', v0.localhost, name='indice'),
+    path('df', v1.download_file, name = 'dowf'),
+    path('uf', v1.upload_file, name = 'uplf'),
     path('articulos',v1.articulosAdd),
     path('addgfh',v1.gfhsAdd ),
     path('adddisp',v1.dispositivosAdd ),
