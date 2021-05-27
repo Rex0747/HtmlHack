@@ -23,15 +23,9 @@
         <div id="flota" class="">
             <!-- <p id="portada">BAJANDO CONFIGURACION DEL SERVIDOR</p> --> 
             <form id="formulario"  method="post" enctype="multipart/form-data" >
-<<<<<<< HEAD
                             {% csrf_token %}
                     <input type="hidden"  id="hosphidden" value={{request.session.hospitalCodigo}}>
                     <!-- <div id="Dhospital" class="">
-=======
-                            {% csrf_token %} 
-                            
-                    <!-- <div id="Dhospital" class="">   
->>>>>>> 053faea8da70b106c03c7b9b66baddf902dde745
                         <select id="Shospital" name="hosp" class="form-control">
                             <option value="">SELECCIONE HOSPITAL</option>
                             {% for i in hospitales %}
