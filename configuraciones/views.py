@@ -39,6 +39,11 @@ def config1( request ):
 
 @transaction.atomic
 def upload_file(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
 
     file_url =None
     borradas=None
@@ -151,6 +156,9 @@ def upload_file(request):
 def download_file(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
 
     retorno = []
     nlineas = ''
@@ -160,7 +168,7 @@ def download_file(request):
     articulo = None
     dispId = ''
     dispositivo = ''
-    hospital = ''
+    hospital = request.session['hospitalCodigo']
     code = ''
     cqr = ''
     nombre = ''
@@ -175,8 +183,8 @@ def download_file(request):
             dispositivo = request.POST['disp']
         if request.POST['code']:
             code = request.POST['code']
-        if request.POST['hosp']:
-            hospital = request.POST['hosp']
+        #if request.POST['hosp']:
+            #hospital = request.POST['hosp']
         if gfhNombre:
             dispdown = gfhNombre
         if dispositivo:
@@ -388,6 +396,12 @@ def dispositivosAdd(request):
     return HttpResponse( 'Lista dispositivos correctamente' )
 
 def adDispGfh( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     sound = 0
     gfhss = None
     gfh = None
@@ -428,6 +442,12 @@ def adDispGfh( request ):
     return render(request, 'addDispGfh.html',{'sound': sound, 'gfhs': gfhss, 'hospital': hosp})
 
 def addHospital( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     codigo = None
     hospital = None
     mensaje = None
@@ -539,6 +559,12 @@ def mostrarCodigoGRpng( request ):
     return render( request , 'galeria.html')
 
 def verCgr( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     #items = request.META.items()
     items = request.GET['data']
     #print(str(items))
@@ -584,6 +610,12 @@ def addFotoArticulo( rutaNombreFichero , codigo ):
     return str( res )
 
 def selarticulo( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     nombre = ''
     hospital = ''
     hospi = hospitales.objects.all()
@@ -693,6 +725,12 @@ def ActualizarPactos_Back( request ):
 
 @transaction.atomic
 def ActualizarPactos( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     #disp = None
     global g_gfh
     global g_conf

@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 
 from hacked.contenido import contenido
 from hacked.models import datos, enlaces
+from configuraciones.models import hospitales
 
 #"<br><iframe id='vid1' width='640' height='480' src='https://www.youtube.com/embed/t7zQhKXEdbI' ></iframe>",'titulocont':'EL TIGRE DE MALASIA' }
 
@@ -59,10 +60,12 @@ def login_request( request ):
 			usuario = authenticate(username=user,password=passwd)
 			if user is not None:
 				login(request, usuario)
-				request.session.set_expiry (360)
+				request.session['tiempo'] = 360
+				request.session.set_expiry (request.session['tiempo'])
 				messages.success(request, f"Logeado como {user}")
 				print(f"Logeado como {user}")
-				return HttpResponseRedirect("df")
+				print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+				return HttpResponseRedirect("selhospital")
 			else:
 				messages.error(request, "Login incorrecto")
 				print("Login incorrecto")
@@ -81,3 +84,18 @@ def logout_request(request):
 	messages.info(request, "Sesion cerrada")
 	return HttpResponseRedirect("login")
 
+def selHospital(request):
+	hospital = ''
+	if request.method == 'POST':
+		hospital = request.POST['hosp']
+		hospital2 = hospitales.objects.get(codigo=hospital)
+		print('HOSPITAL: ', hospital2)
+		request.session['hospital'] = hospital2.nombre
+		request.session['hospitalCodigo'] = hospital2.codigo
+		return redirect('dowf')
+		#return HttpResponseRedirect('df')
+		#return render(request, "BajarConfig.html",{'hospital': hospital2})
+	
+	hospitalesAll = hospitales.objects.all()
+
+	return render(request, "sel_hospital.html",{'hospitales': hospitalesAll})

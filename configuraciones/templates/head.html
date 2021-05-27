@@ -23,19 +23,25 @@
         <a href="/selarticulo">Articulos</a>
         <a href="/pedido">Pedidos</a>
 
-        <select id="Shospital" name="hosp" class="form-control">
+        <!-- <select id="Shospital" name="hosp" class="form-control">
             <option value="">SELECCIONE HOSPITAL</option>
 
             {% for i in hospitales %}
                 <option value="{{i.codigo}}">{{i.nombre}}</option>
             {% endfor %}
-        </select>
+        </select> -->
 
         {% if user.is_authenticated %}
+        <div id="Csesion">
+            <div id="hospital">
+                <label id="hosp">Hospital: {{request.session.hospital}}</label>
+            </div>
             <div id="cont-sesion">
+                
                 <label id="user2">{{user.username}}</label>
                 <a id="logout" class="nav-link btn btn-primary" href="{% url '_logout' %}">CERRAR SESION</a>
             </div>
+        </div>
         {% else %}
             <a id="ini" class="nav-link btn btn-primary" href="{% url '_login' %}">INICIAR SESION</a>
         {% endif %}
@@ -104,8 +110,10 @@
     #portada>div>a:hover { color: rgb(163, 255, 186)}
 
     #Shospital{ width: 250px; display: inline-block;}
-    #cont-sesion{float: right; margin-right: 5px; width: 200px;}
+    /* #cont-sesion{ margin-right: 5px; width: 300px;} */
+    /* #hospital{float: right; margin-right: 5px; width: 200px; } */
     #user2{margin-right: 15px}
-    
+    #Csesion{float: right; margin-top: -50px; margin-right: 5px; width: 300px;}
+    #Htitulo{ width: 50%;}
     
 </style>

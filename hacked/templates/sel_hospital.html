@@ -1,0 +1,47 @@
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN</title>
+</head>
+<body>
+    <div id="container">
+        {% if user.is_authenticated %}
+            <h1 id="titulo">SELECCIONAR HOSPITAL</h1>
+        <form id="form-hosp" action="#" method="post" enctype="multipart/form-data" >
+                {% csrf_token %} 
+            <p id="user">USUARIO LOGEADO:&nbsp&nbsp&nbsp{{user.username | upper}}</p>
+            <div id="Dhospital" class="">   
+                <select id="Shospital" name="hosp" class="form-control">
+                    <option value="">SELECCIONE HOSPITAL</option>
+                        {% for i in hospitales %}
+                            <option value="{{i.codigo}}">{{i.nombre}}</option>
+                        {% endfor %}
+                </select>
+                <button type="submit" id="btn-selecc" class="btn btn-success">SELECCIONAR</button>
+            </div>
+
+        </form>
+                
+        {% endif %}
+
+        </form>
+        
+    </div>
+    
+</body>
+</html>
+<style>
+    #titulo{text-align: center; margin-top: 20px; margin-bottom: 20px;color: white;}
+    #container{width: 50%; height:400px; border: 1px solid; margin: 30px auto; background-color: rgb(133, 96, 221)}
+    #btn-selecc{ margin: auto; display: block; margin-top: 120px;}
+    label{ display: inline-block; margin-left: 25%}
+    #Dhospital{width: 60%; margin: 50px auto}
+    #user{margin: auto; text-align: center; color: white; margin-top: 40px}
+</style>
