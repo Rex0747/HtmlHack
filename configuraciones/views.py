@@ -225,7 +225,7 @@ def download_file(request):
                 print('Entro en code')
                 res = excel.objects.filter(  codigo=code ,hosp=hospital_id ).order_by('gfh','modulo','estanteria','ubicacion')
             elif dispositivo and code:
-                print('Entro en dispositivo and code  ' + str(dispId) + ' '+code )
+                print('Entro en dispositivo and code  ' + str(dispId) + ' y '+ code )
                 res = excel.objects.filter( disp=dispId, codigo=code ,hosp=hospital_id ).order_by('modulo','estanteria','ubicacion')
             elif gfhNombre and code:
                 print('Entro en gfhNombre and code  ' + gfhNombre + ' ' + code )
