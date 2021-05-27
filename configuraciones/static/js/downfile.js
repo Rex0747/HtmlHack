@@ -3,13 +3,16 @@ $(document).ready(function(){
     
     $(".loader").fadeOut("slow");
     $('#Htitulo').text('CONTROL DE PACTOS');
-    $('#Dgfh').hide();
+    //$('#Dgfh').hide();
     $('#Dugs').hide();
     $('#Dbajarfila').hide();
     $('#Dboton').hide();
     $('#Dcode').hide();
-    $('#Shospital').change( Chospital );
-    $('#Sgfh').change( Cugs ); 
+    //$('#Shospital').change( Chospital );
+    $('#Sgfh').change( Cugs );
+
+    Hospital = $('#hosphidden').val()
+    Chospital(Hospital);//hosphidden
 });
 
 
@@ -18,7 +21,7 @@ function Chospital(e)
     prot = document.location.protocol;
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getHospital';
-    datos = { hospital: e.target.value };
+    datos = { hospital: e }; //datos = { hospital: e.target.value };
 
     Sgfh = $('#Sgfh');
     $.getJSON( ruta, datos, function(dataDev){
@@ -28,7 +31,7 @@ function Chospital(e)
             // Sugs.append(`<option value="${dataDev[i].nombre}">${dataDev[i].nombre}</option>`);
             Sgfh.append(`<option value="${dataDev[i].gfh}">${dataDev[i].descripcion}</option>`);
         }
-    $('#Dgfh').show();
+    //$('#Dgfh').show();
     $('#Dcode').show();
     $('#Dboton').show();
     

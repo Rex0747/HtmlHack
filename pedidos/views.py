@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import os, random
 from configuraciones.models import articulos, configurations , hospitales, gfhs , dispositivos, excel
 import datetime
 from pedidos.models import pedidos, pedidos_ident, pedidos_temp, usuarios, pedidos_dc, pedidos_ident_dc, addRefPedido #addLineaPedido
 from django.db import connection
+from django.http import HttpResponseRedirect
 from configuraciones.excell import Excell
 from configuraciones.views import getIdDB
 from HtmlHack.settings import MEDIA_ROOT
@@ -22,6 +23,12 @@ global hospital, disp, user, gfh
 
 @transaction.atomic
 def pedido( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     global gfh, hospital, disp, user, passwd, user_pk
     lista=[] ; codes={}
     hospi = hospitales.objects.all()
@@ -154,6 +161,7 @@ def pedido( request ):
         return render( request, 'pedidos.html', {'hospitales': hospi })
 
 def imprimirEtiquetas( request, disp):
+
     try:
         objGfh = gfhs.objects.get(nombre=disp)
         #print('GFH_ID: ', objGfh)
@@ -197,6 +205,7 @@ def imprimirEtiquetas( request, disp):
 
 @transaction.atomic
 def pedidodc( request, data ):
+        
     mtx = json.loads( data )
     print('TYPE: ',type(mtx))
     print('Lista: ', mtx)
@@ -346,6 +355,12 @@ def getPedTemp( request ):
         return HttpResponse(txtJson)
 
 def gestPedidos( request ):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     hospi = hospitales.objects.all()
 
     if request.method == 'POST':
@@ -416,6 +431,7 @@ def getAlbaranesdc( request ):
         return HttpResponse(txtJson)
 
 def gpedidos( request ):
+    
     albaran = ''
     if request.method == 'GET':
         albaran = request.GET['albaran']
@@ -440,6 +456,11 @@ def gpedidosdc( request ):
     return HttpResponse(None)
 
 def impresion( request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
 
     filas = addRefPedido.objects.all()
     nfilas = None
@@ -477,6 +498,12 @@ def impresion( request):
     return render(request,'impresion.html',{ 'filas': filas, 'nfilas': nfilas })
 
 def gestPedidosDC(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     hospi = hospitales.objects.all()
 
     return render(request,'gestPedidosdc.html', {'hospitales': hospi})
