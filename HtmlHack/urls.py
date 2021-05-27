@@ -35,6 +35,7 @@ urlpatterns = [
     #path('htmlhack/', include(urls)),
     path('logout',v0.logout_request, name='_logout'),
     path('login',v0.login_request, name='_login'),
+    path('selhospital',v0.selHospital, name='_selhospital'),
     path('vermeta/',v0.vermeta),
     path('index/' , v0.hack , name = 'index'),
     #path('login' , v0.login ),
@@ -45,16 +46,16 @@ urlpatterns = [
     path('df', v1.download_file, name = 'dowf'),
     path('uf', v1.upload_file, name = 'uplf'),
     path('articulos',v1.articulosAdd),
-    path('addgfh',v1.gfhsAdd ),
-    path('adddisp',v1.dispositivosAdd ),
+    path('addgfh',v1.gfhsAdd ),     #comprobar sino borrar url  vista  y plantilla
+    path('adddisp',v1.dispositivosAdd ),   #comprobar sino borrar url  vista  y plantilla
     path('gfhdispAdd',v1.adDispGfh ),
     path('hospitalAdd',v1.addHospital ),
-    path('addFotos',v1.AñadirFotosArticulos ),
-    path('verGaleria',v1.verGaleria ),
-    path('verqr',v1.mostrarCodigoQR),
-    path('verqr2',v1.mostrarCodigoGRpng),
-    path('cqr',v1.verCgr),
-    path('mfoto',v1.mfoto),
+    path('addFotos',v1.AñadirFotosArticulos ),    #comprobar sino borrar url  vista  y plantilla
+    path('verGaleria',v1.verGaleria ),            #comprobar sino borrar url  vista  y plantilla
+    path('verqr',v1.mostrarCodigoQR),             #comprobar sino borrar url  vista  y plantilla
+    path('verqr2',v1.mostrarCodigoGRpng),         #comprobar sino borrar url  vista  y plantilla
+    path('cqr',v1.verCgr),                        #comprobar sino borrar url  vista  y plantilla
+    path('mfoto',v1.mfoto),                       #comprobar sino borrar url  vista  y plantilla
     path('pedido/', v2.pedido),
     path('stocks/<modo>' , v3.Stocks),
     path('expdisp/<disp>', v2.imprimirEtiquetas),
