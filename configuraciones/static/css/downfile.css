@@ -1,12 +1,14 @@
 
 body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
-#flota{width: 60%; margin: 10px auto;}
-#Dhospital, #Dgfh, #Dugs, #Dbajarfila, #Dcode{margin: 20px 5%; display: block; width: 50%}
-#Shospital, #Sgfh, #Sugs, #code{ width: 60%}
-#Dbajarfila label{color: #000;}
+#flota{width: 60%; margin: 10px auto; }
+#Dhospital, #Dgfh, #Dugs{margin: 10px ; display: inline-block; width: 20%;  }
+#Dbajarfila, #Dcode{margin: 20px 5%; display: inline-block; width: 10%;  }
+#Shospital, #Sgfh, #Sugs, #code{ width: 100%}
+#Dbajarfila label{color: #000; display:inline-block; text-align: center;}
 #mensajes{margin-top: 10px;}
 #mensajes p{ color: #000;}
-#boton{ width: 150px; margin-top: 20px; margin-left: 5%; margin-bottom: 10px; box-shadow: 10px 10px 20px black;}
+#Dboton{ width: 150px; margin: 10px auto;}
+#boton{ width: 150px; box-shadow: 10px 10px 20px black;}
 
 .glyphicon glyphicon-cloud{margin-left: 15px; padding: 10px;}
 
