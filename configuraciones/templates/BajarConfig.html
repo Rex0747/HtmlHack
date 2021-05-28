@@ -24,7 +24,7 @@
             <!-- <p id="portada">BAJANDO CONFIGURACION DEL SERVIDOR</p> --> 
             <form id="formulario"  method="post" enctype="multipart/form-data" >
                             {% csrf_token %} 
-                            
+                    <input type="hidden"  id="hosphidden" value={{request.session.hospitalCodigo}}>      
                     <!-- <div id="Dhospital" class="">   
                         <select id="Shospital" name="hosp" class="form-control">
                             <option value="">SELECCIONE HOSPITAL</option>
