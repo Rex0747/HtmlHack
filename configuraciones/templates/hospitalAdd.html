@@ -11,6 +11,7 @@
     <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}>
     <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
     <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}> -->
+    
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
     <script defer type="text/javascript" languaje="javascript" src={% static 'js/hospitales.js' %}></script>
     <script defer src='https://maps.googleapis.com/maps/api/js?callback=initMap'></script>
@@ -26,7 +27,7 @@
     <div id="cont1" name="cont1">
         <form id="formulario"  method="post" enctype="multipart/form-data" >
             {% csrf_token %}
-            
+            <input type="hidden"  id="hosphidden" value={{request.session.hospitalCodigo}}>
             <div id="cont2">
                     <input type="text" name="codhosp" id="codhosp" placeholder="CODIGO" class="form-control ctexto">
                     <input type="text" name="codisp" id="codisp" placeholder="NOMBRE" class="form-control">
@@ -41,21 +42,18 @@
             <div id="mapa">
 
             </div>
-
-            <div id="Dlhosp">
+            {% comment %}
+            <!-- <div id="Dlhosp">
                 
-                    <!-- <label id="lbdthosp" for="dthosp">HOSPITALES:</label> -->
                     <select id="dthosp" name="dthosp" class="form-control">
                         <option label="Seleccione hospital"></option>
                         {% for i in hospitales %}
-                            <!-- <p>{{i}}</p> -->
                             <option  id={{i.codigo}} value="{{i.codigo}}*{{i.nombre}}*{{i.longitud}}*{{i.latitud}}*{{i.foto}}*{{i.comentario}}*{{i.link}}" >{{i.nombre}}</option>
                                 
                         {% endfor %}
                     </select>
-
-            </div>
-
+            </div> -->
+            {% endcomment %}
             
 
         </form> 

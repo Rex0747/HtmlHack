@@ -75,6 +75,8 @@ urlpatterns = [
     path('getAlbaranes', v2.getAlbaranes ),#ajax
     path('getAlbaranesdc', v2.getAlbaranesdc),#ajax
     path('getLineas', v2.getLineas ),      #ajax  
+    path('getDatosHospital', v1.getDatosHospital ), #ajax
+    path('getConfGfh', v1.getConfGfh, name='getconfgfh'), #ajax
     
 ]
 

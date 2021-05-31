@@ -62,7 +62,7 @@ class hospitales(models.Model):
     link=models.CharField(max_length=255,null=True, blank=True)
     foto=models.ImageField( upload_to = 'articulos/', null=True, blank=True )
     def __str__(self):
-        return '%s %s %s' %( self.codigo, self.nombre, self.rutaFotos )
+        return '%s %s %s %s %s %s %s' %( self.codigo, self.nombre, self.rutaFotos,self.longitud, self.latitud, self.comentario, self.link )
         
 
 class configurations(models.Model):
