@@ -838,7 +838,7 @@ def getHospital(request):
     if request.method == 'GET':
         hospi = request.GET['hospital']   
         hosp = hospitales.objects.get(codigo=hospi)
-        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh') # Cuando se migre a POSTGRESS insertar el filtro DISTINCT
+        gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh').distinct() # Cuando se migre a POSTGRESS insertar el filtro DISTINCT
         if len(gfh) > 0:
             for i in gfh:
                 bloque += '{"gfh": "%s","nombre": "%s", "descripcion": "%s"},' %( i.gfh, i.nombre, i.descripcion)
@@ -867,4 +867,44 @@ def getUgs( request ):
         print('txtJson: ', txtJson)
 
         return HttpResponse(txtJson)
+
+def getDatosHospital( request ):
+    hospi = ''
+    txtJson = None
+    bloque = "["
+    if request.method == 'GET':
+        hospi = request.GET['hospital']
+        print('CodHosp: ', hospi)
+        i = hospitales.objects.get(codigo=hospi)
+        bloque += '{"codigo": "%s","nombre": "%s","latitud": "%s","longitud": "%s","foto": "%s","comentario": "%s","link": "%s"},' %( i.codigo, i.nombre, i.latitud, i.longitud, i.foto, i.comentario, i.link)
+        res = bloque[ :-1] + "]"
+        #print( res )
+        j = json.loads(res, strict=False)
+        txtJson = json.dumps(j)
+        #print('txtJson: ', txtJson)
+
+        return HttpResponse(txtJson)
+
+def getConfGfh ( request ):
+
+    hospi = ''
+    txtJson = None
+    bloque = "["
+    if request.method == 'GET':
+        hospi = request.GET['hospital']
+        print('CodHosp: ', hospi)
+        i = hospitales.objects.get(codigo=hospi)
+        #bloque += '{"codigo": "%s","nombre": "%s","latitud": "%s","longitud": "%s","foto": "%s","comentario": "%s","link": "%s"},' %( i.codigo, i.nombre, i.latitud, i.longitud, i.foto, i.comentario, i.link)
+        res = bloque[ :-1] + "]"
+        #print( res )
+        j = json.loads(res, strict=False)
+        txtJson = json.dumps(j)
+        #print('txtJson: ', txtJson)
+        return HttpResponse(txtJson)
+
+
+
+        
+
+
 
