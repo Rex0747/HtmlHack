@@ -1,0 +1,67 @@
+
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FILTRAR DATOS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1, user-scalable=no">
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/filtrarDatos.css' %}>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}>
+        <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+        <script defer type="text/javascript" languaje="javascript" src={% static 'js/filtrarDatos.js' %} ></script>
+        <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
+    </head>
+    <body>
+    {% block content %}
+
+        {% include 'head.html' %}
+        <div class="loader"></div>
+        <div id="flota" class="">
+            <!-- <p id="portada">BAJANDO CONFIGURACION DEL SERVIDOR</p> --> 
+            <form id="formulario"  method="post"  enctype="multipart/form-data" >
+                            {% csrf_token %} 
+                    <input type="hidden"  id="hosphidden" value={{request.session.hospitalCodigo}}>
+                    <!-- <label>{{request.session.hospitalCodigo}}</label> -->
+                    <div id="Dfiltro">
+                        <input type="text" id="filtro" placeholder="INTRODUCE FILTRADO">
+                        <input type="button" id="bfiltro" class="btn-outline-primary" value="FILTRAR">
+                    </div>
+                    <div id="Dgfh" class="">
+                        <select name="gfh" id="Sgfh" class="form-control">
+                                <option value="">SELECCIONE GFH</option>
+                        </select>
+                    </div>    
+                    
+                    <div id="Dugs" class="">
+                        <select id="Sugs" name="disp" class="form-control">
+                            <option value="">SELECCIONE UGS</option>
+                        </select>
+                    </div>
+                    <!-- <div>
+                        <input type="text" id="Tgfh"  name="Tgfh" placeholder="INTRODUCE CODIGO GFH" >
+                    </div>
+
+                    <div>
+                        <input type="text" id="Tdisp"  name="Tdisp" placeholder="INTRODUCE CODIGO DISP" >
+                    </div> -->
+
+                    <div id="Dgetdatos">
+                        <input type="button" class="btn-outline-primary" id="Bgetdatos" value="VER DATOS">
+                    </div>
+                    <div id="res"></div>
+            </form>
+
+            <div id="tabla" class="config">
+                
+            </div>
+
+            <div id="info" class="">
+                <label id="Linfo"></label>
+            </div>
+
+
+        {% endblock %}
+        </div>

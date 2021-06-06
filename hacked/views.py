@@ -60,7 +60,7 @@ def login_request( request ):
 			usuario = authenticate(username=user,password=passwd)
 			if user is not None:
 				login(request, usuario)
-				request.session['tiempo'] = 360
+				request.session['tiempo'] = 3600
 				request.session.set_expiry (request.session['tiempo'])
 				messages.success(request, f"Logeado como {user}")
 				print(f"Logeado como {user}")

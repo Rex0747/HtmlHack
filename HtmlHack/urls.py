@@ -68,6 +68,7 @@ urlpatterns = [
     path('gestPedidosDC', v2.gestPedidosDC ),
     path('gpedidos', v2.gpedidos),
     path('gpedidosdc', v2.gpedidosdc),
+    path('filtrardatos', v1.filtrardatos, name = 'filtrar'),
     path('getHospital', v1.getHospital ),  #ajax 
     path('getUgs', v1.getUgs ),            #ajax
     path('getConf', v1.getConf ),          #ajax
@@ -77,7 +78,7 @@ urlpatterns = [
     path('getLineas', v2.getLineas ),      #ajax  
     path('getDatosHospital', v1.getDatosHospital ), #ajax
     path('getConfGfh', v1.getConfGfh, name='getconfgfh'), #ajax
-    
+
 ]
 
 if settings.DEBUG:

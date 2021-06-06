@@ -24,15 +24,15 @@
             {% csrf_token %}
             
             <h2 id="titulo" class="subtitulo">CREAR GFH</h2>
-
-            <div id="contHospCod" name="contHospCod" class="container">
+            <input type="hidden"  id="hosphidden" value={{request.session.hospitalCodigo}}>
+            <!-- <div id="contHospCod" name="contHospCod" class="container">
                 <select name="addHospC" id="addhospC" class="form-control-sm elements">
                     <option name="opHosp" value="sel">SELECCIONE HOSPITAL:</option>
                     {% for i in hospital %}
                         <option name="opHosp" value={{i.codigo}}>{{i.nombre}}</option>
                     {% endfor %}
                 </select>
-            </div>
+            </div -->>
 
             <div id="contGfhCod" name="contGfhCod" class="container">
                 <input type="text" name="addgfhC" id="addgfhC" placeholder="GFH" class="form-control-sm elements">

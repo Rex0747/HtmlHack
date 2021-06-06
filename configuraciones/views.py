@@ -886,22 +886,41 @@ def getDatosHospital( request ):
         return HttpResponse(txtJson)
 
 def getConfGfh ( request ):
-
+    print( request.headers )
     hospi = ''
     txtJson = None
     bloque = "["
-    if request.method == 'GET':
+    
+    if request.method == 'GET' and request.GET['hospital'] and request.GET['gfh'] and request.GET['disp']:
+        hosp = request.GET['hospital']
+        disp = request.GET['disp']
+        gfh = request.GET['gfh']
+        hosp_id = hospitales.objects.get(codigo=hosp)
+        disp_id = dispositivos.objects.get(nombre=disp)
+        gfh_id = gfhs.objects.get(gfh=gfh,nombre=disp)
+        #print('H: ', hosp_id.pk," D:", disp_id.pk," G: ", gfh_id.pk)
+
         hospi = request.GET['hospital']
         print('CodHosp: ', hospi)
-        i = hospitales.objects.get(codigo=hospi)
-        #bloque += '{"codigo": "%s","nombre": "%s","latitud": "%s","longitud": "%s","foto": "%s","comentario": "%s","link": "%s"},' %( i.codigo, i.nombre, i.latitud, i.longitud, i.foto, i.comentario, i.link)
-        res = bloque[ :-1] + "]"
-        #print( res )
-        j = json.loads(res, strict=False)
+        res = excel.objects.filter(disp=disp_id,gfh=gfh_id,hosp=hosp_id).select_related()
+        for i in res:
+            #print( 'RES: ', i )
+            bloque += '{"modulo": "%s", "estanteria": "%s", "ubicacion": "%s", "division": "%s", "codigo": "%s", "nombre": "%s", "pacto": "%s", "minimo": "%s", "dc": "%s"},' \
+                %(i.modulo, i.estanteria, i.ubicacion, i.division, i.codigo, i.nombre.nombre, i.pacto, i.minimo, i.dc)
+        data = bloque[ :-1] + "]"
+        #print( data )
+        j = json.loads(data, strict=False)
         txtJson = json.dumps(j)
         #print('txtJson: ', txtJson)
         return HttpResponse(txtJson)
+    return HttpResponse('NO Funciono.')
 
+def filtrardatos( request ):
+    print('perfecto')
+
+    return render( request, 'filtrardatos.html')
+
+    
 
 
         
