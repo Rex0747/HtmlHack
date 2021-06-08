@@ -420,9 +420,10 @@ def getAlbaranesdc( request ):
         
         if len(res) > 0:
             for i in res:
-                bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S"), i.hospital)
+                bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S"), i.hospital.nombre)
                 #print('Fecha: ', str(i.fecha.strftime("%d/%m/%Y %H:%M:%S")), ' Tipo: ', type(i.fecha.strftime("%d/%m/%Y %H:%M:%S")))
             res = bloque[ :-1] + "]"
+            #print('JSON: ', res)
             j = json.loads(res)
             txtJson = json.dumps(j)
         else:

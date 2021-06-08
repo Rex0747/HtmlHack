@@ -419,8 +419,8 @@ def adDispGfh( request ):
     if request.method == 'POST':
         if request.POST['addgfhC']:
             gfh = request.POST['addgfhC']
-            if request.POST['addHospC']:
-                hosp_id = request.POST['addHospC']
+            #if request.POST['addHospC']:
+            hosp_id = request.session['hospitalCodigo'] #request.POST['addHospC']
             if request.POST['addisp']:
                 disp = request.POST['addisp']
             if request.POST['descripcion']:
@@ -739,11 +739,11 @@ def ActualizarPactos( request ):
     if request.method == "POST":
         d = request.POST['selDisp']
         g = request.POST['selGfh']
-        h = request.POST['selHosp']
+        h = request.session['hospitalCodigo']  #request.POST['hospital']
         
         #print('Hospital: ',request.POST['selHosp']);'  Disp: ',request.POST['selDisp'];'  Gfh: ',request.POST['selGfh']
-        if request.POST.get('selHosp', True)  and request.POST.get('selGfh', True) and request.POST.get('selDisp', True):
-            clavesDescartar = ('csrfmiddlewaretoken', 'selHosp', 'selDisp', 'selGfh' ) #'oculto'
+        if  request.POST.get('selGfh', True) and request.POST.get('selDisp', True):
+            clavesDescartar = ('csrfmiddlewaretoken', 'selDisp', 'selGfh' ) #'oculto'
             dic = {}
             for key, value in request.POST.items():
                 if key not in clavesDescartar:
@@ -780,31 +780,6 @@ def ActualizarPactos( request ):
             #disp = gfhs.objects.all()
             return render( request, 'actualizaPactos.html',{'hospital': hosp_update, }) #'dispositivo': disp
         
-        # else:
-        
-        #     #disp = gfhs.objects.filter(hp_id=hosp_update[0].id).select_related()
-            
-        #     #disp = gfhs.objects.all()
-        #     print(request.META['REMOTE_ADDR'])
-        #     print(request.META['HTTP_USER_AGENT'])
-        #     print('Iniciando.')
-
-        #     for key, value in request.POST.items():
-        #         print('Key: ',str(key), '  Value: ', str(value))
-
-        #     if request.method == 'POST':
-        #         if request.POST.get('selHosp',True )  and request.POST.get('selGfh', True) and request.POST.get('selDisp', True):
-                
-        #             d = request.POST['selDisp']
-        #             a = request.POST['selGfh']
-        #             h = request.POST['selHosp']
-        #             print('CHANGE',str(a))
-                    
-        #             g_conf = excel.objects.filter(disp=dispositivos.objects.get(nombre=d), hosp=hospitales.objects.get(codigo=h)).select_related()
-        #             #print('Conf: ', conf)
-        #             g_gfh = g_conf[0].gfh
-        #             print('GFH_: ', g_gfh)
-        #             return render( request, 'actualizaPactos.html',{'hospital': hosp_update, 'pacto': g_conf, 'gfh': g_gfh}) #'dispositivo': disp,
 
     return render( request, 'actualizaPactos.html',{'hospital': hosp_update, }) #'dispositivo': disp
 

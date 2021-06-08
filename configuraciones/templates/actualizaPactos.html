@@ -23,15 +23,15 @@
         <form id="formdisp"  method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <!-- <h2 id='titulo'>ACTUALIZAR PACTOS</h2> -->
-            
-            <div id="contHosp" name="contHosp" class="container">
+            <input type="hidden"  id="hosphidden"  value={{request.session.hospitalCodigo}}>
+            <!-- <div id="contHosp" name="contHosp" class="container">
                 <select name="selHosp" id="selHosp" class="form-control">
                     <option name="opHosp" value="" >SELECCIONE HOSPITAL:</option>
                     {% for i in hospital %}
                         <option name="opHosp" value={{i.codigo}}>{{i.nombre}}</option>
                     {% endfor %}
                 </select>
-            </div> 
+            </div>  -->
 
             <div id="contGfhC" name="contGfhC" class="container">
                 <select name="selGfh" id="selGfh" class="form-control">

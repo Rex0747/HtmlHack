@@ -6,7 +6,7 @@ $(document).ready(function(){
     $('#Htitulo').text('Modificar pactos');
     boton = $('#boton');
     tabla = $('#tabla');
-    despHospital = $('#selHosp');
+    //despHospital = $('#selHosp');
     despGfh = $('#selGfh');
     despDisp = $('#selDisp');
 
@@ -15,17 +15,20 @@ $(document).ready(function(){
     tabla.hide();
     boton.hide();
     
-    despHospital.change(CHospital);
+    //despHospital.change(CHospital);
     despGfh.change( Cgfh);
     despDisp.change( Cdisp);
+
+    hospital = $('#hosphidden').val();
+    CHospital(hospital);
 });
 
-function CHospital(e){
+function CHospital( hospital ){
 
     prot = document.location.protocol;
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getHospital';
-    datos = { hospital: e.target.value };
+    datos = { hospital: hospital };
     despGfh.show();
 
     $.getJSON( ruta, datos, function(dataDev){
@@ -44,7 +47,7 @@ function Cgfh(e){
     loc = document.location.host;
     ruta = prot +'//'+ loc + '/getUgs';
     Shospital = $('#selHosp option:selected').val();//.text();
-    datos = {  hospital: Shospital,  ugs: e.target.value };
+    datos = {  hospital: hospital,  ugs: e.target.value };
     Sugs = $('#selDisp');
     boton = $('#boton');
     boton.hide();
@@ -69,7 +72,7 @@ function Cdisp(e){
     ruta = prot +'//'+ loc + '/getConf';
     Shospital = $('#selHosp option:selected').val();//.text();
     Sgfh = $('#selGfh option:selected').text();
-    datos = { ugs: e.target.value, hospital: Shospital, gfh: Sgfh  };
+    datos = { ugs: e.target.value, hospital: hospital, gfh: Sgfh  };
     //console.log(Shospital + ' ' + Sgfh + ' ' + e.target.value )
     $.getJSON( ruta, datos, function(dataDev){
         //Stabla = $('#tabla');
