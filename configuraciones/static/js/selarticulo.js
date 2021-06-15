@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('#Htitulo').text('BUSQUEDA REFERENCIAS');
     $('#Shospi').change( enableBoton );
     $('#boton').hide();
-    $('#art').mouseout( enableBoton );
+    $('#art').keyup( enableBoton );
     
     
     });

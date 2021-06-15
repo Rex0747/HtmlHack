@@ -5,11 +5,11 @@ body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 /* #info>p{ background-color: rgba(224, 235, 255, 0.9); width: 50%; margin: 15px auto;} */
 /* #tform{margin: auto;}
 #tform text{margin-top: 15px } */
-#cont-form{  width: 50%;  margin: 40px auto;}
+#cont-form{  width: 50%;  margin: 40px auto; text-align: center; border: 1px solid}
 /* #dat_ini, #dat_fin{ float: left; display: block; margin: 10px 10%; } */
 
 #dini, #dfin{ width: 40%; margin: 10px auto}
-#dboton{width: 50%; margin: 30px 41%; }
+#dboton{width: 50%; margin: 30px auto; text-align: center}
 /* #fenviar{display: block; margin: 20px   auto} */
 
 .link{ background-color: rgb(190, 255, 190); color: white; border: 2px; padding: 3px ;}

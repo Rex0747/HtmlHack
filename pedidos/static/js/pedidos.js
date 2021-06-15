@@ -9,19 +9,23 @@ $(document).ready(function(){
     pboton2 = $('#pboton2');
     user = $('#user');
     passwd =$('#passwd')
+    pval = $('.pval').focusout( comprobar ); //focusout
     Sgfh.hide();
     Sdisp.hide();
     pboton2.hide();
     user.hide();
     passwd.hide();
 
-    Shospital = $('#hospital');
-    Shospital.change(function(e){
-        
+    //Shospital = $('#hospital');
+    hospital = $('#hosphidden').val();
+    CHospital(hospital);
+
+    //Shospital.change(function(e){
+    function CHospital( hospital ){
         prot = document.location.protocol;
         loc = document.location.host;
         ruta = prot +'//'+ loc + '/getHospital';
-        datos = { hospital: e.target.value };
+        datos = { hospital: hospital };
         
         $.getJSON( ruta, datos, function(dataDev){
             Sgfh.html("<option value=''>SELECCIONE GFH</option>");
@@ -32,7 +36,7 @@ $(document).ready(function(){
             
             Sgfh.show();
         });
-    });
+    };
 
     Sgfh.change(function(e){
 
@@ -40,7 +44,7 @@ $(document).ready(function(){
         loc = document.location.host;
         ruta = prot +'//'+ loc + '/getUgs';
         Shospital = $('#hospital option:selected').val();//.text();
-        datos = { ugs: e.target.value, hospital: Shospital };
+        datos = { ugs: e.target.value, hospital: hospital };
 
         $.getJSON( ruta, datos, function(dataDev){
             Sdisp.html("<option value=''>SELECCIONE DSP</option>");
@@ -56,5 +60,11 @@ $(document).ready(function(){
         
         //$('#cont1').hide();
     });
+
+    function comprobar(e){
+        console.log(e.target.value);
+        console.log(e.target.id);
+
+    }
 });
 

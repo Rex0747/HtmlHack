@@ -8,22 +8,24 @@ $(document).ready(function(){
     calFin = $('#dat_fin');
     
 
-    hosp = $('#Shospital'),
+    //hosp = $('#Shospital'),
     fboton.click( Eboton );
     calIni.change( Cdate);
     calFin.change( Cdate);
-    hosp.change(Chosp);
+    //hosp.change(Chosp);
+    Hospital = $('#hosphidden').val()
+    Chosp(Hospital);//hosphidden
 
 });
 
 function Chosp(){
-    if(calIni.val() != "" && calFin.val() != "" && hosp.val() != "SELECCIONE HOSPITAL" ){
-        fboton.show();
+    if(calIni.val() != "" && calFin.val() != "" ){ 
+        
     }
 }
 
 function Cdate(){
-    if(calIni.val() != "" && calFin.val() != "" && hosp.val() != "SELECCIONE HOSPITAL" ){
+    if(calIni.val() != "" && calFin.val() != "" ){ 
         fboton.show();
     }
 
@@ -31,7 +33,7 @@ function Cdate(){
 
 function Eboton(){
 
-    hospi = hosp.val();
+    hospi = Hospital //hosp.val();
     //alert(hospi);
     cal_ini = calIni.val();
     cal_fin = calFin.val();

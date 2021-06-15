@@ -3,7 +3,7 @@
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,8 @@
     {% include 'head.html' %}
     <div class="loader"></div>
     <div id="cont-form">
-            <div id="dhosp" >
+        <input type="hidden"  id="hosphidden"  value={{request.session.hospitalCodigo}}>
+            <!-- <div id="dhosp" >
                 <label for="Shospital"><strong>Hospital:</strong>
                 <select id="Shospital" name="Shospital" class="form-control">
                     <option >SELECCIONE HOSPITAL</option>
@@ -30,7 +31,7 @@
                         <option  value={{i.codigo}}>{{i.nombre}}</option>
                     {% endfor %}
                 </select></label>
-            </div>
+            </div> -->
             <div id="dini">
                 <label for="dat_ini"><strong>Fecha inicio:</strong>
                 <input type="date" id="dat_ini" data-date-format="DD/MM/YYYY" class="form-control"></label>

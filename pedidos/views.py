@@ -31,7 +31,7 @@ def pedido( request ):
 
     global gfh, hospital, disp, user, passwd, user_pk
     lista=[] ; codes={}
-    hospi = hospitales.objects.all()
+    #hospi = hospitales.objects.all()
 
     if request.method == 'POST':
         
@@ -43,7 +43,7 @@ def pedido( request ):
             filas = None
             npedido = None
             user_temp = request.POST['usuario']        #usuarios.objects.get(ident=user).pk
-            hospi_ = request.POST['hosp']
+            #hospi_ = request.POST['hosp']
             #user_passwd = request.POST['passwd']
             try:
                 #print(str(user_temp))
@@ -95,7 +95,7 @@ def pedido( request ):
             #funciones.envcorreogmail( fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
                     #mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
 
-            return render( request, 'pedidos.html', { 'hospitales': hospi })
+            return render( request, 'pedidos.html') #, { 'hospitales': hospi })
 
         
         clavesDescartar = ['csrfmiddlewaretoken', 'hospital', 'gfh', 'disp', 'pboton', 'tped', 'user', 'passwd']
@@ -113,9 +113,9 @@ def pedido( request ):
                 codes[i] = request.POST[i] 
 
         
-        if request.POST['hospital'] and request.POST['gfh'] and request.POST['disp'] and request.POST['user'] and request.POST['passwd']:
+        if request.POST['gfh'] and request.POST['disp'] and request.POST['user'] and request.POST['passwd']:  #request.POST['hospital'] and 
             print('Paso por 2º')
-            hospital = request.POST['hospital']
+            hospital =  request.session['hospitalCodigo'] #request.POST['hospital']
             gfh = request.POST['gfh']
             disp = request.POST['disp']
             user = request.POST['user']
@@ -146,7 +146,7 @@ def pedido( request ):
                 tmp = i.nombre
                 i.nombre.nombre = tmp.nombre[0:15]
 
-            return render( request, 'pedidos.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user, 'datos': datos, 'passwd': passwd })
+            return render( request, 'pedidos.html',{  'gfh': gfh, 'disp': disp, 'user': user, 'datos': datos, 'passwd': passwd })
 
 
         #if request.method == 'POST':
@@ -158,7 +158,7 @@ def pedido( request ):
 
     else:
         print('Paso por 4º')
-        return render( request, 'pedidos.html', {'hospitales': hospi })
+        return render( request, 'pedidos.html') #, {'hospitales': hospi })
 
 def imprimirEtiquetas( request, disp):
 
@@ -414,8 +414,8 @@ def getAlbaranesdc( request ):
     if request.method == 'GET':
         cal_ini = request.GET['cal_ini']
         cal_fin = request.GET['cal_fin']
-        hospital = request.GET['hospital']
-
+        hospital = request.session['hospitalCodigo'] #request.GET['hospital']
+        #print('Hospital: ', hospital)
         res = pedidos_ident_dc.objects.filter(fecha__range=[ cal_ini, cal_fin],hospital=hospitales.objects.get(codigo=hospital))
         
         if len(res) > 0:
@@ -505,8 +505,8 @@ def gestPedidosDC(request):
         request.session.set_expiry (request.session['tiempo'])
         print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
 
-    hospi = hospitales.objects.all()
+    #hospi = hospitales.objects.all()
 
-    return render(request,'gestPedidosdc.html', {'hospitales': hospi})
+    return render(request,'gestPedidosdc.html')
 
 

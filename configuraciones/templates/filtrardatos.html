@@ -11,7 +11,10 @@
         <link rel="STYLESHEET" type="text/css" href={% static 'css/filtrarDatos.css' %}>
         <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}>
         <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+        <script type="text/javascript" src={% static 'js/xlsx.full.min.js' %}></script>
+        <script type="text/javascript" src={% static 'js/FileSaver.js' %}></script>
         <script defer type="text/javascript" languaje="javascript" src={% static 'js/filtrarDatos.js' %} ></script>
+
         <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}>
     </head>
     <body>
@@ -27,7 +30,7 @@
                     <!-- <label>{{request.session.hospitalCodigo}}</label> -->
                     <div id="Dfiltro">
                         <input type="text" id="filtro" placeholder="INTRODUCE FILTRADO">
-                        <input type="button" id="bfiltro" class="btn-outline-primary" value="FILTRAR">
+                        <input type="button" id="bfiltro" class="btn-outline-primary" value=" FILTRAR ">
                     </div>
                     <div id="Dgfh" class="">
                         <select name="gfh" id="Sgfh" class="form-control">
@@ -49,19 +52,56 @@
                     </div> -->
 
                     <div id="Dgetdatos">
-                        <input type="button" class="btn-outline-primary" id="Bgetdatos" value="VER DATOS">
+                        <input type="button" class="btn-outline-primary" id="Bgetdatos" value=" VER DATOS ">&nbsp &nbsp
+                        <input type="button" class="btn-outline-primary" id="Bexcel" value=" EXP EXCEL ">
                     </div>
                     <div id="res"></div>
             </form>
+            <div id="info" class="">
+                <br>
+                <label id="Linfo"></label>
+            </div>
 
             <div id="tabla" class="config">
                 
             </div>
 
-            <div id="info" class="">
-                <label id="Linfo"></label>
-            </div>
-
-
         {% endblock %}
         </div>
+
+
+    <script>
+        
+       /*  boton = document.getElementById("Bexcel");
+        boton.addEventListener('click', bclick );
+
+        function s2ab(s) { 
+            var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+            var view = new Uint8Array(buf);  //create uint8array as viewer
+            for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+            return buf;    
+            }
+        
+            var wb = XLSX.utils.book_new();
+        wb.Props = {
+            Title: "SheetJS Pruebas",
+            Subject: "Test",
+            Author: "Pedro Luis",
+            CreatedDate: new Date(2021,06,14)
+            };
+            
+        wb.SheetNames.push("Test Sheet");
+        var ws_data = [['hello' , 'world'],['Hola','Amigo'],[1,2,3,4,5,6,7,8]];  //a row with 2 columns
+
+        var ws = XLSX.utils.aoa_to_sheet(ws_data);
+        wb.Sheets["Test Sheet"] = ws;
+        var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+        //saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+
+
+        function bclick(){
+        {saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'file.xlsx');
+            }
+		}; */
+    </script>>
+        

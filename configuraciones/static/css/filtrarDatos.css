@@ -3,7 +3,7 @@ body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 #Dfiltro, #Dgfh, #Dugs{margin-top: 15px; margin-bottom: 15px;}
 #bfiltro{margin-left: 20px;}
 #Dgetdatos{text-align: center}
-
+#filtro{width: 80%; border: solid 1px }
 
 #tabla{ margin-top: 20px; margin-bottom: 20px;}
 #tabla tr td input{width: 40%; margin: auto}

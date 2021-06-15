@@ -9,11 +9,13 @@ body{background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 #Dhosp>select{margin: 10px 10%; width: 70%; }
 #Dhosp>input{margin: 10px 10%; width: 70%;}
 #Dboton{margin: 20px 32%;}
-#boton{ width: 150px; margin-top: 20px; margin-bottom: 10px; box-shadow: 10px 10px 20px black;}
+#boton{ width: 150px; margin-top: 10px; margin-bottom: 10px; box-shadow: 10px 10px 20px black;}
+#Dhosp{display: block; margin-top: 30px;} 
 
-#mfoto{ width: 65%; margin: auto; margin-top: 90px; }
+#mfoto{ width: 65%; margin: auto; margin-top: 90px; margin-bottom: 20px; }
 #art1 tr td a{margin-left: 50px;}
 #image{border: 2px solid black}
+#limage{ margin: auto; text-align: center; padding: 25px 0px}
 
 .config{ margin: auto; border: 2px solid; background-color: aliceblue;margin-top: 5px  }
 .config th{ border: 1px solid; background-color: lightgreen(15, 104, 82); color: black; font-size: 1.1em; height: 1.1em; text-align: center;}

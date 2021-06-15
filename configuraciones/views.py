@@ -618,13 +618,13 @@ def selarticulo( request ):
 
     nombre = ''
     hospital = ''
-    hospi = hospitales.objects.all()
+    #hospi = hospitales.objects.all()
     art = ''
 
     if request.method == 'POST':
         if request.POST['art']:
             nombre = request.POST['art']
-            hospital = request.POST['hospi']
+            hospital = request.session['hospitalCodigo'] #request.POST['hospi']
             #print('Hospital: ', hospital )
     
     #hosp_id = getIdDB( hospitales.objects.filter(codigo=hospital),'id' )
@@ -651,7 +651,7 @@ def selarticulo( request ):
     except Exception as e:
         print( 'Error: ', str(e) )
 
-    return render( request , 'selarticulo.html',{ 'articulos': art ,'hospitales': hospi, 'user': usuario } )
+    return render( request , 'selarticulo.html',{ 'articulos': art , 'user': usuario } ) #,'hospitales': hospi
 
 @transaction.atomic
 def ActualizarPactos_Back( request ):
@@ -816,7 +816,9 @@ def getHospital(request):
         gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh').distinct() # Cuando se migre a POSTGRESS insertar el filtro DISTINCT
         if len(gfh) > 0:
             for i in gfh:
-                bloque += '{"gfh": "%s","nombre": "%s", "descripcion": "%s"},' %( i.gfh, i.nombre, i.descripcion)
+                nfilas = excel.objects.filter(hosp=hosp.pk, gfh=i.pk).count()
+                bloque += '{"gfh": "%s","nombre": "%s", "descripcion": "%s","nfilas": "%s"},' %( i.gfh, i.nombre, i.descripcion, nfilas)
+                #print('GFH-ID: ',str(i.pk) + ' Nfilas: ', str(nfilas))
             res = bloque[ :-1] + "]"
             j = json.loads(res)
             txtJson = json.dumps(j)
@@ -861,7 +863,7 @@ def getDatosHospital( request ):
         return HttpResponse(txtJson)
 
 def getConfGfh ( request ):
-    print( request.headers )
+    #print( request.headers )
     hospi = ''
     txtJson = None
     bloque = "["
@@ -877,7 +879,7 @@ def getConfGfh ( request ):
 
         hospi = request.GET['hospital']
         print('CodHosp: ', hospi)
-        res = excel.objects.filter(disp=disp_id,gfh=gfh_id,hosp=hosp_id).select_related()
+        res = excel.objects.filter(disp=disp_id,gfh=gfh_id,hosp=hosp_id).select_related().order_by('modulo','estanteria','ubicacion','division')
         for i in res:
             #print( 'RES: ', i )
             bloque += '{"modulo": "%s", "estanteria": "%s", "ubicacion": "%s", "division": "%s", "codigo": "%s", "nombre": "%s", "pacto": "%s", "minimo": "%s", "dc": "%s"},' \

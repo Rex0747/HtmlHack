@@ -31,12 +31,12 @@
                 <form id="fart"  method="post" enctype="multipart/form-data" >
                         {% csrf_token %}
                         <div id="Dhosp">
-                            <select name="hospi" id="Shospi" class="form-control">
+                            <!-- <select name="hospi" id="Shospi" class="form-control">
                                     <option value="">SELECCIONE HOSPITAL</option>
                                 {% for i in hospitales %}
                                     <option value={{i.codigo}}>{{i.codigo}}</option>
                                 {% endfor %}
-                            </select>
+                            </select> -->
                             <input type="text" name="art" id="art" placeholder="INGRESE TEXTO A BUSCAR" class="form-control">
                         </div>
                         <!-- <div id="Dtext">

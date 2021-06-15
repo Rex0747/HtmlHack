@@ -2,7 +2,7 @@
 {% load bootstrap4 %}
 {% bootstrap_css %}
 
-{% include 'menu.html' %}
+
 <html>
     <head>
         <title>ARTICULOS</title>
@@ -15,7 +15,7 @@
         
             {%for i in foto%}
                 <img id= "image" class="img-fluid" src={{i.foto.url}} alt={{i.foto}} width="750">
-                <p>{{i.nombre}}</p>
+                <p id="limage">{{i.nombre}}</p>
             {%endfor%}
         </div>
     </body>

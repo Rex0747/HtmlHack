@@ -5,16 +5,17 @@ body{ background-color: rgba(159, 182, 223, 0.9); margin: 0px; padding: 0px;}
 #cont0{ width: 40%; height: 100px; margin: auto; }
 #cont0 button { margin: 30px 30px}
 
-#cont1{ width: 40%; display: inline-block; margin: 50px 30%;}
+#cont1{ width: 40%; display: inline-block; margin: 50px 30%;  text-align: center;}
 #cont1 input{margin: 20px auto; width: 80%; }
 #cont1 select{margin:20px auto; width: 80%; }
-#pboton, #pboton2{margin: 55px 15px; width: 40%; }  
+#pboton, #pboton2{margin: 20px ; width: auto; text-align: center;}  
 #pcancel{ margin-left: 25px; width: 40%;}
-#botones{ width: 500px; margin: auto;  }
+#botones{ width: 500px; text-align: center;  margin: auto; }
+.pval{ width: 60px;}
 
-.config{ margin: auto; border: 2px solid;  }
+.config{ margin: auto; border: 2px solid; text-align: center; }
 .config th{ border: 2px solid black; background-color: rgb(100, 150, 255); color: white; font-size: 1.1em; height: 1.1em; text-align: left; margin-left: 5px; padding: 7px 5px}
-.config tr{ border: 1px solid black; }
+.config tr{ border: 1px solid black; text-align: center;}
 .config td{ border: 1px solid black; text-align: left; ; margin-left: 5px;}
 .config tr:nth-child(odd){ background-color: rgb(221, 227, 248) }
 .config tr:nth-child(even){ background-color:rgb(156, 187, 253); }

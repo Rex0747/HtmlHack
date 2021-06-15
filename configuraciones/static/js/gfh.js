@@ -16,9 +16,9 @@ $(document).ready(function(){
     
     $.getJSON(ruta, datos, function(dataDev){
         tabla.html("");
-        tabla.append("<tr><th>GFH</th><th>LECTOR</th><th>DESCRIPCION</th></tr>");
+        tabla.append("<tr><th>GFH</th><th>LECTOR</th><th>DESCRIPCION</th><th>NUMERO LINEAS</th></tr>");
         for(let i=0;i<dataDev.length;i++){
-            tabla.append(`<tr><td><p>${dataDev[i].gfh}</p></td><td><p>${dataDev[i].nombre}</p></td><td><p>${dataDev[i].descripcion}</p></td></tr>`);
+            tabla.append(`<tr><td><p>${dataDev[i].gfh}</p></td><td><p>${dataDev[i].nombre}</p></td><td><p>${dataDev[i].descripcion}</p></td><td><p>${dataDev[i].nfilas}</p></td></tr>`);
             
         }
 

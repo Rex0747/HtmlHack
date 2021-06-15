@@ -23,15 +23,15 @@
             <form id="fpedidos" name="fpedido" enctype="multipart/form-data" method="POST" class="form-group" >
                                         {% csrf_token %}
                     <div id="cont1" >
-                        <!-- <input type="text" name="hospital" id="hospital" value="HCSC" class="form-control"> -->
-                        <select name="hospital" id="hospital" class="form-control">
+                        <input type="hidden"  id="hosphidden" name="hospital"  value={{request.session.hospitalCodigo}}>
+                        <!-- <select name="hospital" id="hospital" class="form-control">
                             <option name="opHosp" value="">SELECCIONE HOSPITAL:</option>
                             {% for i in hospitales %}
                                 <option  value={{i.codigo}}>{{i.nombre}}</option>
                             {% endfor %}
-                        </select>
-                        
+                        </select> -->
                         <!-- <input type="text" name="gfh" id="gfh" placeholder="Introduce gfh" class="form-control"> -->
+
                         <select name="gfh" id="gfh" class="form-control">
                             
                         </select>
@@ -42,11 +42,12 @@
                         </select>
 
                         <input type="text" name="user" placeholder="Introduce usuario"id="user" class="form-control">
-                        <input type="text" name="passwd" placeholder="Introduce clave"id="passwd" class="form-control">
-                        <button type="submit" id="pboton2" class="btn-outline-primary" >Enviar Pedido</button>
+                        <input type="password" name="passwd" placeholder="Introduce clave"id="passwd" class="form-control">
+                        <button type="submit" id="pboton2" class="btn-outline-primary" >Subir Pedido</button>
                     </div>
 
-                {% if hospital %}
+                <!-- {% comment %} {% if hospital %} {% endcomment %} -->
+                {% if disp %}
                 <table id="tabla" class="config">
                     <tr>
                         <th>Codigo</th>
@@ -66,7 +67,7 @@
                             <td>{{i.pacto}}</td>
                             <!--<td>{{i.gfh}}</td>
                             <td>{{i.disp}}</td>-->
-                            <td><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}" value="0" class="input-group-text" 
+                            <td class="pval"><input type="text" name="{{i.codigo}}*{{i.modulo}}*{{i.estanteria}}*{{i.ubicacion}}" value="0" id="{{i.pacto}}" class="form-control" 
                                 onkeypress="return event.charCode >= 48 && event.charCode <= 57"></td>
                             
                         </tr>
