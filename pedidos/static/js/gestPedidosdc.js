@@ -13,7 +13,7 @@ $(document).ready(function(){
     calIni.change( Cdate);
     calFin.change( Cdate);
     //hosp.change(Chosp);
-    Hospital = $('#hosphidden').val()
+    Hospital = $('#hosphidden').val();
     Chosp(Hospital);//hosphidden
 
 });

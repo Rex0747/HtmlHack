@@ -12,7 +12,7 @@ $(document).ready(function(){
     $('#Htitulo').text('FILTROS');
     tabla = $('#tabla');
     tabla.hide();
-    
+    $('#Dfiltro').hide();
     $('#Bexcel').click( bclick );
     $('#Bgetdatos').click( getData );
     $('#bfiltro').click( FiltroCodigo );
@@ -94,6 +94,7 @@ async function getData(){
         
         });
         tabla.show();
+        $('#Dfiltro').show();
         //$('#Dgetdatos').hide();
 
         $('#Linfo').text(mtx.length + ' FILAS EN DISPOSITIVO.')

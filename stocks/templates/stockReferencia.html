@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load  static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/jquery.min.js' %}></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/stockReferencia.js' %} ></script>
+    <script defer type="text/javascript" languaje="javascript" src={% static 'js/sweetalert.min.js' %}></script>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/gestPedidos.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/bootstrap.min.css' %}>
+    <link rel="STYLESHEET" type="text/css" href={% static 'css/sweetalert.min.css' %}>
+    <!-- <link rel="STYLESHEET" type="text/css" href={% static 'css/reloj.css' %}> -->
+    <title>Pruebas Consumos</title>
+</head>
+<body>
+    {% include 'head.html' %}
+    <div class="loader"></div>
+
+        <div id="cont-form">
+            <!-- <form enctype="multipart/form-data" method="get" action="#" > -->
+                <input type="hidden"  id="hosphidden"  value={{request.session.hospitalCodigo}}>
+
+                <div id="dcodigo">
+                    <input type="text" placeholder="Introduce codigo" required id="codigo"></label>
+                </div>
+                <div id="dini">
+                    <label class="lbcal" for="dat_ini">Fecha inicial
+                    <input type="date" id="dat_ini"  required data-date-format="DD/MM/YYYY"></label>
+                </div>
+                <div id="dfin">
+                    <label class="lbcal" for="dat_fin">Fecha final
+                    <input type="date" id="dat_fin"  required  data-date-format="DD/MM/YYYY"></label>
+                </div>
+                <div id="dboton">
+                    <input type="submit" id="fenviar" class="btn-outline-primary" value="Enviar" >
+                </div>
+            <!-- </form> -->
+        </div>
+
+        <table id="tabla" class="tabla">
+
+        </table>
+
+    
+</body>

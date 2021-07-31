@@ -26,7 +26,12 @@ from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 #login
 from django.contrib.auth.views import LoginView, logout_then_login
-#from HtmlHack import urls
+#______________RESTFULL_______________
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'_pedidos', v2.PedidosViewSet, basename='_pedidos')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls, name = 'admin'),
@@ -78,6 +83,11 @@ urlpatterns = [
     path('getLineas', v2.getLineas ),      #ajax  
     path('getDatosHospital', v1.getDatosHospital ), #ajax
     path('getConfGfh', v1.getConfGfh, name='getconfgfh'), #ajax
+    path('addLineaPedidoDc', v2.addLineaPedidoDc, name='addLineaPedido'), #ajax
+    path('stockref', v3.calcularConsumo, name= 'calconsumo'), #ajax
+
+    path('ret', include(router.urls)),#rest_framework
+    path('rest_pedido/', include('rest_framework.urls', namespace='rest_framework.urls')),
 
 ]
 

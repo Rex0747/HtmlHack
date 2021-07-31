@@ -75,8 +75,6 @@ def login_request( request ):
 	form = AuthenticationForm()
 	form.fields['username'].widget.attrs['placeholder'] = 'INTRODUCE USUARIO'
 	form.fields['password'].widget.attrs['placeholder'] = 'INTRODUCE CONTRASEÑA'
-	
-
 	return render(request, "login.html", {"form": form})
 
 def logout_request(request):

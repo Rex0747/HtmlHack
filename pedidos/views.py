@@ -19,6 +19,10 @@ from pedidos.forms import formGpedidos
 from pedidos.func import funciones
 from django.db import transaction
 global hospital, disp, user, gfh
+#______________RESTFULL_______________
+from rest_framework import viewsets
+from rest_framework import permissions
+from pedidos.serializers import ret_pedidos
 
 
 @transaction.atomic
@@ -34,7 +38,6 @@ def pedido( request ):
     #hospi = hospitales.objects.all()
 
     if request.method == 'POST':
-        
         
         if request.POST.get('usuario', False):         #request.POST.get('is_private', False)
             print('Paso por 1º')
@@ -141,6 +144,8 @@ def pedido( request ):
             datos = excel.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
             #print('Type: '+ str(type(datos)))
             #print('Datos: ', str( datos ))
+            if (datos[0].dc == "0" or datos[0].dc == "1"):
+                return render( request, 'pedidos.html',{'mensaje': 'No se puede pedir DC por este medio, Consulte con empresa de gestion.'})
             
             for i in datos:
                 tmp = i.nombre
@@ -159,6 +164,72 @@ def pedido( request ):
     else:
         print('Paso por 4º')
         return render( request, 'pedidos.html') #, {'hospitales': hospi })
+
+def getPedido( request ):  #Nueva implantacion por ajax de la funcion pedido AUN NO FUNCIONA
+
+    # clavesDescartar = ['csrfmiddlewaretoken', 'hospital', 'gfh', 'disp', 'pboton', 'tped', 'user', 'passwd']
+    #     claves = request.POST.keys()
+    #     for i in claves:
+    #         if i in clavesDescartar:
+    #             pass
+    #         else:
+    #             lista.append(i)
+
+    #     #print('lista: '+ str(lista))  #Comentar de nuevo
+
+    #     for i in lista:
+    #         if int(request.POST[i]) > 0:
+    #             codes[i] = request.POST[i] 
+        res = None
+        txtJson = None
+        bloque = "["
+        
+        if request.method == 'GET':  #request.POST['gfh'] and request.POST['disp'] and request.POST['user'] and request.POST['passwd']:  #request.POST['hospital'] and 
+            print('Paso por 2º')
+            hospital =  request.session['hospitalCodigo'] #request.POST['hospital']
+            gfh = request.GET['gfh']
+            disp = request.GET['disp']
+            user = request.GET['user']
+            passw = request.GET['passwd']
+
+            h = blake2b(digest_size=25)
+            h.update( passw.encode() )
+            passwd = h.hexdigest()
+            user_Dbpassw = usuarios.objects.get(ident=user).passwd
+
+            if user_Dbpassw != passwd:
+                bloque += '{"error": %i}'#( -2 )
+                res = bloque + ']'
+                print('JSON: ', res)
+                j = json.loads(res)
+                txtJson = json.dumps(j)
+                return HttpResponse( txtJson ) # Usuario no valido
+                
+
+            gfh_id, disp_id, user_id, hospital_id = funciones.GetDatos( disp, user)
+            datos = excel.objects.filter( disp=disp_id, hosp_id=hospital_id).order_by('modulo','estanteria','ubicacion')
+            #print('Type: '+ str(type(datos)))
+            #print('Datos: ', str( datos ))
+            
+            for i in datos:
+                tmp = i.nombre
+                i.nombre.nombre = tmp.nombre[0:15]
+                # bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido,
+
+            return render( request, 'pedidos.html',{  'gfh': gfh, 'disp': disp, 'user': user, 'datos': datos, 'passwd': passwd })
+
+
+        #if request.method == 'POST':
+            #print(str(codes.keys()) + '\t' + str(codes.values()))
+        print('Paso por 3º')
+        funciones.Insert_temp( codes, hospital, disp , user )
+
+        return render( request, 'pedido2.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user }) 
+
+    # else:
+    #     print('Paso por 4º')
+    #     return render( request, 'pedidos.html') #, {'hospitales': hospi })
+
 
 def imprimirEtiquetas( request, disp):
 
@@ -216,7 +287,7 @@ def pedidodc( request, data ):
             listaT = []
             listaT.append(i['ubicacion'])
             listaT.append(i['codigo'])
-            articulo = articulos.objects.get(codigo=listaT[1] , hospital_id=hospitales.objects.get(codigo=i['hospital']).id )
+            articulo = articulos.objects.get(codigo=i['codigo'] , hospital_id=hospitales.objects.get(codigo=i['hospital']).id )
             listaT.insert( 2 , articulo.nombre )
             listaT.append(i['pacto'])
             listaT.append(i['gfh'])
@@ -225,7 +296,7 @@ def pedidodc( request, data ):
             listaM.append(listaT)
             hospital = i['hospital']
             listaT = []
-            print('PASOOO.')
+            #print('PASOOO.')
         except Exception as e:
             print('Exception ', str(e))
 
@@ -325,14 +396,6 @@ def getLineas(request):
         return HttpResponse(txtJson)    
 
     return HttpResponse('null')
-            
-# def imprimirGfh( request):  #borrar .....
-#     gfh = 'expgfh/'
-#     if request.method == 'POST':
-#         if request.POST['tbenlace']:
-#             gfh += request.POST['tbenlace']
-#     print('LINK: ', gfh)
-#     return render( request, 'imprimirGfh.html', {'gfh': gfh})
 
 def getPedTemp( request ):
     txtJson = None
@@ -432,6 +495,12 @@ def getAlbaranesdc( request ):
         return HttpResponse(txtJson)
 
 def gpedidos( request ):
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
     
     albaran = ''
     if request.method == 'GET':
@@ -445,11 +514,18 @@ def gpedidos( request ):
     return HttpResponse(None)
 
 def gpedidosdc( request ):
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
     albaran = ''
     if request.method == 'GET':
         albaran = request.GET['albaran']
         print('Res: ', albaran)
-        pedidoFilas = pedidos_dc.objects.filter(npedido=albaran).select_related()
+        pedidoFilas = pedidos_dc.objects.filter(npedido=albaran).select_related().order_by('gfh')
         pedidoIdent = pedidos_ident_dc.objects.filter(pedido=albaran)
 
         return render( request, 'gpedidosdc.html',{'datos': pedidoFilas, 'npedido': pedidoIdent})
@@ -509,4 +585,39 @@ def gestPedidosDC(request):
 
     return render(request,'gestPedidosdc.html')
 
+def addLineaPedidoDc( request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login')
+    else:
+        request.session.set_expiry (request.session['tiempo'])
+        print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
+
+    if request.method == 'POST':
+        if request.POST.get('fecha', False):
+            fecha = request.GET['fecha']
+            print("Fecha: ", fecha)
+            return HttpResponse("Corresto")
+            
+
+        else:
+            return render(request, 'addLineaPedidoDc.html')
+    else:
+        if request.method == 'GET':
+            return render(request, 'addLineaPedidoDc.html')
+
+
+
+
+class PedidosViewSet(viewsets.ModelViewSet):
+    #permissions_classes = (permissions.IsAuthenticated,)
+    serializer_class = ret_pedidos
+    
+    def retPedido():
+        res = pedidos.objects.all().order_by('npedido')
+        print('Ret: ', str(res))
+        return res
+
+
+
+    
 

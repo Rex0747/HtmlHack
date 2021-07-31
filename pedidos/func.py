@@ -9,6 +9,8 @@ from configuraciones.views import getIdDB
 from HtmlHack.settings import MEDIA_ROOT
 from HtmlHack.settings import STATIC_ROOT
 from django.db import connection
+from datetime import datetime
+from pytz import timezone
 
 class funciones:
 
@@ -68,7 +70,13 @@ class funciones:
         return gfh_id, disp_id, user_id, hospital_id
 
     @staticmethod
-    def GenNumPedido():
+    def GenNumPedido(): #hospital=None
+        # # Hay que modificar la funcion para que se puedan asociar mas lineas a este pedido
+        # # en el caso de que no se haya lanzado hasta una hora determinada.
+        # fecha = datetime.datetime.now()
+        # fped = pedidos_ident.objects.get(fecha=fecha ,hospital=hospital)
+        # print('FPED: ',fecha)
+
         rnd= ''
         l1 = 'A','B','C','D','E','F','X','Y','Z'
         for i in range(3):
@@ -79,6 +87,15 @@ class funciones:
         rnd += random.choice(l1)
 
         return rnd
+
+    @staticmethod
+    def ConvFechaHora(tiempo):
+        fecha_y_hora_actuales = tiempo #datetime.now()
+        zona_horaria = timezone('Europe/Madid')
+        fecha_y_hora_Madrid = fecha_y_hora_actuales.astimezone(zona_horaria)
+        fecha_y_hora_Madrid_en_texto = fecha_y_hora_Madrid.strftime('%d/%m/%Y %H:%M:%S')
+        print(fecha_y_hora_Madrid_en_texto)
+        return fecha_y_hora_Madrid_en_texto
 
     @staticmethod
     def envcorreogmail( fileadjunto, subject, mensaje ):

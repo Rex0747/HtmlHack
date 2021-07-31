@@ -654,7 +654,7 @@ def selarticulo( request ):
     return render( request , 'selarticulo.html',{ 'articulos': art , 'user': usuario } ) #,'hospitales': hospi
 
 @transaction.atomic
-def ActualizarPactos_Back( request ):
+def ActualizarPactos_Back( request ):  #comprobar si esta obsoleto y si esta eliminar.
     #disp = None
     global g_gfh
     global g_conf
@@ -811,7 +811,8 @@ def getHospital(request):
     bloque = "["
 
     if request.method == 'GET':
-        hospi = request.GET['hospital']   
+        #hospi = request.GET['hospital']
+        hospi = request.session['hospitalCodigo']   
         hosp = hospitales.objects.get(codigo=hospi)
         gfh = gfhs.objects.filter(hp_id=hosp.id).select_related().order_by('gfh').distinct() # Cuando se migre a POSTGRESS insertar el filtro DISTINCT
         if len(gfh) > 0:

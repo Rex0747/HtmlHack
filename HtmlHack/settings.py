@@ -152,3 +152,26 @@ print( STATIC_ROOT + 'qrcode.png')
 
 MEDIA_ROOT = os.path.join( BASE_DIR, 'media' )
 MEDIA_URL = '/media/'
+
+
+REST_FRAMEWORK = {
+    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    #'PAGE_SIZE': 10
+}
+
+
+""" REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSIONS_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+} """
+
