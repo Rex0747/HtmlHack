@@ -592,18 +592,42 @@ def addLineaPedidoDc( request):
         request.session.set_expiry (request.session['tiempo'])
         print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
 
-    if request.method == 'POST':
-        if request.POST.get('fecha', False):
-            fecha = request.GET['fecha']
-            print("Fecha: ", fecha)
-            return HttpResponse("Corresto")
-            
+    hospital = ''
+    fecha = ''
+    txtJson = None
+    bloque = "["
+    # if request.method == 'POST':
+    #     print('POST')
+    #     if request.POST.get('fecha', False):
+    #         fecha = request.POST['fecha']
+    #         print("Fecha: ", fecha)
+    #         return render(request, 'addLineaPedidoDc.html')
 
-        else:
-            return render(request, 'addLineaPedidoDc.html')
-    else:
-        if request.method == 'GET':
-            return render(request, 'addLineaPedidoDc.html')
+    #else:
+    if request.method == 'GET' and request.GET.get('cal_ini', False):
+        if request.GET.get('cal_ini', False):
+            hospital = request.GET['hospital']
+            fecha = request.GET['cal_ini']
+            print(fecha)
+            print(hospital)
+            hosp = hospitales.objects.get(codigo=hospital).pk
+            res = pedidos_ident_dc.objects.filter(fecha__range=[fecha, datetime.datetime.now()],hospital=hosp).select_related()
+            
+            print('RES: ', res)
+            for i in res:
+                bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S"),i.hospital.codigo )
+            if len(res) == 0:    
+                res = bloque[ : ] + "]"
+            else:
+                res = bloque[ :-1 ] + "]"
+            print( 'REX: ' ,res )
+            j = json.loads(res)
+            txtJson = json.dumps(j)
+        
+            return HttpResponse(txtJson)
+
+            
+    return render(request, 'addLineaPedidoDc.html')
 
 
 

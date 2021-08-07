@@ -21,13 +21,18 @@
     {% include 'head.html' %}
     <div class="loader"></div>
     <div id="contenedor">
-            
+        <!-- <form method="post" >
+            {% csrf_token %} -->
         <input type="hidden"  id="hosphidden"  value={{request.session.hospitalCodigo}}>
         <div id="dini">
             <label for="dat_ini"><strong>Fecha Pedido:</strong>
-            <input type="date" id="dat_ini" data-date-format="DD/MM/YYYY" class="form-control"></label>
+            <input type="date" id="dat_ini" name="fecha" data-date-format="DD/MM/YYYY" class="form-control"></label>
+            <input type="button" value="SEND">
         </div>
-        
+        <!-- </form>     -->
+        <div id="tabla">
+            
+        </div>
     </div>
     
 </body>
