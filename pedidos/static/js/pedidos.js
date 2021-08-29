@@ -8,8 +8,8 @@ $(document).ready(function(){
     Sgfh = $('#gfh');
     Sdisp = $('#disp');
     pboton2 = $('#pboton2');
-    pboton = $('#pboton');
-    user = $('#user');
+    pboton = $('#pboton'); 
+    user = $('#userlog');
     passwd =$('#passwd')
     pval = $('.pval').unbind().on('focusout', comprobar);
     //pboton2.click( envPacto );
@@ -22,7 +22,7 @@ $(document).ready(function(){
     user.hide();
     passwd.hide();
     pboton.hide();
-
+    //alert(user.val());
     //Shospital = $('#hospital');
     hospital = $('#hosphidden').val();
     CHospital(hospital);

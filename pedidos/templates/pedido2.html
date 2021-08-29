@@ -16,13 +16,16 @@
 </head>
     <body>
     {% include 'head.html' %}
+    <div class="loader"></div>
+    <div id="cont2" class="container" >
+
     <div id="cont" class="container-fluid" >
         <div class="row	justify-content-md-center">
         <form id="fenviar" name="fenviar" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-        <input type="hidden" id="u" name="usuario" value={{user}}>
-        <input type="hidden" id="h" name="hosp" value={{hospital}}>
-        <input type="hidden" id="h" name="passwd" value={{passwd}}>
+        <input type="hidden" id="u" name="usuario" value={{userPed}}>
+        <input type="hidden" id="h" name="hosp" value={{request.session.hospitalCodigo}}>
+        <input type="hidden" id="p" name="passwd" value={{passwd}}>
         <div id="cont0">
         
             <a href="" id="envpedidos" class="btn-outline-primary" >Volver a Pedidos</a>
@@ -32,16 +35,10 @@
         </div>
         <div id="cont2" >
             <table id="tabla" class="config">
-                <!-- <tr><th>CODIGO</th><th>NOMBRE</th><th>CANTIDAD</th><th>GFH</th><th>DISPOSITIVO</th><th>HOSPITAL</th></tr>
-                <tr>
-                    <td id="u">{{user}}</td>
-                    <td id="h">{{hospital}}</td>
-                    <td>{{gfh}}</td>
-                    <td>{{disp}}</td>
-                </tr>  -->
+
             </table>
         
-            </div>
+        </div>
         </form>
     </div>
     </div>

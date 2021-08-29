@@ -26,19 +26,12 @@
                                         {% csrf_token %}
                     <div id="cont1" >
                         <input type="hidden"  id="hosphidden" name="hospital"  value={{request.session.hospitalCodigo}}>
-                        <!-- <select name="hospital" id="hospital" class="form-control">
-                            <option name="opHosp" value="">SELECCIONE HOSPITAL:</option>
-                            {% for i in hospitales %}
-                                <option  value={{i.codigo}}>{{i.nombre}}</option>
-                            {% endfor %}
-                        </select> -->
-                        <!-- <input type="text" name="gfh" id="gfh" placeholder="Introduce gfh" class="form-control"> -->
+                        <input type="hidden" id="userlog" value={{request.session.user}}>
 
                         <select name="gfh" id="gfh"  class="form-control">
                             
                         </select>
 
-                        <!-- <input type="text" name="disp" id="disp" placeholder="Introduce dispositivo" class="form-control"> -->
                         <select name="disp" id="disp"  class="form-control">
                         
                         </select>
@@ -47,10 +40,10 @@
                         <input type="password" name="passwd" placeholder="Introduce clave"id="passwd" required class="form-control">
                         <button type="submit" id="pboton2" class="btn-outline-primary" >Descargar Pacto</button>
                     </div>
-            <!-- </form>
+            </form>
                 
             <form id="fpedidos2" name="fpedido2" enctype="multipart/form-data" method="POST" class="form-group" >
-                    {% csrf_token %} -->
+                    {% csrf_token %}
 
                 {% if disp %}
                 <table id="tabla" class="config">

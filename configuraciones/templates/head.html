@@ -31,13 +31,14 @@
                 <option value="{{i.codigo}}">{{i.nombre}}</option>
             {% endfor %}
         </select> -->
-
+        {% comment %} <p>USUARIO:&nbsp{{user.is_authenticated}}</p> {% endcomment %}
         {% if user.is_authenticated %}
+                                            
         <div id="Csesion">
             <div id="hospital">
                 <label id="hosp">{{request.session.hospital}}</label>
             </div>
-            <div id="cont-sesion">
+            <div id="cont-sesion"> 
                 
                 <label id="user2">{{user.username}}</label>
                 <a id="logout" class="nav-link btn btn-primary" href="{% url '_logout' %}">CERRAR SESION</a>

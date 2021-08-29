@@ -27,18 +27,19 @@ from pedidos.serializers import ret_pedidos
 
 @transaction.atomic
 def pedido( request ):
+    print('Entro en pedido')
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login')
     else:
         request.session.set_expiry (request.session['tiempo'])
         print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
 
-    global gfh, hospital, disp, user, passwd, user_pk
+    global gfh, hospital , disp, user, passwd, user_pk
+    #gfh=""; hospital=request.session['hospitalCodigo']; disp=""; user=""; passwd=""; user_pk=""
     lista=[] ; codes={}
-    #hospi = hospitales.objects.all()
+    hospital = request.session['hospitalCodigo']
 
     if request.method == 'POST':
-        
         if request.POST.get('usuario', False):         #request.POST.get('is_private', False)
             print('Paso por 1º')
             print(request.POST)
@@ -94,9 +95,10 @@ def pedido( request ):
             funciones.InsertarAlbaranPedido(user_pk, npedido )
             deltem = pedidos_temp.objects.filter(user_temp_id=user_pk).delete()
             print('Fichero Excel2: ', filexcel)
+
             #Activar en produccion
-            #funciones.envcorreogmail( fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
-                    #mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
+            funciones.envcorreogmail( fileadjunto=filexcel +'.xlsx', subject='Pedido material.',\
+                    mensaje=r'Buenos dias adjunto fichero con material a pedir.\nUn saludo',)
 
             return render( request, 'pedidos.html') #, { 'hospitales': hospi })
 
@@ -116,9 +118,9 @@ def pedido( request ):
                 codes[i] = request.POST[i] 
 
         
-        if request.POST['gfh'] and request.POST['disp'] and request.POST['user'] and request.POST['passwd']:  #request.POST['hospital'] and 
+        if request.POST.get('gfh', False) and request.POST['disp'] and request.POST['user'] and request.POST['passwd']:  #request.POST['hospital'] and 
             print('Paso por 2º')
-            hospital =  request.session['hospitalCodigo'] #request.POST['hospital']
+            #hospital =  request.session['hospitalCodigo'] #request.POST['hospital']
             gfh = request.POST['gfh']
             disp = request.POST['disp']
             user = request.POST['user']
@@ -128,11 +130,13 @@ def pedido( request ):
             h.update( passw.encode() )
             passwd = h.hexdigest()
 
-            user_Dbpassw = usuarios.objects.get(ident=user).passwd
-
+            try:
+                user_Dbpassw = usuarios.objects.get(ident=user).passwd
+            except Exception as e:
+                return HttpResponse("Usuario incorrecto.")
 
             if user_Dbpassw != passwd:
-                return HttpResponse("Usuario no valido.")
+                return HttpResponse("Usuario incorrecto o contraseña incorrecta.")
                 
             # userres = usuarios.objects.filter(ident=user).exists()
             # if userres == False:
@@ -149,17 +153,18 @@ def pedido( request ):
             
             for i in datos:
                 tmp = i.nombre
-                i.nombre.nombre = tmp.nombre[0:15]
+                i.nombre.nombre = tmp.nombre[0:26]
 
-            return render( request, 'pedidos.html',{  'gfh': gfh, 'disp': disp, 'user': user, 'datos': datos, 'passwd': passwd })
+            return render( request, 'pedidos.html',{  'gfh': gfh, 'disp': disp, 'datos': datos, 'passwd': passwd })
 
 
         #if request.method == 'POST':
             #print(str(codes.keys()) + '\t' + str(codes.values()))
         print('Paso por 3º')
+        print('USER: ', user)
         funciones.Insert_temp( codes, hospital, disp , user )
 
-        return render( request, 'pedido2.html',{ 'hospital': hospital, 'gfh': gfh, 'disp': disp, 'user': user }) 
+        return render( request, 'pedido2.html',{ 'hospital': hospital,'userPed': user, 'gfh': gfh, 'disp': disp }) 
 
     else:
         print('Paso por 4º')
@@ -403,12 +408,13 @@ def getPedTemp( request ):
     #bloque = """{"hospital": "","gfh": "","disp": "","codigo": "","nombre": "","cantidad": ""  """
 
     if request.method == 'GET':
-        hosp = request.GET['hospital']
+        hosp = request.session['hospitalCodigo']
         user = request.GET['user']
         hospi = hospitales.objects.get(codigo=hosp)
         usuario = usuarios.objects.get(ident=user)
-        res = pedidos_temp.objects.filter(hospital=hospi.id,user_temp=usuario.id).select_related()
-        
+        res = pedidos_temp.objects.filter(hospital=hospi.id,user_temp=usuario.id).select_related().order_by('gfh','disp')
+        print('USER: ',usuario.id)
+        print('HOSP: ',hospi.id)
         for i in res:
             bloque += '{"hospital": "%s","gfh": "%s","disp": "%s","codigo": "%s","nombre": "%s","cantidad": "%s"},' %( i.hospital.codigo, i.gfh.gfh, i.disp.nombre, i.codigo.codigo, i.codigo.nombre, i.cantidad )
         res = bloque[ :-1] + "]"
@@ -605,26 +611,25 @@ def addLineaPedidoDc( request):
 
     #else:
     if request.method == 'GET' and request.GET.get('cal_ini', False):
-        if request.GET.get('cal_ini', False):
-            hospital = request.GET['hospital']
-            fecha = request.GET['cal_ini']
-            print(fecha)
-            print(hospital)
-            hosp = hospitales.objects.get(codigo=hospital).pk
-            res = pedidos_ident_dc.objects.filter(fecha__range=[fecha, datetime.datetime.now()],hospital=hosp).select_related()
-            
-            print('RES: ', res)
-            for i in res:
-                bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S"),i.hospital.codigo )
-            if len(res) == 0:    
-                res = bloque[ : ] + "]"
-            else:
-                res = bloque[ :-1 ] + "]"
-            print( 'REX: ' ,res )
-            j = json.loads(res)
-            txtJson = json.dumps(j)
+        hospital = request.GET['hospital']
+        fecha = request.GET['cal_ini']
+        print(fecha)
+        print(hospital)
+        hosp = hospitales.objects.get(codigo=hospital).pk
+        res = pedidos_ident_dc.objects.filter(fecha__range=[fecha, datetime.datetime.now()],hospital=hosp).select_related()
         
-            return HttpResponse(txtJson)
+        print('RES: ', res)
+        for i in res:
+            bloque += '{"albaran": "%s","fecha": "%s", "hospital": "%s"},' %( i.pedido, i.fecha.strftime("%d/%m/%Y %H:%M:%S"),i.hospital.codigo )
+        if len(res) == 0:    
+            res = bloque[ : ] + "]"
+        else:
+            res = bloque[ :-1 ] + "]"
+        print( 'REX: ' ,res )
+        j = json.loads(res)
+        txtJson = json.dumps(j)
+        
+        return HttpResponse(txtJson)
 
             
     return render(request, 'addLineaPedidoDc.html')

@@ -9,7 +9,7 @@ from configuraciones.views import getIdDB
 from HtmlHack.settings import MEDIA_ROOT
 from HtmlHack.settings import STATIC_ROOT
 from django.db import connection
-from datetime import datetime
+#from datetime import datetime
 from pytz import timezone
 
 class funciones:
@@ -251,12 +251,15 @@ class funciones:
         #print('InsertarPedido: ', str(datos))
         listaM = []
         for i in datos:
+            #print('DATOS: ',datos)
             #print('Hospital: ', i.hospital.pk)
             #print('Codigo: ', i.codigo.nombre )
             #print('Ubicacion: ',str(configurations.objects.get(codigo=i.codigo.codigo, hosp=i.hospital.id )))
             #tmp = configurations.objects.get(codigo=i.codigo.codigo, gfh=i.gfh.id, hosp=i.hospital.id )
+            ubicacion = configurations.objects.filter(codigo=i.codigo.codigo,gfh=i.gfh.pk,disp=i.disp.pk,hosp=i.hospital.pk)
             listaT = []
-            listaT.append( '####')#tmp.modulo+"-"+tmp.estanteria+"-"+tmp.ubicacion+"-"+tmp.division )
+            ubic = ubicacion[0].modulo+'-'+ubicacion[0].estanteria+'-'+ubicacion[0].ubicacion+'-'+ubicacion[0].division
+            listaT.append( ubic)#tmp.modulo+"-"+tmp.estanteria+"-"+tmp.ubicacion+"-"+tmp.division )
             listaT.append( i.codigo.codigo) #codigo         
             listaT.append( i.codigo.nombre)#nombre
             listaT.append( i.cantidad ) #cantidad  

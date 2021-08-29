@@ -62,6 +62,7 @@ def login_request( request ):
 				login(request, usuario)
 				request.session['tiempo'] = 3600
 				request.session.set_expiry (request.session['tiempo'])
+				request.session['user'] = user
 				messages.success(request, f"Logeado como {user}")
 				print(f"Logeado como {user}")
 				print('TIEMPO SESION: ', str(request.session.get_expiry_age()))
